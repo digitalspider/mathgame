@@ -47,5 +47,5 @@ let settings = settingService.createSetting(
 const user = userService.createUser('david');
 user.settings = settings;
 let game = gameService.createGame(user);
-gameService.start(user, game);
+gameService.start(game);
 console.log('DONE');

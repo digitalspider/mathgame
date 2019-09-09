@@ -7,6 +7,7 @@ class Setting {
     public operations: Operation[] = [Operation.ADD],
     public questionCount: number = 10,
     public maxValue: number = 12,
+    public avgSecondsPerQuestion: number = 6,
   ) {
   }
 }

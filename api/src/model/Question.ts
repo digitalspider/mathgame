@@ -1,10 +1,9 @@
 import {Operation} from './Operation';
-import {Setting} from './Setting';
 
 class Question {
   correctAnswer: number;
   userAnswer?: number;
-  isCorrect?: boolean;
+  isCorrect: boolean = false;
 
   constructor(public firstNumber: number,public secondNumber: number,public operation: Operation) {
     this.correctAnswer = this.calculateAnswer();
@@ -26,4 +25,4 @@ class Question {
   }
 }
 
-export { Question };
+export {Question};

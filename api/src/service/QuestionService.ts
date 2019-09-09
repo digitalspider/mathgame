@@ -5,10 +5,19 @@ import { Setting } from '../model/Setting';
 
 @Service()
 class QuestionService {
+  /**
+   * Get a number between 0 and val (inclusive)
+   * @param val maximum value of the random number
+   */
   random(val: number) {
     return Math.floor(Math.random() * (val+1));
   }
 
+  /**
+   * Create a new questions with the maxValue(s) and operation
+   * determined by the settings.
+   * @param settings the settings to apply
+   */
   createQuestion(settings: Setting): Question {
     let firstNumber = this.random(settings.maxValue);
     let secondNumber = this.random(settings.maxValue);
@@ -33,12 +42,19 @@ class QuestionService {
     return question;
   }
 
-
+  /**
+   * return the "firstNumber operation secondNumber" separated by spaces
+   * @param question the question to print
+   */
   print(question: Question) {
-    return question.firstNumber + question.operation + question.secondNumber;
+    return [question.firstNumber, question.operation, question.secondNumber].join(' ');
   }
 
-
+  /**
+   * Set the value of userAnswer in the question, and calculate isCorrect.
+   * @param question the question
+   * @param answer the answer
+   */
   setAnswer(question: Question, answer: number) {
     question.userAnswer = answer;
     question.isCorrect = question.userAnswer === question.correctAnswer;

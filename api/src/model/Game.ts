@@ -3,8 +3,17 @@ import { Setting } from './Setting';
 import { User } from './User';
 
 class Game {
-  constructor(public id: number, public user: User, public settings: Setting, public questions: Question[]) {
-  }
+  constructor(
+    public id: number,
+    public user: User,
+    public settings: Setting,
+    public questions: Question[],
+    public startTime?: Date,
+    public endTime?: Date,
+    public durationInMs?: number,
+    public errors: number = 0,
+    public score: number = 0,
+  ) {}
 }
 
 export { Game };
