@@ -5,18 +5,17 @@ import {Inject} from 'typedi';
 
 import { UserService } from "../service/UserService";
 
-
 @Inject()
 const userService: UserService;
 
 module.exports = function(passport) {
   passport.use(
-    new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
+    new LocalStrategy({ usernameField: 'username' }, (username, password, done) => {
       // Match user
       try {
-        let user = userService.getUser(email);
+        let user = userService.getUser(username);
         if (!user) {
-          return done(null, false, { message: 'That email is not registered' });
+          return done(null, false, { message: 'That username is not registered' });
         }
 
         // Match password

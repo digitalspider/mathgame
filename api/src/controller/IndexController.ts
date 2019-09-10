@@ -36,7 +36,7 @@ class IndexController {
 
   @Get("/register")
   @Render("register")
-  register(@Res() res: Response) {
+  register(@Body() user: User, @Res() res: Response) {
     const params = {};
     return params;
   }
