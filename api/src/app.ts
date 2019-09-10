@@ -9,9 +9,6 @@ const LocalStrategy = require('passport-local').Strategy;
 import "reflect-metadata";
 import { useContainer, useExpressServer } from "routing-controllers";
 import Container from 'typedi';
-import { GameController } from './controller/GameController';
-import { SettingController } from './controller/SettingController';
-import { UserController } from './controller/UserController';
 import { Difficulty } from './model/Difficulty';
 import { Operation } from './model/Operation';
 import { GameService } from './service/GameService';
@@ -87,7 +84,12 @@ app.use(function(req, res, next) {
 useContainer(Container);
 
 useExpressServer(app, {
-  controllers: [IndexController, UserController, GameController, SettingController]
+  controllers: [IndexController]
+});
+
+useExpressServer(app, {
+  routePrefix: '/api',
+  controllers: [__dirname + "/controller/api/*.ts"]
 });
 
 /*

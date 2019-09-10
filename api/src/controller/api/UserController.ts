@@ -1,6 +1,6 @@
 import { BadRequestError, Body, Get, JsonController, Param, Post, Put } from 'routing-controllers';
-import { User } from '../model/User';
-import { UserService } from '../service/UserService';
+import { User } from '../../model/User';
+import { UserService } from '../../service/UserService';
 import "reflect-metadata";
 
 @JsonController()

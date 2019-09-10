@@ -1,4 +1,4 @@
-import { SettingService } from '../service/SettingService';
+import { SettingService } from '../../service/SettingService';
 import { JsonController, Get } from 'routing-controllers';
 
 @JsonController()

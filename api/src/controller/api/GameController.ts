@@ -1,8 +1,8 @@
-import { GameService } from '../service/GameService';
-import { UserService } from '../service/UserService';
+import { GameService } from '../../service/GameService';
+import { UserService } from '../../service/UserService';
 import { JsonController, Param, Get, Post, Body } from 'routing-controllers';
 import "reflect-metadata";
-import {Game} from '../model/Game';
+import {Game} from '../../model/Game';
 
 @JsonController()
 class GameController {
