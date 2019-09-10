@@ -1,8 +1,9 @@
-import {Body, Controller, Get, Post, Req, Res, Render, Redirect} from 'routing-controllers';
+import {Body, Controller, Get, Post, Req, Res, Render, Redirect, UseBefore} from 'routing-controllers';
 import {User} from '../model/User';
 import {UserService} from '../service/UserService';
 import passport = require('passport');
 import {Response, Request} from 'express';
+import {ensureAuthenticated} from '../middleware/auth';
 
 @Controller()
 class IndexController {
@@ -12,6 +13,7 @@ class IndexController {
   }
 
   @Get("/")
+  @UseBefore(ensureAuthenticated)
   @Render("index")
   index(@Res() res: Response) {
     const params = {};
