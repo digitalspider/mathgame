@@ -1,8 +1,9 @@
-import Container, { Service, Inject } from 'typedi';
-import { Setting } from '../model/Setting';
-import { User } from '../model/User';
-import { SettingService } from './SettingService';
-import { NotFoundError } from 'routing-controllers';
+import bcrypt from 'bcryptjs';
+import {NotFoundError} from 'routing-controllers';
+import {Service} from 'typedi';
+import {Setting} from '../model/Setting';
+import {User} from '../model/User';
+import {SettingService} from './SettingService';
 
 @Service()
 class UserService {
@@ -13,11 +14,13 @@ class UserService {
   ) {
   }
 
-  createUser(username: string, settings?: Setting): User {
+  async createUser(username: string, password: string, settings?: Setting): Promise<User> {
     if (!settings) {
       settings = this.settingService.createSetting();
     }
-    let user = new User(username, settings);
+    let salt = await bcrypt.genSalt(10);
+	  let hash = await bcrypt.hash(password, salt);
+    let user = new User(username, hash, settings);
     this.users.set(username, user);
     return user;
   }
@@ -38,4 +41,5 @@ class UserService {
   }
 }
 
-export { UserService }
+export {UserService};
+

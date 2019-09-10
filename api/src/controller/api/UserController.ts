@@ -1,7 +1,7 @@
-import { BadRequestError, Body, Get, JsonController, Param, Post, Put } from 'routing-controllers';
-import { User } from '../../model/User';
-import { UserService } from '../../service/UserService';
 import "reflect-metadata";
+import {BadRequestError, Body, Get, JsonController, Param, Put} from 'routing-controllers';
+import {User} from '../../model/User';
+import {UserService} from '../../service/UserService';
 
 @JsonController()
 class UserController {
@@ -16,12 +16,6 @@ class UserController {
     return user;
   }
 
-  @Post("/user/:username")
-  create(@Param('username') username: string) {
-    let user = this.userService.createUser(username);
-    return user;
-  }
-
   @Put("/user/:username")
   update(@Param('username') username: string, @Body() user: User) {
     if (username !== user.username) {
@@ -32,4 +26,4 @@ class UserController {
   }
 }
 
-export { UserController }
+export {UserController};

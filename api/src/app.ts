@@ -117,8 +117,9 @@ let settings = settingService.createSetting(
   operations,
   questionCount,
 );
-const user = userService.createUser('david');
-user.settings = settings;
-let game = gameService.createGame(user);
-gameService.start(game);
-console.log('DONE');
+userService.createUser('david', 'password').then((user) => {
+  user.settings = settings;
+  let game = gameService.createGame(user);
+  gameService.start(game);
+  console.log('DONE');
+});

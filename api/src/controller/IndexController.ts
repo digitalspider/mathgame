@@ -26,19 +26,18 @@ class IndexController {
     const params = {};
     return params;
   }
-  
-  @Post("/login")
-  @Redirect("/")
-  loginPost(@Body() user: User, @Res() res: Response) {
-    passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true });
-    this.userService.updateUser(user);
-  }
 
   @Get("/register")
   @Render("register")
-  register(@Body() user: User, @Res() res: Response) {
+  register(@Res() res: Response) {
     const params = {};
     return params;
+  }
+
+  @Post("/login")
+  @Redirect("/")
+  loginPost() {
+    passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true });
   }
 
   @Get("/logout")
@@ -46,6 +45,13 @@ class IndexController {
   logout(@Req() req: Request, @Res() res: Response) {
     req.logout();
     req.flash('success_msg', 'You are logged out');
+  }
+
+  @Post("/register")
+  async create(@Body() userInput: User, @Res() res: Response) {
+    let user = await this.userService.createUser(userInput.username, userInput.password);
+    console.log('user='+JSON.stringify(user));
+    passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login', failureFlash: true });
   }
 }
 
