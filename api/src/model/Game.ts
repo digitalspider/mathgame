@@ -7,7 +7,7 @@ class Game {
     public id: number,
     public user: User,
     public settings: Setting,
-    public questions: Question[],
+    public questions: Question[] = new Array<Question>(),
     public startTime?: Date,
     public endTime?: Date,
     public durationInMs?: number,
