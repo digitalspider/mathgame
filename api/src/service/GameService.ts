@@ -59,7 +59,7 @@ class GameService {
    */
   start(game: Game) {
     if (game.questions.length === 0) {
-      throw new BadRequestError(`Game ${game.id} questions have not been initialized`);
+      throw new Error(`Game ${game.id} questions have not been initialized`);
     }
     game.questions.forEach((question) => {
       let questionString = this.questionService.print(question);
@@ -76,7 +76,7 @@ class GameService {
    */
   stop(game: Game) {
     if (!game.startTime) {
-      throw new BadRequestError(`Game ${game.id} has not started`);
+      throw new Error(`Game ${game.id} has not started`);
     }
     game.endTime = new Date();
     console.log('endTime='+game.endTime);
