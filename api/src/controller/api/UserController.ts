@@ -1,29 +1,24 @@
 import "reflect-metadata";
-import {BadRequestError, Body, Get, JsonController, Param, Put} from 'routing-controllers';
 import {User} from '../../model/User';
 import {UserService} from '../../service/UserService';
+import Container from 'typedi';
+import {Request, Response, NextFunction} from 'express';
 
-@JsonController()
-class UserController {
-  constructor(
-    private userService: UserService
-  ) {
-  }
+const userService: UserService = Container.get(UserService);
 
-  @Get("/user/:username")
-  get(@Param('username') username: string) {
-    let user = this.userService.getUser(username);
-    return user;
-  }
-
-  @Put("/user/:username")
-  update(@Param('username') username: string, @Body() user: User) {
-    if (username !== user.username) {
-      throw new BadRequestError(`Cannot change username in update. Username=${username}`);
-    }
-    let updatedUser = this.userService.updateUser(user);
-    return updatedUser;
-  }
+export const get = (req: Request, res: Response, next: NextFunction) => {
+  let user = userService.getUser(req.params.username);
+  delete user.password;
+  return res.json(user);
 }
 
-export {UserController};
+export const update = (req: Request, res: Response, next: NextFunction) => {
+  let {username} = req.params;
+  let user: User = req.body;
+  if (username !== user.username) {
+    throw new Error(`Cannot change username in update. Username=${username}`);
+  }
+  let updatedUser = userService.updateUser(user);
+  delete updatedUser.password;
+  return res.json(updatedUser);
+}

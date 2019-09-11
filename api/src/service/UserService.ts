@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs';
-import {NotFoundError} from 'routing-controllers';
-import {Service} from 'typedi';
+import Container, {Service} from 'typedi';
 import {Setting} from '../model/Setting';
 import {User} from '../model/User';
 import {SettingService} from './SettingService';
@@ -9,9 +8,10 @@ import {SettingService} from './SettingService';
 class UserService {
 
   constructor(
-    private settingService: SettingService,
+    private settingService: SettingService = Container.get(SettingService),
     private users = new Map<string, User>(),
   ) {
+    this.createUser('david','david');
   }
 
   async createUser(username: string, password: string, settings?: Setting): Promise<User> {
@@ -28,9 +28,8 @@ class UserService {
   getUser(username: string): User {
     let user = this.users.get(username);
     if (!user) {
-      throw new NotFoundError('Username '+username+' does not exist');
+      throw new Error('Username '+username+' does not exist');
     }
-    delete user.password;
     return user;
   }
 

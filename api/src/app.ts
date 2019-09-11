@@ -1,25 +1,32 @@
 import bodyParser from "body-parser";
 import flash from 'connect-flash';
-import express from 'express';
+import express, {Request, Response, NextFunction} from 'express';
 import hbs from 'express-handlebars';
 import session from 'express-session';
 import passport from 'passport';
 import path from 'path';
-import "reflect-metadata";
-import {useContainer, useExpressServer} from "routing-controllers";
 import Container from 'typedi';
-import {IndexController} from './controller/IndexController';
+import "reflect-metadata";
 import {Difficulty} from './model/Difficulty';
 import {Operation} from './model/Operation';
 import {GameService} from './service/GameService';
 import {QuestionService} from './service/QuestionService';
 import {SettingService} from './service/SettingService';
 import {UserService} from './service/UserService';
+import {GameController} from './controller/api/GameController';``
+
+// Controllers (route handlers)
+import * as indexController from "./controller/IndexController";
+import * as userController from "./controller/api/UserController";
+import * as settingController from "./controller/api/SettingController";
+
+const gameController = new GameController();
 
 console.log('START');
 
 // Passport configuration
 import * as passportConfig from "./config/passport";
+passportConfig;
 
 const app = express();
 
@@ -81,22 +88,19 @@ app.use(flash());
 //   next();
 // });
 
-// its important to set container before any operation you do with routing-controllers,
-// including importing controllers
-useContainer(Container);
-
-useExpressServer(app, {
-  defaultErrorHandler: false,
-  controllers: [IndexController]
-});
-
-useExpressServer(app, {
-  routePrefix: '/api',
-  controllers: [__dirname + "/controller/api/*.ts"]
-});
-
-app.post('/login', passportConfig.postLogin);
-app.post('/register', passportConfig.postRegister);
+app.get('/', passportConfig.isAuthenticated, indexController.index);
+app.get('/login', indexController.login);
+app.get('/register', indexController.register);
+app.get('/logout', indexController.logout);
+app.post('/login', indexController.postLogin);
+app.post('/register', indexController.postRegister);
+app.get('/api/game/:username/:id', gameController.get);
+app.post('/api/game/:username', gameController.create);
+app.get('/api/game/:username/:id/start', gameController.start);
+app.post('/api/game/:username/stop', gameController.stop);
+app.get('/api/settings', settingController.get);
+app.get('/api/user/:username', userController.get);
+app.put('/api/user/:username', userController.update);
 
 /*
 app.get('/', (req, res) => {

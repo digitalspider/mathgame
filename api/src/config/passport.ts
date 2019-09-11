@@ -1,11 +1,10 @@
-import passport from "passport";
-import passportLocal, {IVerifyOptions} from "passport-local";
 import bcrypt from 'bcryptjs';
-import {User} from '../model/User';
-import {UserService} from '../service/UserService';
+import passport from "passport";
+import passportLocal from "passport-local";
 import Container from 'typedi';
-import {NextFunction, Request, Response} from 'express';
-import { check, sanitize, validationResult } from "express-validator";
+import {UserService} from '../service/UserService';
+import {Request, Response, NextFunction} from 'express';
+import {find} from 'lodash';
 
 const LocalStrategy = passportLocal.Strategy;
 
@@ -48,43 +47,27 @@ passport.use(
   })
 );
 
-export const postLogin = (req: Request, res: Response, next: NextFunction) => {
-  /*
-  check("email", "Email is not valid").isEmail();
-  check("password", "Password cannot be blank").isLength({min: 1});
-  // eslint-disable-next-line @typescript-eslint/camelcase
-  sanitize("email").normalizeEmail({ gmail_remove_dots: false });
-
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-      req.flash("errors", errors.array());
-      return res.redirect("/login");
+/**
+ * Login Required middleware.
+ */
+export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
+  if (req.isAuthenticated()) {
+      return next();
   }
-  */
-
-  console.log("about to passport authenticate");
-  passport.authenticate("local", (err: Error, user: User, info: IVerifyOptions) => {
-      console.log("inside passport authenticate");
-      if (err) { return next(err); }
-      if (!user) {
-          req.flash("errors", info.message);
-          return res.redirect("/login");
-      }
-      req.logIn(user, (err) => {
-          if (err) { return next(err); }
-          req.flash("success", "Success! You are logged in.");
-          req.user = user;
-          res.redirect(req.session && req.session.returnTo || "/");
-      });
-  })(req, res, next);
+  res.redirect("/login");
 };
 
-export const postRegister = async (req: Request, res: Response, next: NextFunction) => {
-  let user = await userService.createUser(req.body.username, req.body.password);
-  if (!user) {
-    return res.redirect('/register');
+/**
+* Authorization Required middleware.
+*/
+export const isAuthorized = (req: Request, res: Response, next: NextFunction) => {
+  const provider = req.path.split("/").slice(-1)[0];
+
+  /*
+  if (req.user && find(req.user.tokens, { kind: provider })) {
+      next();
+  } else {
+      res.redirect(`/auth/${provider}`);
   }
-  console.log('/registered user='+JSON.stringify(user));
-  postLogin(req, res, next);
-}
+  */
+};

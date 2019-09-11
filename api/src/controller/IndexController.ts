@@ -1,77 +1,70 @@
-import {Body, Controller, Get, Post, Req, Res, Render, Redirect, UseBefore} from 'routing-controllers';
+import {NextFunction, Request, Response} from 'express';
+import {IVerifyOptions} from 'passport-local';
+import Container from 'typedi';
 import {User} from '../model/User';
 import {UserService} from '../service/UserService';
-import passport from 'passport';
-import {Response, Request, NextFunction} from 'express';
-import {ensureAuthenticated} from '../middleware/auth';
-import {IVerifyOptions} from 'passport-local';
-import {postLogin} from '../config/passport';
+import passport = require('passport');
 
-@Controller()
-class IndexController {
-  constructor(
-    private userService: UserService,
-  ) {
-  }
+const userService: UserService = Container.get(UserService);
 
-  @Get("/")
-  @UseBefore(ensureAuthenticated)
-  @Render("index")
-  index(@Req() req: Request) {
-    const params = {user: req.user};
-    return params;
-  }
+export const index = (req: Request, res: Response) => {
+  res.render("index", {
+      title: "Home",
+      user: req.user,
+  });
+};
 
-  @Get("/login")
-  @Render("login")
-  login(@Res() res: Response) {
-    const params = {};
-    return params;
-  }
+export const login = (req: Request, res: Response) => {
+  res.render("login");
+};
 
-  @Get("/register")
-  @Render("register")
-  register(@Res() res: Response) {
-    const params = {};
-    return params;
-  }
+export const register = (req: Request, res: Response) => {
+  res.render("register");
+};
 
-  /**
-Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
-    at ServerResponse.setHeader (_http_outgoing.js:470:11)
-    at ServerResponse.header (C:\code\david\mathgame\api\node_modules\express\lib\response.js:771:10)
-    at ServerResponse.location (C:\code\david\mathgame\api\node_modules\express\lib\response.js:888:15)
-    at ServerResponse.redirect (C:\code\david\mathgame\api\node_modules\express\lib\response.js:926:18)
-    at req.logIn (C:\code\david\mathgame\api\src\controller\IndexController.ts:52:17)
-    at C:\code\david\mathgame\api\node_modules\passport\lib\http\request.js:51:48
-    at C:\code\david\mathgame\api\node_modules\passport\lib\sessionmanager.js:16:14
-    at pass (C:\code\david\mathgame\api\node_modules\passport\lib\authenticator.js:297:14)
-    at Authenticator.serializeUser (C:\code\david\mathgame\api\node_modules\passport\lib\authenticator.js:299:5)
-    at SessionManager.logIn (C:\code\david\mathgame\api\node_modules\passport\lib\sessionmanager.js:14:8)
-*
-  @Post("/login")
-  loginPost(@Req() req: Request, @Res() res: Response, next: Function) {
-    passport.authenticate("local", (err: Error, user: User, info: IVerifyOptions) => {
-        if (err && next) { return next(err); }
-        if (!user) {
-          return res.redirect("/login?error="+(info && info.message));
-        } else {
-          req.logIn(user, (err) => {
-              if (err && next) { return next(err); }
-              res.redirect(req.session && req.session.returnTo || "/");
-          });
-        }
-    })(req, res, next);
-  }
-*/
+export const logout = (req: Request, res: Response) => {
+  req.logout();
+  req.flash('success_msg', 'You are logged out');
+  res.redirect('/login')
+};
 
-  @Get("/logout")
-  @Redirect("/login")
-  logout(@Req() req: Request, @Res() res: Response) {
-    req.logout();
-    req.flash('success_msg', 'You are logged out');
+
+export const postLogin = (req: Request, res: Response, next: NextFunction) => {
+  /*
+  check("email", "Email is not valid").isEmail();
+  check("password", "Password cannot be blank").isLength({min: 1});
+  // eslint-disable-next-line @typescript-eslint/camelcase
+  sanitize("email").normalizeEmail({ gmail_remove_dots: false });
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+      req.flash("errors", errors.array());
+      return res.redirect("/login");
   }
+  */
+
+  console.log("about to passport authenticate");
+  passport.authenticate("local", (err: Error, user: User, info: IVerifyOptions) => {
+      console.log("inside passport authenticate");
+      if (err) { return next(err); }
+      if (!user) {
+          req.flash("errors", info.message);
+          return res.redirect("/login");
+      }
+      req.logIn(user, (err) => {
+          if (err) { return next(err); }
+          req.flash("success", "Success! You are logged in.");
+          res.redirect(req.session && req.session.returnTo || "/");
+      });
+  })(req, res, next);
+};
+
+export const postRegister = async (req: Request, res: Response, next: NextFunction) => {
+  let user = await userService.createUser(req.body.username, req.body.password);
+  if (!user) {
+    return res.redirect('/register');
+  }
+  console.log('/registered user='+JSON.stringify(user));
+  postLogin(req, res, next);
 }
-
-export {IndexController};
-

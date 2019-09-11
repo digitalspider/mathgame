@@ -1,18 +1,10 @@
 import { SettingService } from '../../service/SettingService';
-import { JsonController, Get } from 'routing-controllers';
+import {Request, Response, NextFunction} from 'express';
+import Container from 'typedi';
 
-@JsonController()
-class SettingController {
-  constructor(
-    private settingService: SettingService,
-  ) {
-  }
+const settingService = Container.get(SettingService);
 
-  @Get("/settings")
-  get() {
-    let settings = this.settingService.getAllSettings();
-    return settings;
-  }
+export const get = (req: Request, res: Response, next: NextFunction) => {
+  let settings = settingService.getAllSettings();
+  return res.json(settings);
 }
-
-export { SettingController }

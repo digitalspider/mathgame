@@ -1,47 +1,43 @@
 import { GameService } from '../../service/GameService';
 import { UserService } from '../../service/UserService';
-import { JsonController, Param, Get, Post, Body } from 'routing-controllers';
 import "reflect-metadata";
 import {Game} from '../../model/Game';
+import {Request, Response, NextFunction} from 'express';
+import Container from 'typedi';
 
-@JsonController()
 class GameController {
 
   constructor(
-    private gameService: GameService,
-    private userService: UserService,
+    private gameService: GameService = Container.get(GameService),
+    private userService: UserService = Container.get(UserService),
   ) {
   }
 
-  @Get("/game/:username/:id")
-  get(@Param('username') username: string, @Param('id') id: number) {
-    let user = this.userService.getUser(username);
-    let game = this.gameService.getGame(id, user);
-    return game;
+  get(req: Request, res: Response, next: NextFunction) {
+    let user = this.userService.getUser(req.params.username);
+    let game = this.gameService.getGame(parseInt(req.params.id), user);
+    return res.json(game);
   }
 
-  @Post("/game/:username")
-  create(@Param('username') username: string) {
-    console.log('here');
-    let user = this.userService.getUser(username);
+  create(req: Request, res: Response, next: NextFunction) {
+    let user = this.userService.getUser(req.params.username);
     let game = this.gameService.createGame(user);
-    return game;
+    return res.json(game);
   }
 
-  @Get("/game/:username/:id/start")
-  start(@Param('username') username: string, @Param('id') id: number) {
-    let user = this.userService.getUser(username);
-    let game = this.gameService.getGame(id, user);
+  start(req: Request, res: Response, next: NextFunction) {
+    let user = this.userService.getUser(req.params.username);
+    let game = this.gameService.getGame(parseInt(req.params.id), user);
     this.gameService.start(game);
-    return game;
+    return res.json(game);
   }
 
-  @Post("/game/:username/stop")
-  stop(@Param('username') username: string, @Body() game: Game) {
-    let user = this.userService.getUser(username);
+  stop(req: Request, res: Response, next: NextFunction) {
+    let game: Game = req.body;
+    let user = this.userService.getUser(req.params.username);
     this.gameService.getGame(game.id, user); // validate correct game
     this.gameService.stop(game);
-    return game;
+    return res.json(game);
   }
 }
 

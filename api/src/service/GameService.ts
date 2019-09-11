@@ -1,5 +1,4 @@
-import {BadRequestError, NotFoundError} from 'routing-controllers';
-import {Service} from 'typedi';
+import Container, {Service} from 'typedi';
 import {Game} from '../model/Game';
 import {Setting} from '../model/Setting';
 import {User} from '../model/User';
@@ -10,7 +9,7 @@ class GameService {
 
   games: Map<number,Game>;
   constructor(
-    private questionService: QuestionService,
+    private questionService: QuestionService = Container.get(QuestionService),
   ) {
     this.games = new Map<number,Game>(); // Cache of games
   }
@@ -23,10 +22,10 @@ class GameService {
   getGame(id: number, user: User) {
     let game = this.games.get(id);
     if (!game) {
-      throw new NotFoundError(`Game ${id} does not exist`);
+      throw new Error(`Game ${id} does not exist`);
     }
     if (game && game.user !== user) {
-      throw new BadRequestError(`Game ${id} does not belong to ${user.username}`);
+      throw new Error(`Game ${id} does not belong to ${user.username}`);
     }
     return game;
   }
