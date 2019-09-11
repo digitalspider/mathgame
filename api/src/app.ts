@@ -17,8 +17,7 @@ import {GameService} from './service/GameService';
 import {QuestionService} from './service/QuestionService';
 import {SettingService} from './service/SettingService';
 import {UserService} from './service/UserService';
-
-const SESSION_SECRET = process.env.SESSION_SECRET || 'secret';
+import {SESSION_SECRET, PORT} from './config';
 
 const gameController = new GameController();
 
@@ -137,7 +136,7 @@ app.get('/', (req, res) => {
 */
 
 // Set Port
-app.set('port', process.env.PORT || 5000);
+app.set('port', PORT);
 // Start listening
 app.listen(app.get('port'), function() {
 	console.log('Server started on port '+app.get('port'));
