@@ -1,29 +1,31 @@
-import path from 'path';
 import bodyParser from "body-parser";
-import express from 'express';
 import flash from 'connect-flash';
-import passport from 'passport';
+import express from 'express';
+import hbs from 'express-handlebars';
 import session from 'express-session';
-import exphbs from 'express-handlebars';
-const LocalStrategy = require('passport-local').Strategy;
+import passport from 'passport';
+import path from 'path';
 import "reflect-metadata";
-import { useContainer, useExpressServer } from "routing-controllers";
+import {useContainer, useExpressServer} from "routing-controllers";
 import Container from 'typedi';
-import { Difficulty } from './model/Difficulty';
-import { Operation } from './model/Operation';
-import { GameService } from './service/GameService';
-import { QuestionService } from './service/QuestionService';
-import { SettingService } from './service/SettingService';
-import { UserService } from './service/UserService';
 import {IndexController} from './controller/IndexController';
+import {Difficulty} from './model/Difficulty';
+import {Operation} from './model/Operation';
+import {GameService} from './service/GameService';
+import {QuestionService} from './service/QuestionService';
+import {SettingService} from './service/SettingService';
+import {UserService} from './service/UserService';
 
 console.log('START');
+
+// Passport configuration
+import * as passportConfig from "./config/passport";
 
 const app = express();
 
 // View Engine
 app.set('views', path.join(__dirname, 'views'));
-app.engine('handlebars', exphbs({ defaultLayout: 'layout' }));
+app.engine('handlebars', hbs({ defaultLayout: 'layout' }));
 app.set('view engine', 'handlebars');
 
 // Body Parser
@@ -37,8 +39,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(
   session({
     secret: 'secret',
-    resave: true,
-    saveUninitialized: true
+    resave: false,
+    saveUninitialized: false
   })
 );
 
@@ -72,18 +74,19 @@ app.use(
 app.use(flash());
 
 // Global variables
-app.use(function(req, res, next) {
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg = req.flash('error_msg');
-  res.locals.error = req.flash('error');
-  next();
-});
+// app.use((req: Request, res: Response, next: NextFunction) => {
+//   res.locals.success_msg = req.flash('success_msg');
+//   res.locals.error_msg = req.flash('error_msg');
+//   res.locals.error = req.flash('error');
+//   next();
+// });
 
 // its important to set container before any operation you do with routing-controllers,
 // including importing controllers
 useContainer(Container);
 
 useExpressServer(app, {
+  defaultErrorHandler: false,
   controllers: [IndexController]
 });
 
@@ -91,6 +94,9 @@ useExpressServer(app, {
   routePrefix: '/api',
   controllers: [__dirname + "/controller/api/*.ts"]
 });
+
+app.post('/login', passportConfig.postLogin);
+app.post('/register', passportConfig.postRegister);
 
 /*
 app.get('/', (req, res) => {

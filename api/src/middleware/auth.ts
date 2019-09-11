@@ -6,6 +6,7 @@ export const ensureAuthenticated = function(
   next: NextFunction
 ) {
   if (req.isAuthenticated()) {
+    console.log('auth user='+JSON.stringify(req.user));
     return next();
   } else {
     //req.flash('error_msg','You are not logged in');

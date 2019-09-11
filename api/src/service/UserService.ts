@@ -30,7 +30,12 @@ class UserService {
     if (!user) {
       throw new NotFoundError('Username '+username+' does not exist');
     }
+    delete user.password;
     return user;
+  }
+
+  getUserRaw(username: string): User | undefined {
+    return this.users.get(username);
   }
 
   updateUser(user: User): User {
