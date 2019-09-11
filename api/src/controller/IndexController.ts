@@ -4,6 +4,7 @@ import Container from 'typedi';
 import {User} from '../model/User';
 import {UserService} from '../service/UserService';
 import passport = require('passport');
+import { check, sanitize, validationResult } from "express-validator";
 
 const userService: UserService = Container.get(UserService);
 
@@ -30,7 +31,6 @@ export const logout = (req: Request, res: Response) => {
 
 
 export const postLogin = (req: Request, res: Response, next: NextFunction) => {
-  /*
   check("email", "Email is not valid").isEmail();
   check("password", "Password cannot be blank").isLength({min: 1});
   // eslint-disable-next-line @typescript-eslint/camelcase
@@ -39,32 +39,36 @@ export const postLogin = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-      req.flash("errors", errors.array());
+      req.flash("error_msg", errors.array().toString());
       return res.redirect("/login");
   }
-  */
 
   console.log("about to passport authenticate");
   passport.authenticate("local", (err: Error, user: User, info: IVerifyOptions) => {
       console.log("inside passport authenticate");
       if (err) { return next(err); }
       if (!user) {
-          req.flash("errors", info.message);
+          req.flash("error_msg", info.message);
           return res.redirect("/login");
       }
       req.logIn(user, (err) => {
           if (err) { return next(err); }
-          req.flash("success", "Success! You are logged in.");
+          req.flash("success_msg", "Success! You are logged in.");
           res.redirect(req.session && req.session.returnTo || "/");
       });
   })(req, res, next);
 };
 
 export const postRegister = async (req: Request, res: Response, next: NextFunction) => {
-  let user = await userService.createUser(req.body.username, req.body.password);
-  if (!user) {
-    return res.redirect('/register');
+  try {
+    let {username, password, email} = req.body;
+    let user = await userService.createUser(username, password, email);
+    if (!user) {
+      throw new Error('Could not register user: '+username)
+    }
+    postLogin(req, res, next);
+  } catch(err) {
+    req.flash('error_msg', err.message);
+    res.redirect('/register');
   }
-  console.log('/registered user='+JSON.stringify(user));
-  postLogin(req, res, next);
 }

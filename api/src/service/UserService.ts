@@ -11,16 +11,20 @@ class UserService {
     private settingService: SettingService = Container.get(SettingService),
     private users = new Map<string, User>(),
   ) {
-    this.createUser('david','david');
+    this.createUser('guest','guest', 'guest@mathgame.com.au');
   }
 
-  async createUser(username: string, password: string, settings?: Setting): Promise<User> {
+  async createUser(username: string, password: string, email: string, settings?: Setting): Promise<User> {
+    let existingUser = this.getUserRaw(username);
+    if (existingUser) {
+      throw new Error('This username is already registered');
+    }
     if (!settings) {
       settings = this.settingService.createSetting();
     }
     let salt = await bcrypt.genSalt(10);
 	  let hash = await bcrypt.hash(password, salt);
-    let user = new User(username, hash, settings);
+    let user = new User(username, hash, email, settings);
     this.users.set(username, user);
     return user;
   }

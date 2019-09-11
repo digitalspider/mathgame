@@ -1,31 +1,30 @@
 import bodyParser from "body-parser";
-import flash from 'connect-flash';
+import flash from "connect-flash";
 import express, {Request, Response, NextFunction} from 'express';
 import hbs from 'express-handlebars';
 import session from 'express-session';
 import passport from 'passport';
 import path from 'path';
-import Container from 'typedi';
 import "reflect-metadata";
+import * as passportConfig from "./config/passport";
+import {GameController} from './controller/api/GameController';
+import * as settingController from "./controller/api/SettingController";
+import * as userController from "./controller/api/UserController";
+import * as indexController from "./controller/IndexController";
 import {Difficulty} from './model/Difficulty';
 import {Operation} from './model/Operation';
 import {GameService} from './service/GameService';
 import {QuestionService} from './service/QuestionService';
 import {SettingService} from './service/SettingService';
 import {UserService} from './service/UserService';
-import {GameController} from './controller/api/GameController';``
 
-// Controllers (route handlers)
-import * as indexController from "./controller/IndexController";
-import * as userController from "./controller/api/UserController";
-import * as settingController from "./controller/api/SettingController";
+const SESSION_SECRET = process.env.SESSION_SECRET || 'secret';
 
 const gameController = new GameController();
 
 console.log('START');
 
 // Passport configuration
-import * as passportConfig from "./config/passport";
 passportConfig;
 
 const app = express();
@@ -40,20 +39,49 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Set Static Folder
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
 
 // Express session
 app.use(
   session({
-    secret: 'secret',
-    resave: false,
-    saveUninitialized: false
+    secret: SESSION_SECRET,
+    resave: true,
+    saveUninitialized: false,
+    /*
+    store: new MongoStore({
+        url: mongoUrl,
+        autoReconnect: true
+    })
+    */
   })
 );
 
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
+app.use((req: Request, res: Response, next: NextFunction) => {
+  if (!req.session) {
+    return next();
+  };
+  // After successful login, redirect back to the intended page
+  if (!req.user &&
+  req.path !== "/login" &&
+  req.path !== "/register" &&
+  !req.path.match(/^\/auth/) &&
+  !req.path.match(/\./)) {
+    req.session.returnTo = req.path;
+  } else if (req.user &&
+  req.path == "/account") {
+      req.session.returnTo = req.path;
+  }
+  next();
+});
+
 
 /*
 // Express Validator
@@ -81,12 +109,12 @@ app.use(
 app.use(flash());
 
 // Global variables
-// app.use((req: Request, res: Response, next: NextFunction) => {
-//   res.locals.success_msg = req.flash('success_msg');
-//   res.locals.error_msg = req.flash('error_msg');
-//   res.locals.error = req.flash('error');
-//   next();
-// });
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 app.get('/', passportConfig.isAuthenticated, indexController.index);
 app.get('/login', indexController.login);
@@ -127,7 +155,7 @@ let settings = settingService.createSetting(
   operations,
   questionCount,
 );
-userService.createUser('david', 'password').then((user) => {
+userService.createUser('admin', 'admin', 'admin@test.com').then((user) => {
   user.settings = settings;
   let game = gameService.createGame(user);
   gameService.start(game);
