@@ -24,7 +24,7 @@ class GameService {
     if (!game) {
       throw new Error(`Game ${id} does not exist`);
     }
-    if (game && game.user !== user) {
+    if (game && game.user.username !== user.username) {
       throw new Error(`Game ${id} does not belong to ${user.username}`);
     }
     return game;
@@ -98,7 +98,6 @@ class GameService {
       console.log(questionString);
     });
     game.startTime = new Date();
-    console.log('startTime='+game.startTime);
   }
 
   /**
@@ -111,9 +110,7 @@ class GameService {
       throw new Error(`Game ${game.id} has not started`);
     }
     game.endTime = new Date();
-    console.log('endTime='+game.endTime);
     game.durationInMs = game.endTime.getTime()-game.startTime.getTime();
-    console.log('duration='+game.durationInMs);
     this.calculateScore(game);
     console.log('score='+game.score+', errors='+game.errors);
     return this.updateGame(game);

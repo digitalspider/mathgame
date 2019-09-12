@@ -16,7 +16,7 @@ passport.serializeUser<any, any>((user, done) => {
 
 passport.deserializeUser((username: string, done: Function) => {
   try {
-    let user = userService.getUser(username);
+    let user = Object.assign({}, userService.getUser(username));
     delete user.password;
     done(null, user);
   } catch (err) {

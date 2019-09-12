@@ -8,7 +8,7 @@ const userService: UserService = Container.get(UserService);
 
 export const get = (req: Request, res: Response, next: NextFunction) => {
   let user: User = req.user && Object.assign(req.user);
-  let result = userService.getUser(user.username);
+  let result = Object.assign({}, userService.getUser(user.username));
   delete result.password;
   return res.json(result);
 }
@@ -20,7 +20,7 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
   if (username !== userInput.username) {
     throw new Error(`Cannot change username in update. Username=${username}`);
   }
-  let result = userService.updateUser(userInput);
+  let result = Object.assign({}, userService.updateUser(userInput));
   delete result.password;
   return res.json(result);
 }

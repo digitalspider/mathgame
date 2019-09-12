@@ -53,9 +53,7 @@ export const postLogin = (req: Request, res: Response, next: NextFunction) => {
       return res.redirect("/login");
   }
 
-  console.log("about to passport authenticate");
   passport.authenticate("local", (err: Error, user: User, info: IVerifyOptions) => {
-      console.log("inside passport authenticate");
       if (err) { return next(err); }
       if (!user) {
           req.flash("error_msg", info.message);
