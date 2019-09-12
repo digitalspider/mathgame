@@ -3,15 +3,22 @@ import {IVerifyOptions} from 'passport-local';
 import Container from 'typedi';
 import {User} from '../model/User';
 import {UserService} from '../service/UserService';
+import {GameService} from '../service/GameService';
 import passport = require('passport');
 import { check, sanitize, validationResult } from "express-validator";
 
-const userService: UserService = Container.get(UserService);
+const userService = Container.get(UserService);
+const gameService = Container.get(GameService);
 
 export const index = (req: Request, res: Response) => {
+  let user: User = req.user && Object.assign(req.user);
+  let games = gameService.findGamesByUser(user);
+  let game = gameService.findActiveGame(user, games);
   res.render("index", {
       title: "Home",
-      user: req.user,
+      user,
+      games,
+      game,
   });
 };
 

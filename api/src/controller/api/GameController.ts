@@ -1,44 +1,48 @@
-import { GameService } from '../../service/GameService';
-import { UserService } from '../../service/UserService';
+import {NextFunction, Request, Response} from 'express';
 import "reflect-metadata";
-import {Game} from '../../model/Game';
-import {Request, Response, NextFunction} from 'express';
 import Container from 'typedi';
+import {Game} from '../../model/Game';
+import {User} from '../../model/User';
+import {GameService} from '../../service/GameService';
 
-class GameController {
+const gameService = Container.get(GameService);
 
-  constructor(
-    private gameService: GameService = Container.get(GameService),
-    private userService: UserService = Container.get(UserService),
-  ) {
-  }
-
-  get(req: Request, res: Response, next: NextFunction) {
-    let user = this.userService.getUser(req.params.username);
-    let game = this.gameService.getGame(parseInt(req.params.id), user);
-    return res.json(game);
-  }
-
-  create(req: Request, res: Response, next: NextFunction) {
-    let user = this.userService.getUser(req.params.username);
-    let game = this.gameService.createGame(user);
-    return res.json(game);
-  }
-
-  start(req: Request, res: Response, next: NextFunction) {
-    let user = this.userService.getUser(req.params.username);
-    let game = this.gameService.getGame(parseInt(req.params.id), user);
-    this.gameService.start(game);
-    return res.json(game);
-  }
-
-  stop(req: Request, res: Response, next: NextFunction) {
-    let game: Game = req.body;
-    let user = this.userService.getUser(req.params.username);
-    this.gameService.getGame(game.id, user); // validate correct game
-    this.gameService.stop(game);
-    return res.json(game);
-  }
+export const get = (req: Request, res: Response, next: NextFunction) => {
+  let user: User = req.user && Object.assign(req.user);
+  let game = gameService.getGame(parseInt(req.params.id), user);
+  return res.json(game);
 }
 
-export { GameController }
+export const list = (req: Request, res: Response, next: NextFunction) => {
+  let user: User = req.user && Object.assign(req.user);
+  let result = gameService.findGamesByUser(user);
+  return res.json(result);
+}
+
+export const create = (req: Request, res: Response, next: NextFunction) => {
+  let user: User = req.user && Object.assign(req.user);
+  let game = gameService.createGame(user);
+  return res.json(game);
+}
+
+export const update = (req: Request, res: Response, next: NextFunction) => {
+  let gameInput: Game = req.body;
+  let user: User = req.user && Object.assign(req.user);
+  gameService.getGame(gameInput.id, user); // validate correct game
+  let result = gameService.updateGame(gameInput);
+  return res.json(result);
+}
+
+export const start = (req: Request, res: Response, next: NextFunction) => {
+  let user: User = req.user && Object.assign(req.user);
+  let game = gameService.getGame(parseInt(req.params.id), user);
+  gameService.start(game);
+  return res.json(game);
+}
+
+export const stop = (req: Request, res: Response, next: NextFunction) => {
+  let user: User = req.user && Object.assign(req.user);
+  let game = gameService.getGame(parseInt(req.params.id), user); // validate correct game
+  gameService.stop(game);
+  return res.json(game);
+}

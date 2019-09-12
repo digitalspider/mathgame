@@ -31,6 +31,26 @@ class GameService {
   }
 
   /**
+   * Find all the games that belong to this user
+   * @param user the user whose games to find
+   */
+  findGamesByUser(user: User) {
+    return Array.from<Game>(this.games.values()).filter((game) => game.user.username === user.username);
+  }
+
+  /**
+   * Find the current active game for the user
+   * @param user the user whose game to find
+   * @param games the list of games this user has
+   */
+  findActiveGame(user: User, games?: Game[]) {
+    if (!games) {
+      games = this.findGamesByUser(user);
+    }
+    return games.find((game) => game.endTime!==null);
+  }
+
+  /**
    * Create a new game and populate teh questions.
    * @param user the user the game belongs to
    */

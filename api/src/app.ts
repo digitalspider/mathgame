@@ -1,13 +1,14 @@
 import bodyParser from "body-parser";
 import flash from "connect-flash";
-import express, {Request, Response, NextFunction} from 'express';
+import express, {NextFunction, Request, Response} from 'express';
 import hbs from 'express-handlebars';
 import session from 'express-session';
 import passport from 'passport';
 import path from 'path';
 import "reflect-metadata";
+import {PORT, SESSION_SECRET} from './config';
 import * as passportConfig from "./config/passport";
-import {GameController} from './controller/api/GameController';
+import * as gameController from "./controller/api/GameController";
 import * as settingController from "./controller/api/SettingController";
 import * as userController from "./controller/api/UserController";
 import * as indexController from "./controller/IndexController";
@@ -17,9 +18,6 @@ import {GameService} from './service/GameService';
 import {QuestionService} from './service/QuestionService';
 import {SettingService} from './service/SettingService';
 import {UserService} from './service/UserService';
-import {SESSION_SECRET, PORT} from './config';
-
-const gameController = new GameController();
 
 console.log('START');
 
@@ -115,19 +113,25 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.get('/', passportConfig.isAuthenticated, indexController.index);
+// public routes
 app.get('/login', indexController.login);
 app.get('/register', indexController.register);
 app.get('/logout', indexController.logout);
 app.post('/login', indexController.postLogin);
 app.post('/register', indexController.postRegister);
-app.get('/api/game/:username/:id', gameController.get);
-app.post('/api/game/:username', gameController.create);
-app.get('/api/game/:username/:id/start', gameController.start);
-app.post('/api/game/:username/stop', gameController.stop);
+
+// Authenticated routes
+app.use(passportConfig.isAuthenticated);
+app.get('/', indexController.index);
+app.get('/api/game/:id', gameController.get);
+app.get('/api/game', gameController.list);
+app.post('/api/game', gameController.create);
+app.post('/api/game/:id/start', gameController.start);
+app.post('/api/game/:id/stop', gameController.stop);
+app.post('/api/game/:id', gameController.update);
 app.get('/api/settings', settingController.get);
-app.get('/api/user/:username', userController.get);
-app.put('/api/user/:username', userController.update);
+app.get('/api/user', userController.get);
+app.put('/api/user', userController.update);
 
 /*
 app.get('/', (req, res) => {

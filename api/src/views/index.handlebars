@@ -1,2 +1,36 @@
 <h2 class="page-header">Dashboard</h2>
 <p>Welcome to the dashboard: <b>{{user.username}}</b></p>
+
+<h2>Game</h2>
+Click here to start a new game:
+<ul>
+  {{#if game}}
+  <li><a href='/api/game/{{game.id}}/start'>Start Game</a></li>
+  {{else}}
+  <form method="POST" action="/api/game">
+    <li><button type='Submit'>Create Game</button></li>
+  </form>
+  {{/if}}
+</ul>
+{{#if games}}
+<h3>Games</h3>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Score</th>
+      <th>Duration</th>
+    </th>
+  </thead>
+  <tbody>
+    {{#each games}}
+    <tr>
+      <td>{{this.id}}</td>
+      <td>{{this.score}}</td>
+      <td>{{this.durationInMs}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+{{/if}}
+
