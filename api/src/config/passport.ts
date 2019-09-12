@@ -31,7 +31,10 @@ passport.use(
       let user = userService.getUserRaw(username);
       console.log('passport found '+JSON.stringify(user));
       if (!user) {
-        return done(null, false, { message: 'That username '+username+' is not registered' });
+        return done(null, false, { message: 'The username '+username+' is not registered' });
+      }
+      if (!user.password) {
+        return done(null, false, { message: 'The username '+username+' has no password' });
       }
 
       // Match password

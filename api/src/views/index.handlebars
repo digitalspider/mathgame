@@ -1,33 +1,31 @@
-<h2 class="page-header">Dashboard</h2>
-<p>Welcome to the dashboard: <b>{{user.username}}</b></p>
-
-<h2>Game</h2>
-Click here to start a new game:
-<ul>
-  {{#if game}}
-  <li><a href='/api/game/{{game.id}}/start'>Start Game</a></li>
+<h2 class="page-header">Math Game</h2>
+<p>Welcome player: <b>{{user.username}}</b></p>
+<p>Use the below to play the active game</p>
+{{#if game}}
+  {{#if game.startTime}}
+  <div type='button' class='btn btn-danger' onclick="javascript:stopGame({{game.id}})">Stop Game</div>
   {{else}}
-  <form method="POST" action="/api/game">
-    <li><button type='Submit'>Create Game</button></li>
-  </form>
+  <div type='button' class='btn btn-success' onclick="javascript:startGame({{game.id}})">Start Game</div>
   {{/if}}
-</ul>
-{{#if games}}
-<h3>Games</h3>
-<table>
+{{else}}
+  <div type='button' class='btn btn-warning' onclick="javascript:createGame()">Create Game</div>
+{{/if}}
+{{#if completedGames}}
+<h3>Completed Games</h3>
+<table class="table table-striped">
   <thead>
     <tr>
-      <th>ID</th>
-      <th>Score</th>
-      <th>Duration</th>
+      <th scope="col">ID</th>
+      <th scope="col">Score</th>
+      <th scope="col">Duration</th>
     </th>
   </thead>
   <tbody>
-    {{#each games}}
+    {{#each completedGames}}
     <tr>
-      <td>{{this.id}}</td>
-      <td>{{this.score}}</td>
-      <td>{{this.durationInMs}}</td>
+      <td scope="row">{{this.id}}</td>
+      <td scope="row">{{this.score}}</td>
+      <td scope="row">{{this.durationInMs}}</td>
     </tr>
     {{/each}}
   </tbody>

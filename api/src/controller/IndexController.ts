@@ -12,12 +12,13 @@ const gameService = Container.get(GameService);
 
 export const index = (req: Request, res: Response) => {
   let user: User = req.user && Object.assign(req.user);
-  let games = gameService.findGamesByUser(user);
-  let game = gameService.findActiveGame(user, games);
+  let userGames = gameService.findGamesByUser(user);
+  let game = gameService.findActiveGame(user, userGames);
+  let completedGames = gameService.findCompletedGame(user, userGames);
   res.render("index", {
       title: "Home",
       user,
-      games,
+      completedGames: completedGames.reverse(),
       game,
   });
 };

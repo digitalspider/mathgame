@@ -34,18 +34,19 @@ class UserService {
     if (!user) {
       throw new Error('Username '+username+' does not exist');
     }
-    return user;
+    return Object.assign(user);
   }
 
   getUserRaw(username: string): User | undefined {
-    return this.users.get(username);
+    let user = this.users.get(username);
+    return user && Object.assign(user) || null;
   }
 
   updateUser(user: User): User {
     // validate that user exists
     this.getUser(user.username);
     this.users.set(user.username, user);
-    return user;
+    return Object.assign(user);
   }
 }
 

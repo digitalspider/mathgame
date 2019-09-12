@@ -47,7 +47,19 @@ class GameService {
     if (!games) {
       games = this.findGamesByUser(user);
     }
-    return games.find((game) => game.endTime!==null);
+    return games.find((game) => !game.endTime);
+  }
+
+  /**
+   * Find the completed games for the user
+   * @param user the user whose game to find
+   * @param games the list of games this user has
+   */
+  findCompletedGame(user: User, games?: Game[]) {
+    if (!games) {
+      games = this.findGamesByUser(user);
+    }
+    return games.filter((game) => game.endTime);
   }
 
   /**
