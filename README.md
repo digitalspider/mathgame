@@ -11,7 +11,6 @@ To start this for development run:
 cd api
 npm run dev
 ```
-* Go to https://localhost:5000
-* Login as guest / guest
+* Go to http://localhost:5000
 
 See: [https://mathgame.com.au](https://mathgame.com.au)

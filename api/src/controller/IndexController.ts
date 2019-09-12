@@ -16,7 +16,9 @@ export const index = (req: Request, res: Response) => {
 };
 
 export const login = (req: Request, res: Response) => {
-  res.render("login");
+  res.render("login", {
+    success_msg: 'You can login as guest / guest',
+  });
 };
 
 export const register = (req: Request, res: Response) => {
