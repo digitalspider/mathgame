@@ -9,19 +9,19 @@
     </ol>
     <div class="carousel-inner">
       {{#each game.questions}}
-      <div class="carousel-item {{#if @first}}active{{/if}}">
-        <div class="d-block w-100 h-100" style="background-color: lightgrey; font-size: 200px; text-align: center">
+      <div class="carousel-item {{#if @first}}active{{/if}}" data-interval="6000">
+        <div class="d-block w-100" style="background-color: lightgrey; font-size: 150px; height: 300px; text-align: center">
           {{this.firstNumber}}{{this.operation}}{{this.secondNumber}}=
-          <input type="text" style="width: 40px; font-size: 150px"></input>
+          <input type="text" style="width: 160px; font-size: 150px; height: 160px"></input>
         </div>
       </div>
       {{/each}}
     </div>
-    <a class="carousel-control-prev" href="#gameCarousel" role="button" data-slide="prev">
+    <a class="carousel-control-prev" href="#gameCarousel" role="button" data-slide="prev" style="width: 40px">
       <span class="carousel-control-prev-icon" aria-hidden="true"></span>
       <span class="sr-only">Previous</span>
     </a>
-    <a class="carousel-control-next" href="#gameCarousel" role="button" data-slide="next">
+    <a class="carousel-control-next" href="#gameCarousel" role="button" data-slide="next" style="width: 40px">
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="sr-only">Next</span>
     </a>
