@@ -3,6 +3,8 @@ import Container, {Service} from 'typedi';
 import {Setting} from '../model/Setting';
 import {User} from '../model/User';
 import {SettingService} from './SettingService';
+import {Difficulty} from '../model/Difficulty';
+import {Operation} from '../model/Operation';
 
 @Service()
 class UserService {
@@ -11,8 +13,8 @@ class UserService {
     private settingService: SettingService = Container.get(SettingService),
     private users = new Map<string, User>(),
   ) {
-    let settings = this.settingService.createSetting();
-    settings.questionCount = 3;
+    let settings = this.settingService.createSetting(Difficulty.MEDIUM, [Operation.ADD, Operation.SUBTRACT]);
+    settings.questionCount = 5;
     this.createUser('guest','guest', 'guest@mathgame.com.au', settings);
   }
 

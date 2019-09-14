@@ -1,8 +1,9 @@
 enum Difficulty {
-    EASY = 'easy',
-    MEDIUM = 'medium',
-    HARD = 'hard',
-    CUSTOM = 'custom',
+    KINDY = 'KINDY',
+    EASY = 'EASY',
+    MEDIUM = 'MEDIUM',
+    HARD = 'HARD',
+    CUSTOM = 'CUSTOM',
 }
 
 export { Difficulty };

@@ -7,6 +7,7 @@ import {GameService} from '../service/GameService';
 import passport = require('passport');
 import { check, sanitize, validationResult } from "express-validator";
 import {SettingService} from '../service/SettingService';
+import _ from 'lodash';
 
 const userService = Container.get(UserService);
 const gameService = Container.get(GameService);
@@ -25,9 +26,29 @@ export const index = (req: Request, res: Response) => {
       game,
       settingOptions,
       helpers: { // handlebars
-        ifEquals: function (arg1: string, arg2: string) {
-          console.log('compare: '+arg1+','+arg2);
-          return (arg1 === arg2);
+        ifEquals: function(arg1: string, arg2: string, response: string, dataContext: any) {
+          let context = dataContext && dataContext.data && dataContext.data.root;
+          let value = arg2;
+          let result = response;
+          if (_.has(context, arg2)) {
+            value = _.get(context, arg2);
+          }
+          if (_.has(context, response)) {
+            result = _.get(context, response);
+          }
+          return arg1 === value ? result : '';
+        },
+        ifIncludes: function(arg1: string, arg2: string, response: string, dataContext: any) {
+          let context = dataContext && dataContext.data && dataContext.data.root;
+          let value = arg2;
+          let result = response;
+          if (_.has(context, arg2)) {
+            value = _.get(context, arg2);
+          }
+          if (_.has(context, response)) {
+            result = _.get(context, response);
+          }
+          return value.includes(arg1) ? result : '';
         }
       }
   });

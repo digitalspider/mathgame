@@ -21,18 +21,23 @@ class SettingService {
     customMax: number = 12,
     customAvgSecondsPerQuestion: number = 6,
   ): Setting {
-    let max: number;
-    let avgSecondsPerQuestion: number;
+    let setting = new Setting(difficulty, operations, questionCount, customMax, customAvgSecondsPerQuestion);
+    if (difficulty!=Difficulty.CUSTOM) {
+      this.setDifficulty(setting, difficulty);
+    }
+    return setting;
+  }
+
+  setDifficulty(setting: Setting, difficulty: Difficulty) {
     switch(difficulty) {
-      case Difficulty.EASY: max=12; avgSecondsPerQuestion=6; break;
-      case Difficulty.MEDIUM: max=20; avgSecondsPerQuestion=3; break;
-      case Difficulty.HARD: max=100; avgSecondsPerQuestion=2; break;
-      case Difficulty.CUSTOM: max=customMax; avgSecondsPerQuestion=customAvgSecondsPerQuestion; break;
+      case Difficulty.KINDY: setting.maxValue=6; setting.avgSecondsPerQuestion=10; break;
+      case Difficulty.EASY: setting.maxValue=12; setting.avgSecondsPerQuestion=6; break;
+      case Difficulty.MEDIUM: setting.maxValue=20; setting.avgSecondsPerQuestion=3; break;
+      case Difficulty.HARD: setting.maxValue=100; setting.avgSecondsPerQuestion=2; break;
+      case Difficulty.CUSTOM: break; 
       default:
         throw new Error('Invalid difficulty input = '+difficulty);
     }
-    let setting = new Setting(difficulty, operations, questionCount, max, avgSecondsPerQuestion);
-    return setting;
   }
 
   /**
@@ -42,6 +47,7 @@ class SettingService {
   getAllSettings(user?: User) {
     return {
       difficulty: [
+        Difficulty.KINDY,
         Difficulty.EASY,
         Difficulty.MEDIUM,
         Difficulty.HARD,

@@ -66,7 +66,7 @@
                       <ul class="nav nav-pills nav-fill nav-justified">
                       {{#each settingOptions.difficulty}}
                         <li class="nav-item">
-                          <a class="nav-link {{#if @first}}active{{/if}}" data-toggle="pill" href="#{{this}}">{{this}}</a>
+                          <a id="pill-{{this}}" class="nav-link {{#ifEquals this 'user.settings.difficulty' 'active'}}{{/ifEquals}}" data-toggle="pill" href="#{{this}}">{{this}}</a>
                         </li>
                       {{/each}}
                       </ul>
@@ -75,13 +75,11 @@
                   <tr>
                     <td>Operations</td>
                     <td>
-                      <ul class="nav nav-pills nav-fill nav-justified">
+                      <select class="custom-select" multiple="true">
                       {{#each settingOptions.operations}}
-                        <li class="nav-item">
-                          <a class="nav-link {{#if @first}}active{{/if}}" data-toggle="pill" href="#{{this}}">{{this}}</a>
-                        </li>
+                          <option value="{{this}}" {{#ifIncludes this 'user.settings.operations' 'selected'}}{{/ifIncludes}}>{{this}}</option>
                       {{/each}}
-                      </ul>
+                      </select>
                     </td>
                   </tr>
                   <tr>
