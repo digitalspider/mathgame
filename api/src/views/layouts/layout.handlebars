@@ -17,7 +17,8 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               {{#if user}}
-                <li class="nav-item"><a class="nav-link" href="/logout">Logout {{user.username}}</a></li>
+                <li class="nav-item"><div class="nav-link" data-toggle="modal" data-target="#settingsModal">Settings</div></li>
+                <li class="nav-item"><a class="nav-link" href="/logout" onclick="javascript:logout()">Logout {{user.username}}</a></li>
               {{else}}
                 <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
                 <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
@@ -46,6 +47,47 @@
         
       </div>
 
+      <!-- Settings Modal -->
+      <div class="modal" tabindex="-1" role="dialog" id="settingsModal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Settings</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form method="POST" action="/api/setting">
+                <table class="table table-striped">
+                  <tr>
+                    <td>Difficulty</td>
+                    <td>{{user.settings.difficulty}}</td>
+                  </tr>
+                  <tr>
+                    <td>Operations</td>
+                    <td>{{user.settings.operations}}</td>
+                  </tr>
+                  <tr>
+                    <td>Questions</td>
+                    <td>{{user.settings.questionCount}}</td>
+                  </tr>
+                  <tr>
+                    <td>Max Value</td>
+                    <td>{{user.settings.maxValue}}</td>
+                  </tr>
+                </table>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save Settings</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- footer -->
       <footer class="footer">
         <p>&copy; 2019 MathGame, Inc.</p>
       </footer>
@@ -53,6 +95,8 @@
     </div> <!-- /container -->
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/js/bootstrap-4.3.1.min.js"></script>
+    {{#if user}}
     <script src="/js/mathgame.js"></script>
+    {{/if}}
 </body>
 </html>

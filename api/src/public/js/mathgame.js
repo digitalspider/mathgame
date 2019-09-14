@@ -71,9 +71,24 @@ function saveGame(game, gameIndex) {
   sessionStorage.setItem('gameIndex', gameIndex);
 }
 
+function saveUser() {
+  jQuery.get('/api/user', null, (user) => {
+    localStorage.setItem('mathuser', JSON.stringify(user));
+  }, 'json').fail(() => {
+    alert('Error loading user from server');
+  });
+}
+
+function logout() {
+  localStorage.removeItem('mathuser');
+  return true;
+}
+
 jQuery(document).ready(() => {
-  gameIndex = 0;
-  game = {};
+  let user = localStorage.getItem('mathuser');
+  if (!user) {
+    saveUser();
+  }
   if(jQuery("#answer0")) {
     jQuery("#answer0").focus();
   }
