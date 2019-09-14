@@ -6,20 +6,30 @@ import {UserService} from '../service/UserService';
 import {GameService} from '../service/GameService';
 import passport = require('passport');
 import { check, sanitize, validationResult } from "express-validator";
+import {SettingService} from '../service/SettingService';
 
 const userService = Container.get(UserService);
 const gameService = Container.get(GameService);
+const settingService = Container.get(SettingService);
 
 export const index = (req: Request, res: Response) => {
   let user: User = req.user && Object.assign(req.user);
   let userGames = gameService.findGamesByUser(user);
   let game = gameService.findActiveGame(user, userGames);
+  let settingOptions = settingService.getAllSettings();
   let completedGames = gameService.findCompletedGame(user, userGames);
   res.render("index", {
       title: "Home",
       user,
       completedGames: completedGames.reverse(),
       game,
+      settingOptions,
+      helpers: { // handlebars
+        ifEquals: function (arg1: string, arg2: string) {
+          console.log('compare: '+arg1+','+arg2);
+          return (arg1 === arg2);
+        }
+      }
   });
 };
 

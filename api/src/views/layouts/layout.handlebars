@@ -62,19 +62,35 @@
                 <table class="table table-striped">
                   <tr>
                     <td>Difficulty</td>
-                    <td>{{user.settings.difficulty}}</td>
+                    <td>
+                      <ul class="nav nav-pills nav-fill nav-justified">
+                      {{#each settingOptions.difficulty}}
+                        <li class="nav-item">
+                          <a class="nav-link {{#if @first}}active{{/if}}" data-toggle="pill" href="#{{this}}">{{this}}</a>
+                        </li>
+                      {{/each}}
+                      </ul>
+                    </td>
                   </tr>
                   <tr>
                     <td>Operations</td>
-                    <td>{{user.settings.operations}}</td>
+                    <td>
+                      <ul class="nav nav-pills nav-fill nav-justified">
+                      {{#each settingOptions.operations}}
+                        <li class="nav-item">
+                          <a class="nav-link {{#if @first}}active{{/if}}" data-toggle="pill" href="#{{this}}">{{this}}</a>
+                        </li>
+                      {{/each}}
+                      </ul>
+                    </td>
                   </tr>
                   <tr>
                     <td>Questions</td>
-                    <td>{{user.settings.questionCount}}</td>
+                    <td><input type="text" value="{{user.settings.questionCount}}" name="questionCount"></input></td>
                   </tr>
                   <tr>
                     <td>Max Value</td>
-                    <td>{{user.settings.maxValue}}</td>
+                    <td><input type="text" value="{{user.settings.maxValue}}" name="maxValue"></input></td>
                   </tr>
                 </table>
               </form>
