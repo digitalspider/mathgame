@@ -25,7 +25,7 @@ function ajaxPost(url, postData, eleSelector, callback, reloadPage = false, data
   }, dataType);
 }
 
-function createGame(id) {
+function createGame() {
   ajaxPost('/api/game', null, null, null, true);
 }
 

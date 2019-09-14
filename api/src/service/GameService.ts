@@ -3,15 +3,16 @@ import {Game} from '../model/Game';
 import {Setting} from '../model/Setting';
 import {User} from '../model/User';
 import {QuestionService} from '../service/QuestionService';
+import uuid from 'uuid/v4';
 
 @Service()
 class GameService {
 
-  games: Map<number,Game>;
+  games: Map<string,Game>;
   constructor(
     private questionService: QuestionService = Container.get(QuestionService),
   ) {
-    this.games = new Map<number,Game>(); // Cache of games
+    this.games = new Map<string,Game>(); // Cache of games
   }
 
   /**
@@ -19,7 +20,7 @@ class GameService {
    * @param id the id of the game
    * @param user the user the game belongs to
    */
-  getGame(id: number, user: User) {
+  getGame(id: string, user: User) {
     let game = this.games.get(id);
     if (!game) {
       throw new Error(`Game ${id} does not exist`);
@@ -68,7 +69,7 @@ class GameService {
    */
   createGame(user: User) {
     let questions = this.createQuestions(user.settings);
-    let game = new Game(this.games.size, user, user.settings, questions);
+    let game = new Game(uuid().split('-')[0], user, user.settings, questions);
     return this.updateGame(game);
   }
 
@@ -93,10 +94,6 @@ class GameService {
     if (game.questions.length === 0) {
       throw new Error(`Game ${game.id} questions have not been initialized`);
     }
-    game.questions.forEach((question) => {
-      let questionString = this.questionService.print(question);
-      console.log(questionString);
-    });
     game.startTime = new Date();
   }
 
@@ -125,7 +122,24 @@ class GameService {
    */
   updateGame(game: Game) {
     this.games.set(game.id, game);
+    let max: number = 10;
+    this.limitMapSize(this.games, max);
     return game;
+  }
+
+  /**
+   * Remove old values in the map, greater that the max provided
+   * @param inputMap the map provided
+   * @param max the max number to keep
+   */
+  limitMapSize(inputMap: Map<string, Game>, max: number) {
+    let diff = inputMap.size-max;
+    if (diff>0) {
+      let keys = Array.from(inputMap.keys());
+      for (let i=0; i<diff; i++) {
+        inputMap.delete(keys[i]);
+      }
+    }
   }
 
   /**
@@ -148,9 +162,6 @@ class GameService {
   }
 
   deserialize(game: Game) {
-    if (typeof game.id === 'string') {
-      game.id = parseInt(game.id);
-    }
     if (typeof game.settings.questionCount === 'string') {
       game.settings.questionCount = parseInt(game.settings.questionCount);
     }

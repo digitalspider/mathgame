@@ -9,7 +9,7 @@ const gameService = Container.get(GameService);
 
 export const get = (req: Request, res: Response, next: NextFunction) => {
   let user: User = req.user && Object.assign(req.user);
-  let game = gameService.getGame(parseInt(req.params.id), user);
+  let game = gameService.getGame(req.params.id, user);
   return res.json(game);
 }
 
@@ -35,14 +35,14 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
 
 export const start = (req: Request, res: Response, next: NextFunction) => {
   let user: User = req.user && Object.assign(req.user);
-  let gameId = parseInt(req.params.id);
+  let gameId = req.params.id;
   let game = gameService.getGame(gameId, user); // validate correct game
   gameService.start(game);
   return res.json(game);
 }
 
 export const stop = (req: Request, res: Response, next: NextFunction) => {
-  let gameId = parseInt(req.params.id);
+  let gameId = req.params.id;
   let gameInput = req.body;
   if (gameInput.id != gameId) {
     throw new Error(`Invalid game.id provided: ${gameInput.id}!=${gameId}`);

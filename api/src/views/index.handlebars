@@ -27,7 +27,7 @@
     </a>
   </div>
   {{else}}
-  <div type='button' class='btn btn-success' onclick="javascript:startGame({{game.id}})">Start Game</div>
+  <div type='button' class='btn btn-success' onclick="javascript:startGame('{{game.id}}')">Start Game</div>
   {{/if}}
 {{else}}
   <p>Welcome player: <b>{{user.username}}</b></p>

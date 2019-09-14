@@ -4,7 +4,7 @@ import { User } from './User';
 
 class Game {
   constructor(
-    public id: number,
+    public id: string,
     public user: User,
     public settings: Setting,
     public questions: Question[] = new Array<Question>(),
