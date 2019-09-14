@@ -8,6 +8,7 @@
     "build": "tsc -p . && npm run copy-static-assets",
     "copy-static-assets": "ts-node src/copyStaticAssets.ts",
     "dev": "nodemon --config \"./nodemon.json\"/",
+    "debug": "node --inspect dist/app.js",
     "start": "node dist/app.js",
     "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix"
   },
