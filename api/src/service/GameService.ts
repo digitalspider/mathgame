@@ -106,13 +106,16 @@ class GameService {
    * @param game the game being played
    */
   stop(game: Game) {
+    game.endTime = new Date();
     if (!game.startTime) {
       throw new Error(`Game ${game.id} has not started`);
     }
-    game.endTime = new Date();
+    if (typeof game.startTime === 'string') {
+      game.startTime = new Date(game.startTime);
+    }
+    this.deserialize(game);
     game.durationInMs = game.endTime.getTime()-game.startTime.getTime();
     this.calculateScore(game);
-    console.log('score='+game.score+', errors='+game.errors);
     return this.updateGame(game);
   }
 
@@ -142,6 +145,21 @@ class GameService {
         game.errors++;
       }
     });
+  }
+
+  deserialize(game: Game) {
+    if (typeof game.id === 'string') {
+      game.id = parseInt(game.id);
+    }
+    if (typeof game.settings.questionCount === 'string') {
+      game.settings.questionCount = parseInt(game.settings.questionCount);
+    }
+    if (typeof game.settings.maxValue === 'string') {
+      game.settings.maxValue = parseInt(game.settings.maxValue);
+    }
+    if (typeof game.settings.avgSecondsPerQuestion === 'string') {
+      game.settings.avgSecondsPerQuestion = parseInt(game.settings.avgSecondsPerQuestion);
+    }
   }
 }
 

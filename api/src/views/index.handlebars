@@ -1,7 +1,7 @@
 {{#if game}}
   {{#if game.startTime}}
   <div type='button' class='btn btn-danger' onclick="javascript:stopGame({{game.id}})">Stop Game</div>
-  <div id="gameCarousel" class="carousel" data-ride="carousel">
+  <div id="gameCarousel" class="carousel">
     <ol class="carousel-indicators">
       {{#each game.questions}}
         <li data-target="#gameCarousel" data-slide-to="{{@index}}" {{#if @first}}class="active"{{/if}}></li>
@@ -10,9 +10,9 @@
     <div class="carousel-inner">
       {{#each game.questions}}
       <div class="carousel-item {{#if @first}}active{{/if}}" data-interval="6000">
-        <div class="d-block w-100" style="background-color: lightgrey; font-size: 150px; height: 300px; text-align: center">
+        <div class="d-block w-100 form-inline game-tile">
           {{this.firstNumber}}{{this.operation}}{{this.secondNumber}}=
-          <input type="text" style="width: 160px; font-size: 150px; height: 160px"></input>
+          <input type="text" class="form-control answer" id="answer{{@index}}" onchange="javascript:handleInput(this)"></input>
         </div>
       </div>
       {{/each}}
@@ -47,7 +47,7 @@
       {{#each completedGames}}
       <tr>
         <td scope="row">{{this.id}}</td>
-        <td scope="row">{{this.score}}</td>
+        <td scope="row">{{this.score}} / {{this.questions.length}}</td>
         <td scope="row">{{this.durationInMs}}</td>
       </tr>
       {{/each}}

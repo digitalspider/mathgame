@@ -11,7 +11,9 @@ class UserService {
     private settingService: SettingService = Container.get(SettingService),
     private users = new Map<string, User>(),
   ) {
-    this.createUser('guest','guest', 'guest@mathgame.com.au');
+    let settings = this.settingService.createSetting();
+    settings.questionCount = 3;
+    this.createUser('guest','guest', 'guest@mathgame.com.au', settings);
   }
 
   async createUser(username: string, password: string, email: string, settings?: Setting): Promise<User> {
