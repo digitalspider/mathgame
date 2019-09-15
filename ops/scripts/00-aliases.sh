@@ -13,8 +13,11 @@ alias mathlog='docker logs -t -f mathgame'
 
 # MATHGAME AWS commands
 alias ecrlogin='$(aws --profile mathgame ecr get-login --no-include-email --region ap-southeast-2)'
-alias mathclean='docker rm -f mathgame && docker rmi X.dkr.ecr.ap-southeast-2.amazonaws.com/mathgame'
-alias mathrun='ecrlogin && docker run -d --name=mathgame --publish=80:5000 --env-file ./.env --restart unless-stopped X.dkr.ecr.ap-southeast-2.amazonaws.com/mathgame:latest'
+alias mathclean='docker rm -f mathgame && docker rmi 640016856401.dkr.ecr.ap-southeast-2.amazonaws.com/mathgame'
+alias mathbuild='docker build -t mathgame ./Dockerfile'
+alias mathtag='docker tag mathgame:latest 640016856401.dkr.ecr.ap-southeast-2.amazonaws.com/mathgame:latest'
+alias mathpush='docker push 640016856401.dkr.ecr.ap-southeast-2.amazonaws.com/mathgame:latest'
+alias mathrun='ecrlogin && docker run -d --name=mathgame --publish=80:5000 --env-file ./.env --restart unless-stopped 640016856401.dkr.ecr.ap-southeast-2.amazonaws.com/mathgame:latest'
 alias s3pull='aws --profile mathgame s3 cp s3://mathgame/.env .'
 alias s3push='aws --profile mathgame s3 cp .env s3://mathgame/.env --grants read=uri=http://acs.amazonaws.com/groups/global/AllUsers'
 
