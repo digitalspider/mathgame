@@ -30,10 +30,10 @@ class SettingService {
 
   setDifficulty(setting: Setting, difficulty: Difficulty) {
     switch(difficulty) {
-      case Difficulty.KINDY: setting.maxValue=6; setting.avgSecondsPerQuestion=10; break;
-      case Difficulty.EASY: setting.maxValue=12; setting.avgSecondsPerQuestion=6; break;
-      case Difficulty.MEDIUM: setting.maxValue=20; setting.avgSecondsPerQuestion=3; break;
-      case Difficulty.HARD: setting.maxValue=100; setting.avgSecondsPerQuestion=2; break;
+      case Difficulty.KINDY: setting.questionCount=5; setting.maxValue=6; setting.avgSecondsPerQuestion=10; break;
+      case Difficulty.EASY: setting.questionCount=10; setting.maxValue=12; setting.avgSecondsPerQuestion=6; break;
+      case Difficulty.MEDIUM: setting.questionCount=10; setting.maxValue=20; setting.avgSecondsPerQuestion=3; break;
+      case Difficulty.HARD: setting.questionCount=10; setting.maxValue=100; setting.avgSecondsPerQuestion=2; break;
       case Difficulty.CUSTOM: break; 
       default:
         throw new Error('Invalid difficulty input = '+difficulty);

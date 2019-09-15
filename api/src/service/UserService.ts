@@ -13,7 +13,7 @@ class UserService {
     private settingService: SettingService = Container.get(SettingService),
     private users = new Map<string, User>(),
   ) {
-    let settings = this.settingService.createSetting(Difficulty.MEDIUM, [Operation.ADD, Operation.SUBTRACT]);
+    let settings = this.settingService.createSetting(Difficulty.KINDY, [Operation.ADD, Operation.SUBTRACT]);
     settings.questionCount = 5;
     this.createUser('guest','guest', 'guest@mathgame.com.au', settings);
   }
