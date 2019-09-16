@@ -13,6 +13,7 @@ class Game {
     public durationInMs?: number,
     public errors: number = 0,
     public score: number = 0,
+    public display?: string,
   ) {}
 }
 

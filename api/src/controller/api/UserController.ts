@@ -20,7 +20,6 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
   if (username !== userInput.username) {
     throw new Error(`Cannot change username in update. Username=${username}`);
   }
-  let result = Object.assign({}, userService.updateUser(userInput));
-  delete result.password;
+  let result = userService.updateUser(userInput);
   return res.json(result);
 }

@@ -59,7 +59,7 @@ class SettingService {
         Operation.MULTIPLY,
         Operation.DIVIDE,
       ],
-      questionCount: [10, 20, 30],
+      questionCount: [5, 10, 20, 30],
       maxValue: 10,
       avgSecondsPerQuestion: 6,
     };

@@ -58,7 +58,7 @@
               </button>
             </div>
             <div class="modal-body">
-              <form method="POST" action="/api/setting">
+              <form id='settingsForm' method="POST" action="/api/settings">
                 <table class="table table-striped">
                   <tr>
                     <td>Difficulty</td>
@@ -66,16 +66,17 @@
                       <ul class="nav nav-pills nav-fill nav-justified">
                       {{#each settingOptions.difficulty}}
                         <li class="nav-item">
-                          <a id="pill-{{this}}" class="nav-link {{#ifEquals this 'user.settings.difficulty' 'active'}}{{/ifEquals}}" data-toggle="pill" href="#{{this}}">{{this}}</a>
+                          <a id="{{this}}" class="nav-link {{#ifEquals this 'user.settings.difficulty' 'active'}}{{/ifEquals}}" data-toggle="pill" href="#{{this}}">{{this}}</a>
                         </li>
                       {{/each}}
                       </ul>
+                      <input id="difficulty" type="hidden" name="difficulty" value="{{user.settings.difficulty}}"/>
                     </td>
                   </tr>
                   <tr>
                     <td>Operations</td>
                     <td>
-                      <select class="custom-select" multiple="true">
+                      <select class="custom-select" name="operations" multiple="true">
                       {{#each settingOptions.operations}}
                           <option value="{{this}}" {{#ifIncludes this 'user.settings.operations' 'selected'}}{{/ifIncludes}}>{{this}}</option>
                       {{/each}}
@@ -84,18 +85,18 @@
                   </tr>
                   <tr>
                     <td>Questions</td>
-                    <td><input type="text" value="{{user.settings.questionCount}}" name="questionCount"></input></td>
+                    <td><input type="text" value="{{user.settings.questionCount}}" name="questionCount" id="questionCount"></input></td>
                   </tr>
                   <tr>
                     <td>Max Value</td>
-                    <td><input type="text" value="{{user.settings.maxValue}}" name="maxValue"></input></td>
+                    <td><input type="text" value="{{user.settings.maxValue}}" name="maxValue" id="maxValue"></input></td>
                   </tr>
                 </table>
               </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save Settings</button>
+              <button type="button" class="btn btn-primary" onclick="javascript:submitSettingsForm()">Save Settings</button>
             </div>
           </div>
         </div>

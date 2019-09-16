@@ -35,10 +35,12 @@
   <div type='button' class='btn btn-warning' onclick="javascript:createGame()">Create Game</div>
   {{#if completedGames}}
   <h3>Completed Games</h3>
-  <table class="table table-striped">
+  <table class="table table-striped table-hover">
     <thead>
       <tr>
         <th scope="col">ID</th>
+        <th scope="col">Level</th>
+        <th scope="col"></th>
         <th scope="col">Score</th>
         <th scope="col">Duration</th>
       </th>
@@ -47,6 +49,8 @@
       {{#each completedGames}}
       <tr>
         <td scope="row">{{this.id}}</td>
+        <td scope="row">{{this.settings.difficulty}}</td>
+        <td scope="row" class="table-{{this.display}}" width="10px">&nbsp;</td>
         <td scope="row">{{this.score}} / {{this.questions.length}}</td>
         <td scope="row">{{this.durationInMs}}</td>
       </tr>

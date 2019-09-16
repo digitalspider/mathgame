@@ -130,6 +130,7 @@ app.post('/api/game/:id/start', gameController.start);
 app.post('/api/game/:id/stop', gameController.stop);
 app.post('/api/game/:id', gameController.update);
 app.get('/api/settings', settingController.get);
+app.post('/api/settings', settingController.update);
 app.get('/api/user', userController.get);
 app.put('/api/user', userController.update);
 

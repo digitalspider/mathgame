@@ -5,6 +5,7 @@ import Container from 'typedi';
 import {UserService} from '../service/UserService';
 import {Request, Response, NextFunction} from 'express';
 import {find} from 'lodash';
+import {User} from '../model/User';
 
 const LocalStrategy = passportLocal.Strategy;
 
@@ -17,8 +18,10 @@ passport.serializeUser<any, any>((user, done) => {
 passport.deserializeUser((username: string, done: Function) => {
   try {
     let user = Object.assign({}, userService.getUser(username));
-    delete user.password;
-    done(null, user);
+    done(null, {
+      username: user.username,
+      email: user.email,
+    });
   } catch (err) {
     done(err, null);
   }
@@ -56,7 +59,11 @@ passport.use(
  */
 export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   if (req.isAuthenticated()) {
-      return next();
+    let user: User = req.user && Object.assign(req.user);
+    user = Object.assign({}, userService.getUser(user.username));
+    delete user.password;
+    req.user = user;
+    return next();
   }
   res.redirect("/login");
 };

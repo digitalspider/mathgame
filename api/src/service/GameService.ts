@@ -35,8 +35,9 @@ class GameService {
    * Find all the games that belong to this user
    * @param user the user whose games to find
    */
-  findGamesByUser(user: User) {
-    return Array.from<Game>(this.games.values()).filter((game) => game.user.username === user.username);
+  findGamesByUser(user: User): Game[] {
+    return Array.from<Game>(this.games.values())
+      .filter((game) => game.user.username === user.username);
   }
 
   /**
@@ -113,6 +114,7 @@ class GameService {
     this.deserialize(game);
     game.durationInMs = game.endTime.getTime()-game.startTime.getTime();
     this.calculateScore(game);
+    this.calculateDisplay(game);
     return this.updateGame(game);
   }
 
@@ -161,7 +163,20 @@ class GameService {
     });
   }
 
+  /**
+   * If there are no errors, set display to success
+   * @param game the game to calculate
+   */
+  calculateDisplay(game: Game): Game {
+    game.display = (game.errors===0 ? 'success' : 'warning');
+    if (game.score<game.questions.length/2) { game.display='danger'; }
+    return game;
+  }
+
   deserialize(game: Game) {
+    if (typeof game.errors === 'string') {
+      game.errors = parseInt(game.errors);
+    }
     if (typeof game.settings.questionCount === 'string') {
       game.settings.questionCount = parseInt(game.settings.questionCount);
     }

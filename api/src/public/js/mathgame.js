@@ -58,6 +58,24 @@ function handleInput(target) {
   }
 }
 
+function submitSettingsForm() {
+  let ele = jQuery('a.nav-link.active')[0];
+  console.log(ele);
+  jQuery('#difficulty').val(ele.id);
+  submitForm('settingsForm', (user) => {
+    jQuery('#questionCount').val(user.settings.questionCount);
+    jQuery('#maxValue').val(user.settings.maxValue);
+    localStorage.setItem('mathuser', JSON.stringify(user));
+  });
+}
+
+function submitForm(formId, callback) {
+  console.log('formId='+formId);
+  let form = jQuery('#'+formId);
+  console.log(form);
+  ajaxPost(form[0].action, form.serialize(), null, callback, true);
+}
+
 function getGame() {
   return JSON.parse(sessionStorage.getItem('game'));
 }

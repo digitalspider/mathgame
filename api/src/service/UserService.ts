@@ -47,9 +47,11 @@ class UserService {
 
   updateUser(user: User): User {
     // validate that user exists
-    this.getUser(user.username);
-    this.users.set(user.username, user);
-    return user;
+    let dbUser = this.getUser(user.username);
+    let updatedUser = Object.assign(dbUser, user);
+    this.users.set(user.username, Object.assign({}, updatedUser));
+    delete updatedUser.password;
+    return updatedUser;
   }
 }
 
