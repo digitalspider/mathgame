@@ -115,6 +115,7 @@ class GameService {
     game.durationInMs = game.endTime.getTime()-game.startTime.getTime();
     this.calculateScore(game);
     this.calculateDisplay(game);
+    console.log(game);
     return this.updateGame(game);
   }
 
@@ -186,6 +187,23 @@ class GameService {
     if (typeof game.settings.avgSecondsPerQuestion === 'string') {
       game.settings.avgSecondsPerQuestion = parseInt(game.settings.avgSecondsPerQuestion);
     }
+    game.questions.forEach((question) => {
+      if (typeof question.firstNumber === 'string') {
+        question.firstNumber = parseInt(question.firstNumber);
+      }
+      if (typeof question.secondNumber === 'string') {
+        question.secondNumber = parseInt(question.secondNumber);
+      }
+      if (typeof question.correctAnswer === 'string') {
+        question.correctAnswer = parseInt(question.correctAnswer);
+      }
+      if (typeof question.userAnswer === 'string') {
+        question.userAnswer = parseInt(question.userAnswer);
+      }
+      if (typeof question.isCorrect === 'string') {
+        question.isCorrect = 'true'===question.isCorrect;
+      }
+    })
   }
 }
 
