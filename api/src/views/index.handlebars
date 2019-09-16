@@ -1,6 +1,6 @@
 {{#if game}}
   {{#if game.startTime}}
-  <div type='button' class='btn btn-danger' onclick="javascript:stopGame({{game.id}})">Stop Game</div>
+  <div type='button' class='btn btn-danger' onclick="javascript:stopGame('{{game.id}}')">Stop Game</div>
   <div id="gameCarousel" class="carousel">
     <ol class="carousel-indicators">
       {{#each game.questions}}
