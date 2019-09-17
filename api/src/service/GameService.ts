@@ -115,7 +115,6 @@ class GameService {
     game.durationInMs = game.endTime.getTime()-game.startTime.getTime();
     this.calculateScore(game);
     this.calculateDisplay(game);
-    console.log(game);
     return this.updateGame(game);
   }
 
@@ -153,8 +152,9 @@ class GameService {
    */
   calculateScore(game: Game) {
     game.questions.forEach((question) => {
-      if (question.userAnswer) {
+      if (question.userAnswer || question.userAnswer === 0) {
         this.questionService.setAnswer(question, question.userAnswer);
+        game.answered++;
       }
       if (question.isCorrect) {
         game.score++;
@@ -162,6 +162,7 @@ class GameService {
         game.errors++;
       }
     });
+    game.completed = game.questions.length === game.answered;
   }
 
   /**

@@ -1,7 +1,7 @@
 enum Operation {
     ADD = '+',
     SUBTRACT = '-',
-    MULTIPLY = '*',
+    MULTIPLY = 'x',
     DIVIDE = '/',
 }
 

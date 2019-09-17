@@ -14,6 +14,8 @@ class Game {
     public errors: number = 0,
     public score: number = 0,
     public display?: string,
+    public answered: number = 0,
+    public completed: boolean = false,
   ) {}
 }
 
