@@ -1,1 +1,1 @@
-docker build ./Dockerfile -t mathgame
+docker build . -t mathgame
