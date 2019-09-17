@@ -15,7 +15,7 @@ class SettingService {
    * @param customAvgSecondsPerQuestion if custom, the average seconds per question
    */
   createSetting(
-    difficulty: Difficulty = Difficulty.EASY,
+    difficulty: Difficulty = Difficulty.KINDY,
     operations: Operation[] = [Operation.ADD],
     questionCount: number = 10,
     customMax: number = 12,

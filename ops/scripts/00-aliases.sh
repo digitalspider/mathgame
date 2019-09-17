@@ -13,7 +13,7 @@ alias mathlog='docker logs -t -f mathgame'
 
 # MATHGAME AWS commands
 alias ecrlogin='$(aws --profile mathgame ecr get-login --no-include-email --region ap-southeast-2)'
-alias mathclean='docker rm -f mathgame && docker rmi 640016856401.dkr.ecr.ap-southeast-2.amazonaws.com/mathgame'
+alias mathclean='docker rm -f mathgame && docker rmi mathgame && docker rmi 640016856401.dkr.ecr.ap-southeast-2.amazonaws.com/mathgame'
 alias mathbuild='docker build -t mathgame .'
 alias mathtag='docker tag mathgame:latest 640016856401.dkr.ecr.ap-southeast-2.amazonaws.com/mathgame:latest'
 alias mathpush='ecrlogin && docker push 640016856401.dkr.ecr.ap-southeast-2.amazonaws.com/mathgame:latest'
