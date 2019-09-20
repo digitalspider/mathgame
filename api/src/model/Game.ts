@@ -1,6 +1,6 @@
 import { Question } from './Question';
 import { Setting } from './Setting';
-import { User } from './User';
+import User from './User.model';
 
 class Game {
   constructor(

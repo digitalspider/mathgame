@@ -1,7 +1,7 @@
 import Container, {Service} from 'typedi';
 import {Game} from '../model/Game';
 import {Setting} from '../model/Setting';
-import {User} from '../model/User';
+import User from '../model/User.model';
 import {QuestionService} from '../service/QuestionService';
 import uuid from 'uuid/v4';
 

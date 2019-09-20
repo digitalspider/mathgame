@@ -18,6 +18,9 @@ import {GameService} from './service/GameService';
 import {QuestionService} from './service/QuestionService';
 import {SettingService} from './service/SettingService';
 import {UserService} from './service/UserService';
+import { sequelize } from "./db";
+import User from "./model/User.model";
+import { Setting } from "./model/Setting";
 
 console.log('START');
 
@@ -140,28 +143,13 @@ app.get('/', (req, res) => {
 });
 */
 
-// Set Port
-app.set('port', PORT);
-// Start listening
-app.listen(app.get('port'), function() {
-	console.log('Server started on port '+app.get('port'));
-});
-
-const settingService = new SettingService();
-const questionService = new QuestionService();
-const userService = new UserService(settingService);
-const gameService = new GameService(questionService);
-const difficulty = Difficulty.MEDIUM;
-const operations = [Operation.ADD, Operation.SUBTRACT, Operation.MULTIPLY, Operation.DIVIDE];
-const questionCount = 20;
-let settings = settingService.createSetting(
-  difficulty,
-  operations,
-  questionCount,
-);
-userService.createUser('admin', 'admin', 'admin@test.com').then((user) => {
-  user.settings = settings;
-  let game = gameService.createGame(user);
-  gameService.start(game);
-  console.log('DONE');
+// Syncronize the database
+sequelize.sync().then(() => {
+  // Set Port
+  app.set('port', PORT);
+  // Start listening
+  app.listen(app.get('port'), function() {
+    console.log('Server started on port '+app.get('port'));
+    console.log('DONE');
+  });
 });

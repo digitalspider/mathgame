@@ -1,14 +1,14 @@
 import "reflect-metadata";
-import {User} from '../../model/User';
+import User from '../../model/User.model';
 import {UserService} from '../../service/UserService';
 import Container from 'typedi';
 import {Request, Response, NextFunction} from 'express';
 
 const userService: UserService = Container.get(UserService);
 
-export const get = (req: Request, res: Response, next: NextFunction) => {
+export const get = async (req: Request, res: Response, next: NextFunction) => {
   let user: User = req.user && Object.assign(req.user);
-  let result = Object.assign({}, userService.getUser(user.username));
+  let result = Object.assign({}, await userService.getUser(user.username));
   delete result.password;
   return res.json(result);
 }

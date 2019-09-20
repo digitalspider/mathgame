@@ -1,25 +1,21 @@
 import bcrypt from 'bcryptjs';
-import Container, {Service} from 'typedi';
-import {Setting} from '../model/Setting';
-import {User} from '../model/User';
-import {SettingService} from './SettingService';
-import {Difficulty} from '../model/Difficulty';
-import {Operation} from '../model/Operation';
+import Container, { Service } from 'typedi';
+import { Setting } from '../model/Setting';
+import User from '../model/User.model';
+import { SettingService } from './SettingService';
+import { sequelize } from '../db';
+import Bluebird from 'bluebird';
 
 @Service()
 class UserService {
 
   constructor(
     private settingService: SettingService = Container.get(SettingService),
-    private users = new Map<string, User>(),
   ) {
-    let settings = this.settingService.createSetting(Difficulty.KINDY, [Operation.ADD, Operation.SUBTRACT]);
-    settings.questionCount = 5;
-    this.createUser('guest','guest', 'guest@mathgame.com.au', settings);
   }
 
   async createUser(username: string, password: string, email: string, settings?: Setting): Promise<User> {
-    let existingUser = this.getUserRaw(username);
+    let existingUser = await this.getUserRaw(username);
     if (existingUser) {
       throw new Error('This username is already registered');
     }
@@ -28,32 +24,36 @@ class UserService {
     }
     let salt = await bcrypt.genSalt(10);
 	  let hash = await bcrypt.hash(password, salt);
-    let user = new User(username, hash, email, settings);
-    this.users.set(username, user);
-    return user;
+    let user = new User();
+    user.username = username;
+    user.password = hash;
+    user.email = email;
+    user.settings = settings;
+    return user.save();
   }
 
-  getUser(username: string): User {
-    let user = this.users.get(username);
+  async getUser(username: string): Promise<User> {
+    let user: any = await sequelize.models.User.findByPk(username);
     if (!user) {
       throw new Error('Username '+username+' does not exist');
     }
     return user;
   }
 
-  getUserRaw(username: string): User | undefined {
-    return this.users.get(username);
+  async getUserRaw(username: string): Promise<User | null> {
+    return await User.findByPk(username);
   }
 
   updateUser(user: User): User {
     // validate that user exists
     let dbUser = this.getUser(user.username);
     let updatedUser = Object.assign(dbUser, user);
-    this.users.set(user.username, Object.assign({}, updatedUser));
+    // TODO: Save user
+    // this.users.set(user.username, Object.assign({}, updatedUser));
     delete updatedUser.password;
     return updatedUser;
   }
 }
 
-export {UserService};
+export { UserService };
 

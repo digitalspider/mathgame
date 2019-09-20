@@ -1,7 +1,7 @@
 import { SettingService } from '../../service/SettingService';
 import {Request, Response, NextFunction} from 'express';
 import Container from 'typedi';
-import {User} from '../../model/User';
+import User from '../../model/User.model';
 import {UserService} from '../../service/UserService';
 
 const settingService = Container.get(SettingService);

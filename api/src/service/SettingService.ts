@@ -2,7 +2,7 @@ import {Service} from 'typedi';
 import {Difficulty} from '../model/Difficulty';
 import {Operation} from '../model/Operation';
 import {Setting} from '../model/Setting';
-import {User} from '../model/User';
+import User from '../model/User.model';
 
 @Service()
 class SettingService {
@@ -17,8 +17,8 @@ class SettingService {
   createSetting(
     difficulty: Difficulty = Difficulty.KINDY,
     operations: Operation[] = [Operation.ADD],
-    questionCount: number = 10,
-    customMax: number = 12,
+    questionCount: number = 5,
+    customMax: number = 6,
     customAvgSecondsPerQuestion: number = 6,
   ): Setting {
     let setting = new Setting(difficulty, operations, questionCount, customMax, customAvgSecondsPerQuestion);

@@ -5,7 +5,7 @@ import Container from 'typedi';
 import {UserService} from '../service/UserService';
 import {Request, Response, NextFunction} from 'express';
 import {find} from 'lodash';
-import {User} from '../model/User';
+import User from '../model/User.model';
 
 const LocalStrategy = passportLocal.Strategy;
 
@@ -15,9 +15,9 @@ passport.serializeUser<any, any>((user, done) => {
   done(null, user.username);
 });
 
-passport.deserializeUser((username: string, done: Function) => {
+passport.deserializeUser(async (username: string, done: Function) => {
   try {
-    let user = Object.assign({}, userService.getUser(username));
+    let user = Object.assign({}, await userService.getUser(username));
     done(null, {
       username: user.username,
       email: user.email,
@@ -28,10 +28,10 @@ passport.deserializeUser((username: string, done: Function) => {
 });
 
 passport.use(
-  new LocalStrategy(function(username: string, password: string, done: Function) {
+  new LocalStrategy(async function(username: string, password: string, done: Function) {
     // Match user
     try {
-      let user = userService.getUserRaw(username);
+      let user = await userService.getUserRaw(username);
       console.log('passport found '+JSON.stringify(user));
       if (!user) {
         return done(null, false, { message: 'The username '+username+' is not registered' });
@@ -57,10 +57,10 @@ passport.use(
 /**
  * Login Required middleware.
  */
-export const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
+export const isAuthenticated = async (req: Request, res: Response, next: NextFunction) => {
   if (req.isAuthenticated()) {
     let user: User = req.user && Object.assign(req.user);
-    user = Object.assign({}, userService.getUser(user.username));
+    user = Object.assign({}, await userService.getUser(user.username));
     delete user.password;
     req.user = user;
     return next();

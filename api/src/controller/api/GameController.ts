@@ -2,7 +2,7 @@ import {NextFunction, Request, Response} from 'express';
 import "reflect-metadata";
 import Container from 'typedi';
 import {Game} from '../../model/Game';
-import {User} from '../../model/User';
+import User from '../../model/User.model';
 import {GameService} from '../../service/GameService';
 
 const gameService = Container.get(GameService);
