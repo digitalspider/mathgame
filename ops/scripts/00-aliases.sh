@@ -2,6 +2,8 @@
 
 # UTILS
 alias upgrade='sudo apt update && sudo apt -y upgrade'
+#alias functions
+doc() { docker exec -it $1 /bin/bash -l; }
 
 # MATHGAME Docker commands
 alias mathgame='docker exec -it mathgame /bin/sh -l'
