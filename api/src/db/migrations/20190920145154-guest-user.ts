@@ -4,7 +4,6 @@ import { sequelize } from '../index';
 import { Sequelize, QueryInterface } from "sequelize/types";
 import { UserService } from "../../service/UserService";
 import Container from "typedi";
-import User from '../../model/User.model';
 
 module.exports = {
   up: async (queryInterface: QueryInterface, Sequelize: Sequelize) => {
