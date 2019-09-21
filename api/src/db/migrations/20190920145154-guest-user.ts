@@ -11,6 +11,6 @@ module.exports = {
   },
 
   down: (queryInterface: QueryInterface, Sequelize: Sequelize) => {
-    return queryInterface.delete(new sequelize.models.User(), 'Users', {username: 'guest'});
+    return queryInterface.delete(new sequelize.models.User(), 'user', {username: 'guest'});
   }
 };

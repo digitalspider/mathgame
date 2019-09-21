@@ -4,7 +4,6 @@ import { Setting } from "./Setting";
 
 @Table({
   tableName: 'user',
-  modelName: 'User',
   timestamps: true,
 })
 export default class User extends Model<User> {

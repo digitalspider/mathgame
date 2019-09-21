@@ -13,8 +13,8 @@ module.exports = {
   down: (queryInterface: any, Sequelize: any) => {
     console.log(sequelize.models);
     return new Promise((resolve, reject) => {
-      Object.keys(sequelize.models).map((model: string) => {
-        return queryInterface.dropTable(model);
+      Object.values(sequelize.models).forEach((model: any) => {
+        return queryInterface.dropTable(model.tableName);
       });
       resolve(true);
     });
