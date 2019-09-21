@@ -33,7 +33,7 @@ class UserService {
   }
 
   async getUser(username: string): Promise<User> {
-    let user: any = await sequelize.models.User.findByPk(username);
+    let user: any = await User.findByPk(username);
     if (!user) {
       throw new Error('Username '+username+' does not exist');
     }
@@ -44,12 +44,10 @@ class UserService {
     return await User.findByPk(username);
   }
 
-  updateUser(user: User): User {
+  async updateUser(user: User): Promise<User> {
     // validate that user exists
-    let dbUser = this.getUser(user.username);
-    let updatedUser = Object.assign(dbUser, user);
-    // TODO: Save user
-    // this.users.set(user.username, Object.assign({}, updatedUser));
+    let dbUser = await this.getUser(user.username);
+    let updatedUser = Object.assign({}, await dbUser.update({email: user.email, settings: user.settings}));
     delete updatedUser.password;
     return updatedUser;
   }
