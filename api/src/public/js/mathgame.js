@@ -26,14 +26,17 @@ function ajaxPost(url, postData, eleSelector, callback, reloadPage = false, data
 }
 
 function createGame() {
-  ajaxPost('/api/game', null, null, null, true);
+  ajaxPost('/api/game', null, null, (game) => {
+    startGame(game.id);
+  }, false);
 }
 
 function startGame(id) {
   sessionStorage.clear();
   ajaxPost('/api/game/'+id+'/start', null, null, (data) => {
     saveGame(data, 0);
-  }, true);
+    location.reload();
+  }, false);
 }
 
 function stopGame(id) {
