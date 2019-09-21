@@ -13,7 +13,7 @@ export const get = (req: Request, res: Response, next: NextFunction) => {
 }
 
 export const update = (req: Request, res: Response, next: NextFunction) => {
-  let user: User = req.user && Object.assign(req.user);
+  let user: User = req.user as User;
   user.settings = settingService.createSetting(
     req.body.difficulty,
     req.body.operations,

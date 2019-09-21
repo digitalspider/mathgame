@@ -30,10 +30,9 @@ class UserService {
     return user.save();
   }
 
+
   async getUser(username: string): Promise<User> {
-    let user = await User.findByPk(username);
-    // user = await User.findOne<User>({where: {username: username}});
-    // console.log(user);
+    let user = await User.findByPk(username, {attributes: {exclude: ['password']}});
     if (!user) {
       throw new Error('Username '+username+' does not exist');
     }
@@ -42,6 +41,14 @@ class UserService {
 
   async getUserRaw(username: string): Promise<User | null> {
     return await User.findByPk(username);
+  }
+
+  async getUserByEmail(email: string): Promise<User> {
+    let user = await User.findOne<User>({where: {email: email}, attributes: {exclude: ['password']}});
+    if (!user) {
+      throw new Error('User with email '+email+' does not exist');
+    }
+    return user;
   }
 
   async updateUser(user: User): Promise<User> {

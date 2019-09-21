@@ -7,14 +7,13 @@ import {Request, Response, NextFunction} from 'express';
 const userService: UserService = Container.get(UserService);
 
 export const get = async (req: Request, res: Response, next: NextFunction) => {
-  let user: User = req.user && Object.assign(req.user);
-  let result = Object.assign({}, await userService.getUser(user.username));
-  delete result.password;
+  let user: User = req.user as User;
+  let result = await userService.getUser(user.username);
   return res.json(result);
 }
 
 export const update = async (req: Request, res: Response, next: NextFunction) => {
-  let user: User = req.user && Object.assign(req.user);
+  let user: User = req.user as User;
   let {username} = user;
   let userInput: User = req.body;
   if (username !== userInput.username) {

@@ -14,7 +14,7 @@ const gameService = Container.get(GameService);
 const settingService = Container.get(SettingService);
 
 export const index = (req: Request, res: Response) => {
-  let user: User = req.user && Object.assign(req.user);
+  let user: User = req.user as User;
   let userGames = gameService.findGamesByUser(user);
   let game = gameService.findActiveGame(user, userGames);
   let settingOptions = settingService.getAllSettings();

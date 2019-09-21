@@ -11,6 +11,14 @@
   text-align: center;
 }
 
+.header .navbar .navbar-brand {
+  font-size: 1.85rem;
+}
+
+.header .navbar .nav-link {
+  font-size: 1.55rem;
+}
+
 /****** Bootstrap Jumbotron settings ******/
 
 /* Space out content a bit */
