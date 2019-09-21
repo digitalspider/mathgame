@@ -1,8 +1,8 @@
+import { JSONB, Model } from 'sequelize';
+import { AllowNull, BelongsTo, Column, Default, ForeignKey, PrimaryKey, Table } from 'sequelize-typescript';
 import { Question } from './Question';
 import { Setting } from './Setting';
-import {User} from './User.model';
-import { Table, PrimaryKey, Column, Default, AllowNull } from 'sequelize-typescript';
-import { JSONB, Model } from 'sequelize';
+import { User } from './User.model';
 
 @Table({
   tableName: 'game',
@@ -14,8 +14,11 @@ class Game extends Model<Game> {
   @Column
   id!: string;
 
-  @AllowNull(false)
-  @Column(JSONB)
+  @ForeignKey(() => User)
+  @Column
+  username!: string;
+  
+  @BelongsTo(() => User)
   user!: User;
 
   @AllowNull(false)
@@ -58,6 +61,7 @@ class Game extends Model<Game> {
     let game: Game = new Game();
     game.id = id;
     game.user = user;
+    game.username = user.username;
     game.settings = settings;
     game.questions = questions;
     return game;
@@ -65,3 +69,4 @@ class Game extends Model<Game> {
 }
 
 export { Game };
+

@@ -23,7 +23,7 @@ class GameService {
     if (!game) {
       throw new Error(`Game ${id} does not exist`);
     }
-    if (game && game.user.username !== user.username) {
+    if (game && game.username !== user.username) {
       throw new Error(`Game ${id} does not belong to ${user.username}`);
     }
     return game;
@@ -35,7 +35,7 @@ class GameService {
    * @param raw if true return raw sequelize content 
    */
   async findGamesByUser(user: User, raw: boolean = false): Promise<Game[]> {
-    return await Game.findAll({raw, where: {user: {username: user.username}}});
+    return await Game.findAll({raw, where: {username: user.username}});
   }
 
   /**
