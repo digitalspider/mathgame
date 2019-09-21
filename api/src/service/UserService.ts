@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import Container, { Service } from 'typedi';
 import { Setting } from '../model/Setting';
-import {User} from '../model/User.model';
+import { User } from '../model/User.model';
 import { SettingService } from './SettingService';
 
 @Service()
@@ -22,11 +22,7 @@ class UserService {
     }
     let salt = await bcrypt.genSalt(10);
 	  let hash = await bcrypt.hash(password, salt);
-    let user = new User();
-    user.username = username;
-    user.password = hash;
-    user.email = email;
-    user.settings = settings;
+    let user = User.createFrom(username, hash, email, settings);
     return user.save();
   }
 

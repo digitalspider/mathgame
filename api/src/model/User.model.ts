@@ -21,6 +21,15 @@ class User extends Model<User> {
 
   @Column(JSONB)
   settings!: Setting;
+
+  static createFrom(username: string, password: string, email: string, settings: Setting): User {
+    let user: User = new User();
+    user.username = username;
+    user.password = password;
+    user.email = email;
+    user.settings = settings;
+    return user;
+  }
 }
 
 export {User};

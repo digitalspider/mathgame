@@ -13,12 +13,12 @@ const userService = Container.get(UserService);
 const gameService = Container.get(GameService);
 const settingService = Container.get(SettingService);
 
-export const index = (req: Request, res: Response) => {
+export const index = async (req: Request, res: Response) => {
   let user: User = req.user as User;
-  let userGames = gameService.findGamesByUser(user);
-  let game = gameService.findActiveGame(user, userGames);
+  let userGames = await gameService.findGamesByUser(user, true);
+  let game = await gameService.findActiveGame(user, userGames);
   let settingOptions = settingService.getAllSettings();
-  let completedGames = gameService.findCompletedGame(user, userGames);
+  let completedGames = await gameService.findCompletedGame(user, userGames);
   res.render("index", {
       title: "Home",
       user,

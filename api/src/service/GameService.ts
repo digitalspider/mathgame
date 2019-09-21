@@ -1,18 +1,16 @@
-import Container, {Service} from 'typedi';
-import {Game} from '../model/Game';
-import {Setting} from '../model/Setting';
-import {User} from '../model/User.model';
-import {QuestionService} from '../service/QuestionService';
+import Container, { Service } from 'typedi';
 import uuid from 'uuid/v4';
+import { Game } from '../model/Game.model';
+import { Setting } from '../model/Setting';
+import { User } from '../model/User.model';
+import { QuestionService } from '../service/QuestionService';
 
 @Service()
 class GameService {
 
-  games: Map<string,Game>;
   constructor(
     private questionService: QuestionService = Container.get(QuestionService),
   ) {
-    this.games = new Map<string,Game>(); // Cache of games
   }
 
   /**
@@ -20,8 +18,8 @@ class GameService {
    * @param id the id of the game
    * @param user the user the game belongs to
    */
-  getGame(id: string, user: User) {
-    let game = this.games.get(id);
+  async getGame(id: string, user: User) {
+    let game = await Game.findByPk(id);
     if (!game) {
       throw new Error(`Game ${id} does not exist`);
     }
@@ -34,20 +32,21 @@ class GameService {
   /**
    * Find all the games that belong to this user
    * @param user the user whose games to find
+   * @param raw if true return raw sequelize content 
    */
-  findGamesByUser(user: User): Game[] {
-    return Array.from<Game>(this.games.values())
-      .filter((game) => game.user.username === user.username);
+  async findGamesByUser(user: User, raw: boolean = false): Promise<Game[]> {
+    return await Game.findAll({raw, where: {user: {username: user.username}}});
   }
 
   /**
    * Find the current active game for the user
    * @param user the user whose game to find
    * @param games the list of games this user has
+   * @param raw if true return raw sequelize content
    */
-  findActiveGame(user: User, games?: Game[]) {
+  async findActiveGame(user: User, games?: Game[], raw: boolean = false) {
     if (!games) {
-      games = this.findGamesByUser(user);
+      games = await this.findGamesByUser(user, raw);
     }
     return games.find((game) => !game.endTime);
   }
@@ -56,10 +55,11 @@ class GameService {
    * Find the completed games for the user
    * @param user the user whose game to find
    * @param games the list of games this user has
+   * @param raw if true return raw sequelize content
    */
-  findCompletedGame(user: User, games?: Game[]) {
+  async findCompletedGame(user: User, games?: Game[], raw: boolean = false) {
     if (!games) {
-      games = this.findGamesByUser(user);
+      games = await this.findGamesByUser(user, raw);
     }
     return games.filter((game) => game.endTime);
   }
@@ -68,10 +68,10 @@ class GameService {
    * Create a new game and populate teh questions.
    * @param user the user the game belongs to
    */
-  createGame(user: User) {
+  async createGame(user: User) {
     let questions = this.createQuestions(user.settings);
-    let game = new Game(uuid().split('-')[0], user, user.settings, questions);
-    return this.updateGame(game);
+    let game = Game.createFrom(uuid().split('-')[0], user, user.settings, questions);
+    return await this.updateGame(game);
   }
 
   /**
@@ -91,11 +91,12 @@ class GameService {
    * Start the game, by setting the startTime.
    * @param game the game being played
    */
-  start(game: Game) {
+  async start(game: Game): Promise<Game> {
     if (game.questions.length === 0) {
       throw new Error(`Game ${game.id} questions have not been initialized`);
     }
     game.startTime = new Date();
+    return this.updateGame(game);
   }
 
   /**
@@ -103,7 +104,7 @@ class GameService {
    * scoring and updating the game.
    * @param game the game being played
    */
-  stop(game: Game) {
+  async stop(game: Game): Promise<Game> {
     game.endTime = new Date();
     if (!game.startTime) {
       throw new Error(`Game ${game.id} has not started`);
@@ -115,17 +116,18 @@ class GameService {
     game.durationInMs = game.endTime.getTime()-game.startTime.getTime();
     this.calculateScore(game);
     this.calculateDisplay(game);
-    return this.updateGame(game);
+    return await this.updateGame(game);
   }
 
   /**
    * Persist the game to the "games" cache
    * @param game the game being played
    */
-  updateGame(game: Game) {
-    this.games.set(game.id, game);
-    let max: number = 10;
-    this.limitMapSize(this.games, max);
+  async updateGame(game: Game): Promise<Game> {
+    game = await game.save();
+    // TODO: Limit guest user to maxiumum 10 games
+    // let max: number = 10;
+    // this.limitMapSize(this.games, max);
     return game;
   }
 
@@ -176,18 +178,6 @@ class GameService {
   }
 
   deserialize(game: Game) {
-    if (typeof game.errors === 'string') {
-      game.errors = parseInt(game.errors);
-    }
-    if (typeof game.settings.questionCount === 'string') {
-      game.settings.questionCount = parseInt(game.settings.questionCount);
-    }
-    if (typeof game.settings.maxValue === 'string') {
-      game.settings.maxValue = parseInt(game.settings.maxValue);
-    }
-    if (typeof game.settings.avgSecondsPerQuestion === 'string') {
-      game.settings.avgSecondsPerQuestion = parseInt(game.settings.avgSecondsPerQuestion);
-    }
     game.questions.forEach((question) => {
       if (typeof question.firstNumber === 'string') {
         question.firstNumber = parseInt(question.firstNumber);
@@ -208,5 +198,5 @@ class GameService {
   }
 }
 
-export {GameService};
+export { GameService };
 
