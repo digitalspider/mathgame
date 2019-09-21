@@ -41,7 +41,7 @@ class GameService {
     options.where = {username: user.username};
     options.order = [['createdAt', 'DESC']];
     options.limit = 10;
-    return await Game.findAll(options);
+    return Game.findAll(options);
   }
 
   /**

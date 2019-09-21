@@ -36,7 +36,7 @@ class UserService {
   }
 
   async getUserRaw(username: string): Promise<User | null> {
-    return await User.findByPk(username);
+    return User.findByPk(username);
   }
 
   async getUserByEmail(email: string): Promise<User> {
