@@ -3,8 +3,6 @@ import Container, { Service } from 'typedi';
 import { Setting } from '../model/Setting';
 import User from '../model/User.model';
 import { SettingService } from './SettingService';
-import { sequelize } from '../db';
-import Bluebird from 'bluebird';
 
 @Service()
 class UserService {
@@ -33,7 +31,9 @@ class UserService {
   }
 
   async getUser(username: string): Promise<User> {
-    let user: any = await User.findByPk(username);
+    let user = await User.findByPk(username);
+    // user = await User.findOne<User>({where: {username: username}});
+    // console.log(user);
     if (!user) {
       throw new Error('Username '+username+' does not exist');
     }

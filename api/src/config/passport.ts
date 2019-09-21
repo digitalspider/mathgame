@@ -17,11 +17,12 @@ passport.serializeUser<any, any>((user, done) => {
 
 passport.deserializeUser(async (username: string, done: Function) => {
   try {
-    let user = Object.assign({}, await userService.getUser(username));
-    done(null, {
+    let user = await userService.getUser(username);
+    let authUser = {
       username: user.username,
       email: user.email,
-    });
+    };
+    done(null, authUser);
   } catch (err) {
     done(err, null);
   }
