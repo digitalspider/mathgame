@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import User from '../../model/User.model';
+import {User} from '../../model/User.model';
 import {UserService} from '../../service/UserService';
 import Container from 'typedi';
 import {Request, Response, NextFunction} from 'express';

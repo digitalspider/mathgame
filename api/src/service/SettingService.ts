@@ -2,7 +2,7 @@ import {Service} from 'typedi';
 import {Difficulty} from '../model/Difficulty';
 import {Operation} from '../model/Operation';
 import {Setting} from '../model/Setting';
-import User from '../model/User.model';
+import {User} from '../model/User.model';
 
 @Service()
 class SettingService {

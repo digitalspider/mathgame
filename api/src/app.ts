@@ -1,26 +1,18 @@
 import bodyParser from "body-parser";
 import flash from "connect-flash";
-import express, {NextFunction, Request, Response} from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import hbs from 'express-handlebars';
 import session from 'express-session';
 import passport from 'passport';
 import path from 'path';
 import "reflect-metadata";
-import {PORT, SESSION_SECRET} from './config';
+import { PORT, SESSION_SECRET } from './config';
 import * as passportConfig from "./config/passport";
 import * as gameController from "./controller/api/GameController";
 import * as settingController from "./controller/api/SettingController";
 import * as userController from "./controller/api/UserController";
 import * as indexController from "./controller/IndexController";
-import {Difficulty} from './model/Difficulty';
-import {Operation} from './model/Operation';
-import {GameService} from './service/GameService';
-import {QuestionService} from './service/QuestionService';
-import {SettingService} from './service/SettingService';
-import {UserService} from './service/UserService';
 import { sequelize } from "./db";
-import User from "./model/User.model";
-import { Setting } from "./model/Setting";
 
 console.log('START');
 

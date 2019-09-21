@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from 'express';
 import {IVerifyOptions} from 'passport-local';
 import Container from 'typedi';
-import User from '../model/User.model';
+import {User} from '../model/User.model';
 import {UserService} from '../service/UserService';
 import {GameService} from '../service/GameService';
 import passport = require('passport');

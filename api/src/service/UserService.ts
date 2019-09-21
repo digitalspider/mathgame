@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import Container, { Service } from 'typedi';
 import { Setting } from '../model/Setting';
-import User from '../model/User.model';
+import {User} from '../model/User.model';
 import { SettingService } from './SettingService';
 
 @Service()

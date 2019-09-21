@@ -4,9 +4,10 @@ import { Setting } from "./Setting";
 
 @Table({
   tableName: 'user',
+  modelName: 'User',
   timestamps: true,
 })
-export default class User extends Model<User> {
+class User extends Model<User> {
   @PrimaryKey
   @Column
   username!: string;
@@ -21,3 +22,5 @@ export default class User extends Model<User> {
   @Column(JSONB)
   settings!: Setting;
 }
+
+export {User};
