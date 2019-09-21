@@ -22,7 +22,7 @@ export const index = async (req: Request, res: Response) => {
   res.render("index", {
       title: "Home",
       user,
-      completedGames: completedGames.reverse(),
+      completedGames,
       game,
       settingOptions,
       helpers: { // handlebars

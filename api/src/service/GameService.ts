@@ -4,6 +4,7 @@ import { Game } from '../model/Game.model';
 import { Setting } from '../model/Setting';
 import { User } from '../model/User.model';
 import { QuestionService } from '../service/QuestionService';
+import { FindOptions } from 'sequelize/types';
 
 @Service()
 class GameService {
@@ -35,7 +36,12 @@ class GameService {
    * @param raw if true return raw sequelize content 
    */
   async findGamesByUser(user: User, raw: boolean = false): Promise<Game[]> {
-    return await Game.findAll({raw, where: {username: user.username}});
+    let options: FindOptions = {};
+    options.raw = raw;
+    options.where = {username: user.username};
+    options.order = [['createdAt', 'DESC']];
+    options.limit = 10;
+    return await Game.findAll(options);
   }
 
   /**
@@ -68,10 +74,10 @@ class GameService {
    * Create a new game and populate teh questions.
    * @param user the user the game belongs to
    */
-  async createGame(user: User) {
+  async createGame(user: User): Promise<Game> {
     let questions = this.createQuestions(user.settings);
     let game = Game.build({id: uuid().split('-')[0], user, username: user.username, settings: user.settings, questions});
-    return await this.updateGame(game);
+    return this.updateGame(game);
   }
 
   /**
@@ -116,7 +122,7 @@ class GameService {
     game.durationInMs = game.endTime.getTime()-game.startTime.getTime();
     this.calculateScore(game);
     this.calculateDisplay(game);
-    return await this.updateGame(game);
+    return this.updateGame(game);
   }
 
   /**
@@ -124,26 +130,7 @@ class GameService {
    * @param game the game being played
    */
   async updateGame(game: Game): Promise<Game> {
-    game = await game.save();
-    // TODO: Limit guest user to maxiumum 10 games
-    // let max: number = 10;
-    // this.limitMapSize(this.games, max);
-    return game;
-  }
-
-  /**
-   * Remove old values in the map, greater that the max provided
-   * @param inputMap the map provided
-   * @param max the max number to keep
-   */
-  limitMapSize(inputMap: Map<string, Game>, max: number) {
-    let diff = inputMap.size-max;
-    if (diff>0) {
-      let keys = Array.from(inputMap.keys());
-      for (let i=0; i<diff; i++) {
-        inputMap.delete(keys[i]);
-      }
-    }
+    return game.save();
   }
 
   /**
