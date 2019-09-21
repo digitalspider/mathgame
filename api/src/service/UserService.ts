@@ -21,8 +21,8 @@ class UserService {
       settings = this.settingService.createSetting();
     }
     let salt = await bcrypt.genSalt(10);
-	  let hash = await bcrypt.hash(password, salt);
-    let user = User.createFrom(username, hash, email, settings);
+    let hash = await bcrypt.hash(password, salt);
+    let user = User.build({username, password: hash, email, settings});
     return user.save();
   }
 

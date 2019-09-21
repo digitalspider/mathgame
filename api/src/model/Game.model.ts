@@ -56,16 +56,6 @@ class Game extends Model<Game> {
   @Default(false)
   @Column
   completed: boolean = false;
-
-  static createFrom(id: string, user: User, settings: Setting, questions: Question[]): Game {
-    let game: Game = new Game();
-    game.id = id;
-    game.user = user;
-    game.username = user.username;
-    game.settings = settings;
-    game.questions = questions;
-    return game;
-  }
 }
 
 export { Game };

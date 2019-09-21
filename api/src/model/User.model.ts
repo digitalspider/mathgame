@@ -1,6 +1,7 @@
 import { JSONB } from "sequelize";
-import { Column, Model, PrimaryKey, Table, Unique } from 'sequelize-typescript';
+import { Column, Model, PrimaryKey, Table, Unique, HasMany } from 'sequelize-typescript';
 import { Setting } from "./Setting";
+import { Game } from "./Game.model";
 
 @Table({
   tableName: 'user',
@@ -22,17 +23,8 @@ class User extends Model<User> {
   @Column(JSONB)
   settings!: Setting;
 
-  // @HasMany(() => Game)
+  // @HasMany(() => Game, 'username')
   // games!: Game[];
-
-  static createFrom(username: string, password: string, email: string, settings: Setting): User {
-    let user: User = new User();
-    user.username = username;
-    user.password = password;
-    user.email = email;
-    user.settings = settings;
-    return user;
-  }
 }
 
 export { User };

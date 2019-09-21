@@ -70,7 +70,7 @@ class GameService {
    */
   async createGame(user: User) {
     let questions = this.createQuestions(user.settings);
-    let game = Game.createFrom(uuid().split('-')[0], user, user.settings, questions);
+    let game = Game.build({id: uuid().split('-')[0], user, username: user.username, settings: user.settings, questions});
     return await this.updateGame(game);
   }
 
