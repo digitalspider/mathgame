@@ -14,9 +14,20 @@
 .header .navbar .navbar-brand {
   font-size: 1.85rem;
 }
-
 .header .navbar .nav-link {
   font-size: 1.55rem;
+}
+
+@media only screen and (max-width: 800px) {
+  .header .navbar .navbar-brand {
+    font-size: 1.85rem;
+  }
+  .header .navbar .nav-link {
+    font-size: 1.55rem;
+  }
+  .modal-dialog {
+    max-width: 500px;
+  }
 }
 
 /****** Bootstrap Jumbotron settings ******/
