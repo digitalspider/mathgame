@@ -52,6 +52,18 @@ class User extends Model<User> {
   @Column(DataType.STRING)
   school?: School;
 
+  @Default(true)
+  @Column
+  showAge!: boolean;
+
+  @Default(true)
+  @Column
+  showSchool!: boolean;
+
+  @Default(false)
+  @Column
+  showEmail!: boolean;
+
   // @HasMany(() => Game, 'username')
   // games!: Game[];
 }
