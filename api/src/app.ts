@@ -11,8 +11,10 @@ import * as passportConfig from "./config/passport";
 import * as gameController from "./controller/api/GameController";
 import * as settingController from "./controller/api/SettingController";
 import * as userController from "./controller/api/UserController";
+import * as lookupController from "./controller/api/LookupController";
 import * as indexController from "./controller/IndexController";
 import { sequelize } from "./db";
+import * as auth from "./middleware/auth";
 
 console.log('START');
 
@@ -116,7 +118,7 @@ app.post('/login', indexController.postLogin);
 app.post('/register', indexController.postRegister);
 
 // Authenticated routes
-app.use(passportConfig.isAuthenticated);
+app.use(auth.isAuthenticated);
 app.get('/', indexController.index);
 app.get('/api/game/:id', gameController.get);
 app.get('/api/game', gameController.list);
@@ -128,6 +130,15 @@ app.get('/api/settings', settingController.get);
 app.post('/api/settings', settingController.update);
 app.get('/api/user', userController.get);
 app.put('/api/user', userController.update);
+app.get('/api/lookup/:type', auth.restrictGuest, lookupController.all);
+app.get('/api/lookup/:type/:key', auth.restrictGuest, lookupController.get);
+app.get('/api/lookup/:type/find/:query', auth.restrictGuest, lookupController.find);
+
+// Admin only routes
+app.use(auth.isAdmin)
+app.post('/api/lookup/:type', lookupController.create);
+app.delete('/api/lookup/:type', lookupController.remove);
+
 
 /*
 app.get('/', (req, res) => {

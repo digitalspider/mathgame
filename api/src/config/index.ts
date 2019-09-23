@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 export const SESSION_SECRET = process.env.SESSION_SECRET || 'secret';
 export const PORT = process.env.PORT || 5000;
 export const DB_HOST = process.env.DB_HOST || 'localhost';

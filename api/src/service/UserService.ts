@@ -54,6 +54,14 @@ class UserService {
     delete updatedUser.password;
     return updatedUser;
   }
+
+  isGuest(user: User): boolean {
+    return user && user.username === 'guest';
+  }
+
+  isAdmin(user: User): boolean {
+    return user && user.username === 'admin';
+  }
 }
 
 export { UserService };
