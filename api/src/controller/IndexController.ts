@@ -8,6 +8,7 @@ import passport = require('passport');
 import { check, sanitize, validationResult } from "express-validator";
 import {SettingService} from '../service/SettingService';
 import _ from 'lodash';
+import { Game } from '../model/Game.model';
 
 const userService = Container.get(UserService);
 const gameService = Container.get(GameService);
@@ -15,6 +16,7 @@ const settingService = Container.get(SettingService);
 
 export const index = async (req: Request, res: Response) => {
   let user: User = req.user as User;
+  let isGuest = userService.isGuest(user);
   let userGames = await gameService.findGamesByUser(user, true);
   let game = await gameService.findActiveGame(user, userGames);
   let settingOptions = settingService.getAllSettings();
@@ -22,6 +24,7 @@ export const index = async (req: Request, res: Response) => {
   res.render("index", {
       title: "Home",
       user,
+      isGuest,
       completedGames,
       game,
       settingOptions,
@@ -70,6 +73,28 @@ export const logout = (req: Request, res: Response) => {
   res.redirect('/login')
 };
 
+export const profile = (req: Request, res: Response) => {
+  let user: User = req.user as User;
+  let isGuest = userService.isGuest(user);
+  res.render("profile", {
+    user,
+    isGuest,
+    success_msg: isGuest ? 'Please register a user to use this page' : null,
+  });
+};
+
+export const leaderboard = async (req: Request, res: Response) => {
+  let user: User = req.user as User;
+  let isGuest = userService.isGuest(user);
+  let userGames = await gameService.findGamesByUser(user, true);
+  let bestGames = await gameService.findCompletedGame(user, userGames);
+  res.render("leaderboard", {
+    user,
+    isGuest,
+    bestGames,
+    success_msg: isGuest ? 'Please register a user to use this page' : null,
+  });
+};
 
 export const postLogin = (req: Request, res: Response, next: NextFunction) => {
   check("email", "Email is not valid").isEmail();

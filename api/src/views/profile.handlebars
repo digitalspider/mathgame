@@ -1,0 +1,38 @@
+
+<p>User Profile</p>
+{{#if user}}
+<table class="table table-striped table-hover">
+  <tr>
+    <th scope="col">Username</th>
+    <td scope="col">{{user.username}}</td>
+  </tr>
+  <tr>
+    <th scope="col">Email</th>
+    <td scope="col">{{user.email}}</td>
+  </tr>
+  <tr>
+    <th scope="col">Password</th>
+    <td scope="col">Reset Password</td>
+  </tr>
+  <tr>
+    <th scope="col">DisplayName</th>
+    <td scope="col">{{user.displayName}}</td>
+  </tr>
+  <tr>
+    <th scope="col">Age</th>
+    <td scope="col">{{user.age}}</td>
+  </tr>
+  <tr>
+    <th scope="col">Country</th>
+    <td scope="col">{{user.country}}</td>
+  </tr>
+  <tr>
+    <th scope="col">State</th>
+    <td scope="col">{{user.state}}</td>
+  </tr>
+  <tr>
+    <th scope="col">School</th>
+    <td scope="col">{{user.school}}</td>
+  </tr>
+</table>
+{{/if}}

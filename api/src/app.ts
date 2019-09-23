@@ -120,6 +120,8 @@ app.post('/register', indexController.postRegister);
 // Authenticated routes
 app.use(auth.isAuthenticated);
 app.get('/', indexController.index);
+app.get('/profile', indexController.profile);
+app.get('/leaderboard', indexController.leaderboard);
 app.get('/api/game/:id', gameController.get);
 app.get('/api/game', gameController.list);
 app.post('/api/game', gameController.create);
@@ -136,6 +138,7 @@ app.get('/api/lookup/:type/find/:query', auth.restrictGuest, lookupController.fi
 
 // Admin only routes
 app.use(auth.isAdmin)
+// app.get('/profile/:username', userController.adminProfile);
 app.post('/api/lookup/:type', lookupController.create);
 app.delete('/api/lookup/:type', lookupController.remove);
 
