@@ -90,7 +90,6 @@ class GameService {
         username: 'guest',
       };
     }
-    options.where = {endTime: {[Op.ne]: null}};
     options.order = [['durationInMs', 'ASC']];
     options.limit = limit;
     options.raw = raw;
