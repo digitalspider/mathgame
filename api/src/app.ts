@@ -119,9 +119,9 @@ app.post('/register', indexController.postRegister);
 
 // Authenticated routes
 app.use(auth.isAuthenticated);
-app.get('/', indexController.index);
-app.get('/profile', indexController.profile);
-app.get('/leaderboard', indexController.leaderboard);
+app.get('/', auth.mainPage, indexController.index);
+app.get('/profile', auth.mainPage, indexController.profile);
+app.get('/leaderboard', auth.mainPage, indexController.leaderboard);
 app.get('/api/game/:id', gameController.get);
 app.get('/api/game', gameController.list);
 app.post('/api/game', gameController.create);
@@ -141,7 +141,6 @@ app.use(auth.isAdmin)
 // app.get('/profile/:username', userController.adminProfile);
 app.post('/api/lookup/:type', lookupController.create);
 app.delete('/api/lookup/:type', lookupController.remove);
-
 
 /*
 app.get('/', (req, res) => {

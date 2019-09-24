@@ -12,14 +12,12 @@ import { Game } from '../model/Game.model';
 
 const userService = Container.get(UserService);
 const gameService = Container.get(GameService);
-const settingService = Container.get(SettingService);
 
 export const index = async (req: Request, res: Response) => {
   let user: User = req.user as User;
-  let isGuest = userService.isGuest(user);
+  let {isGuest, settingOptions} = res.locals;
   let userGames = await gameService.findGamesByUser(user, true);
   let game = await gameService.findActiveGame(user, userGames);
-  let settingOptions = settingService.getAllSettings(user);
   let completedGames = await gameService.findCompletedGame(user, userGames);
   res.render("index", {
       title: "Home",
@@ -49,8 +47,7 @@ export const logout = (req: Request, res: Response) => {
 
 export const profile = (req: Request, res: Response) => {
   let user: User = req.user as User;
-  let isGuest = userService.isGuest(user);
-  let settingOptions = settingService.getAllSettings(user);
+  let {isGuest, settingOptions} = res.locals;
   res.render("profile", {
     user,
     isGuest,
@@ -61,10 +58,9 @@ export const profile = (req: Request, res: Response) => {
 
 export const leaderboard = async (req: Request, res: Response) => {
   let user: User = req.user as User;
-  let isGuest = userService.isGuest(user);
+  let {isGuest, settingOptions} = res.locals;
   let userGames = await gameService.findGamesByUser(user, true);
   let bestGames = await gameService.findCompletedGame(user, userGames);
-  let settingOptions = settingService.getAllSettings(user);
   res.render("leaderboard", {
     user,
     isGuest,

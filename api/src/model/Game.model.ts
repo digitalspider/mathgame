@@ -17,6 +17,8 @@ class Game extends Model<Game> {
   @ForeignKey(() => User)
   @Column
   username!: string;
+
+  displayName?: string;
   
   @BelongsTo(() => User)
   user!: User;

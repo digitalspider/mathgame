@@ -18,6 +18,7 @@ passport.deserializeUser(async (username: string, done: Function) => {
     const user = await userService.getUser(username);
     const authUser = {
       username: user.username,
+      displayName: user.displayName,
       email: user.email,
       settings: user.settings,
     };
