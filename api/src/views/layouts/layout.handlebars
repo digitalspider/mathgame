@@ -32,7 +32,7 @@
       <div class="row">
         <div class="col-lg-12">
           {{#if success_msg}}
-            <div class="alert alert-success">{{success_msg}}</div>
+            <div class="alert alert-success">{{{success_msg}}}</div>
           {{/if}}
 
           {{#if error_msg}}
@@ -68,7 +68,7 @@
                       <ul class="nav nav-pills nav-fill nav-justified">
                       {{#each settingOptions.difficulty}}
                         <li class="nav-item">
-                          <a id="{{this}}" class="nav-link {{#ifEquals this 'user.settings.difficulty' 'active'}}{{/ifEquals}}" data-toggle="pill" href="#{{this}}">{{this}}</a>
+                          <a id="{{this.name}}" class="nav-link {{#if this.active}}active{{/if}}" data-toggle="pill" href="#{{this.name}}">{{this.name}}</a>
                         </li>
                       {{/each}}
                       </ul>
@@ -80,7 +80,7 @@
                     <td>
                       <select class="custom-select" name="operations" multiple="true">
                       {{#each settingOptions.operations}}
-                          <option value="{{this}}" {{#ifIncludes this 'user.settings.operations' 'selected'}}{{/ifIncludes}}>{{this}}</option>
+                          <option value="{{this.name}}" {{#if this.active}}selected{{/if}}>{{this.name}}</option>
                       {{/each}}
                       </select>
                     </td>

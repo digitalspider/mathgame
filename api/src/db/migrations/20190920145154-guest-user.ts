@@ -11,7 +11,7 @@ module.exports = {
   },
 
   down: async(queryInterface: QueryInterface, Sequelize: Sequelize) => {
-    await queryInterface.delete(new sequelize.models.Game(), 'Game', {username: 'guest'});
-    return queryInterface.delete(new sequelize.models.User(), 'User', {username: 'guest'});
+    await queryInterface.delete(new sequelize.models.Game(), sequelize.models.Game.tableName, {username: 'guest'});
+    return queryInterface.delete(new sequelize.models.User(), sequelize.models.User.tableName, {username: 'guest'});
   }
 };

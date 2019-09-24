@@ -19,7 +19,7 @@ export const index = async (req: Request, res: Response) => {
   let isGuest = userService.isGuest(user);
   let userGames = await gameService.findGamesByUser(user, true);
   let game = await gameService.findActiveGame(user, userGames);
-  let settingOptions = settingService.getAllSettings();
+  let settingOptions = settingService.getAllSettings(user);
   let completedGames = await gameService.findCompletedGame(user, userGames);
   res.render("index", {
       title: "Home",
@@ -28,38 +28,12 @@ export const index = async (req: Request, res: Response) => {
       completedGames,
       game,
       settingOptions,
-      helpers: { // handlebars
-        ifEquals: function(arg1: string, arg2: string, response: string, dataContext: any) {
-          let context = dataContext && dataContext.data && dataContext.data.root;
-          let value = arg2;
-          let result = response;
-          if (_.has(context, arg2)) {
-            value = _.get(context, arg2);
-          }
-          if (_.has(context, response)) {
-            result = _.get(context, response);
-          }
-          return arg1 === value ? result : '';
-        },
-        ifIncludes: function(arg1: string, arg2: string, response: string, dataContext: any) {
-          let context = dataContext && dataContext.data && dataContext.data.root;
-          let value = arg2;
-          let result = response;
-          if (_.has(context, arg2)) {
-            value = _.get(context, arg2);
-          }
-          if (_.has(context, response)) {
-            result = _.get(context, response);
-          }
-          return value.includes(arg1) ? result : '';
-        }
-      }
   });
 };
 
 export const login = (req: Request, res: Response) => {
   res.render("login", {
-    success_msg: 'You can login as guest / guest',
+    success_msg: 'You can login as guest / guest <div class="btn btn-success" id="btn-login" onclick="javascript:loginAsGuest()">Login as Guest</div>',
   });
 };
 
@@ -76,10 +50,12 @@ export const logout = (req: Request, res: Response) => {
 export const profile = (req: Request, res: Response) => {
   let user: User = req.user as User;
   let isGuest = userService.isGuest(user);
+  let settingOptions = settingService.getAllSettings(user);
   res.render("profile", {
     user,
     isGuest,
-    success_msg: isGuest ? 'Please register a user to use this page' : null,
+    settingOptions,
+    success_msg: isGuest ? 'Please <a href="/register">register</a> a user to use this page' : null,
   });
 };
 
@@ -88,11 +64,13 @@ export const leaderboard = async (req: Request, res: Response) => {
   let isGuest = userService.isGuest(user);
   let userGames = await gameService.findGamesByUser(user, true);
   let bestGames = await gameService.findCompletedGame(user, userGames);
+  let settingOptions = settingService.getAllSettings(user);
   res.render("leaderboard", {
     user,
     isGuest,
     bestGames,
-    success_msg: isGuest ? 'Please register a user to use this page' : null,
+    settingOptions,
+    success_msg: isGuest ? 'Please <a href="/register">register</a> a user to use this page' : null,
   });
 };
 

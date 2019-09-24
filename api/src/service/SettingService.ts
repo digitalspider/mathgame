@@ -45,24 +45,33 @@ class SettingService {
    * @param user the user logged in
    */
   getAllSettings(user?: User) {
-    return {
+    let result = {
       difficulty: [
-        Difficulty.KINDY,
-        Difficulty.EASY,
-        Difficulty.MEDIUM,
-        Difficulty.HARD,
-        Difficulty.CUSTOM,
+        {name: Difficulty.KINDY, active: false},
+        {name: Difficulty.EASY, active: false},
+        {name: Difficulty.MEDIUM, active: false},
+        {name: Difficulty.HARD, active: false},
+        {name: Difficulty.CUSTOM, active: false},
       ],
       operations: [
-        Operation.ADD,
-        Operation.SUBTRACT,
-        Operation.MULTIPLY,
-        Operation.DIVIDE,
+        {name: Operation.ADD, active: false},
+        {name: Operation.SUBTRACT, active: false},
+        {name: Operation.MULTIPLY, active: false},
+        {name: Operation.DIVIDE, active: false},
       ],
       questionCount: [5, 10, 20, 30],
       maxValue: 10,
       avgSecondsPerQuestion: 6,
     };
+    if (user) {
+      result.difficulty.forEach((value) => {
+        if (value.name === user.settings.difficulty) value.active = true;
+      });
+      result.operations.forEach((value) => {
+        if (user.settings.operations.includes(value.name)) value.active = true;
+      });
+    }
+    return result;
   }
 }
 

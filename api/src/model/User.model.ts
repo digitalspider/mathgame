@@ -40,6 +40,9 @@ class User extends Model<User> {
   @Column
   displayName?: string;
 
+  @Column
+  oldEmail?: string;
+
   @ForeignKey(() => Country)
   @Column(DataType.STRING)
   country?: Country;
