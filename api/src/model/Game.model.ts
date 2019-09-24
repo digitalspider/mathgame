@@ -18,7 +18,11 @@ class Game extends Model<Game> {
   @Column
   username!: string;
 
+  displayTime?: string;
+  displayDuration?: string;
   displayName?: string;
+  goodMessage?: string;
+  errorMessage?: string;
   
   @BelongsTo(() => User)
   user!: User;

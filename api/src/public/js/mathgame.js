@@ -113,4 +113,8 @@ jQuery(document).ready(() => {
   if(jQuery("#answer0")) {
     jQuery("#answer0").focus();
   }
+  // https://stackoverflow.com/questions/42165713/high-resolution-devices-display-extra-small-bootstrap-layout
+  var scale = 1 / (window.devicePixelRatio || 1);
+  var content = 'width=device-width, initial-scale=' + scale + ', minimum-scale=' + scale;
+  document.querySelector('meta[name="viewport"]').setAttribute('content', content);
 });

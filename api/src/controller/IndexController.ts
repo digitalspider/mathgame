@@ -59,8 +59,7 @@ export const profile = (req: Request, res: Response) => {
 export const leaderboard = async (req: Request, res: Response) => {
   let user: User = req.user as User;
   let {isGuest, settingOptions} = res.locals;
-  let userGames = await gameService.findGamesByUser(user, true);
-  let bestGames = await gameService.findCompletedGame(user, userGames);
+  let bestGames = await gameService.findBestGames(10, isGuest, true);
   res.render("leaderboard", {
     user,
     isGuest,

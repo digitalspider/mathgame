@@ -3,27 +3,23 @@
 <table class="table table-striped table-hover">
   <thead>
     <tr>
-      <th scope="col">Game</th>
-      <th scope="col">User</th>
       <th scope="col">Date</th>
+      <th scope="col">User</th>
       <th scope="col">Level</th>
       <th scope="col"></th>
       <th scope="col">Score</th>
-      <th scope="col">Completed</th>
       <th scope="col">Duration</th>
     </th>
   </thead>
   <tbody>
     {{#each bestGames}}
     <tr>
-      <td scope="row">{{this.id}}</td>
+      <td scope="row">{{this.displayTime}}</td>
       <td scope="row">{{this.username}}</td>
-      <td scope="row">{{this.endTime}}</td>
       <td scope="row">{{this.settings.difficulty}}</td>
       <td scope="row" class="table-{{this.display}}" width="10px">&nbsp;</td>
       <td scope="row">{{this.score}} / {{this.questions.length}}</td>
-      <td scope="row">{{this.completed}}</td>
-      <td scope="row">{{this.durationInMs}}</td>
+      <td scope="row">{{this.displayDuration}} seconds</td>
     </tr>
     {{/each}}
   </tbody>

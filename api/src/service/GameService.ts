@@ -1,10 +1,13 @@
 import Container, { Service } from 'typedi';
 import uuid from 'uuid/v4';
+import moment from 'moment';
 import { Game } from '../model/Game.model';
 import { Setting } from '../model/Setting';
 import { User } from '../model/User.model';
 import { QuestionService } from '../service/QuestionService';
-import { FindOptions } from 'sequelize/types';
+import { FindOptions, Op } from 'sequelize';
+
+const penatlyInSeconds = 3;
 
 @Service()
 class GameService {
@@ -41,7 +44,9 @@ class GameService {
     options.where = {username: user.username};
     options.order = [['createdAt', 'DESC']];
     options.limit = 10;
-    return Game.findAll(options);
+    let games = await Game.findAll(options);
+    this.formatGames(games);
+    return games;
   }
 
   /**
@@ -68,6 +73,30 @@ class GameService {
       games = await this.findGamesByUser(user, raw);
     }
     return games.filter((game) => game.endTime);
+  }
+
+
+  /**
+   * Find the fastest completed games
+   * @param limit limit the result set
+   * @param raw if true return raw sequelize content
+   */
+  async findBestGames(limit: number = 10, isGuest: boolean = true, raw: boolean = false) {
+    let options: FindOptions = {};
+    options.where = {endTime: {[Op.ne]: null}};
+    if (isGuest) {
+      options.where = {
+        endTime: {[Op.ne]: null},
+        username: 'guest',
+      };
+    }
+    options.where = {endTime: {[Op.ne]: null}};
+    options.order = [['durationInMs', 'ASC']];
+    options.limit = limit;
+    options.raw = raw;
+    let games = await Game.findAll(options);
+    this.formatGames(games);
+    return games;
   }
 
   /**
@@ -121,6 +150,14 @@ class GameService {
     this.deserialize(game);
     game.durationInMs = game.endTime.getTime()-game.startTime.getTime();
     this.calculateScore(game);
+    if (game.errors) {
+      game.durationInMs += penatlyInSeconds * 1000 * game.errors; // Add 3s penalty
+      let errorString = 'error';
+      if (game.errors>1) { errorString = 'errors' }
+      game.errorMessage = `Well done, but you made ${game.errors} ${errorString}, with ${penatlyInSeconds}s penalty per error`;
+    } else {
+      game.goodMessage = `Well done: ${game.username}. Perfect score!`;
+    }
     this.calculateDisplay(game);
     return this.updateGame(game);
   }
@@ -182,6 +219,15 @@ class GameService {
         question.isCorrect = 'true'===question.isCorrect;
       }
     })
+  }
+
+  formatGames(games: Game[]) {
+    games.map((game) => {
+      if (game.endTime) game.displayTime = moment(game.endTime).format('DD MMM YYYY @ HH:mm');
+      if (game.durationInMs) {
+        game.displayDuration = moment.duration(game.durationInMs, 'ms').asSeconds().toString();
+      }
+    });
   }
 }
 
