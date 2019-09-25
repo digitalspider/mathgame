@@ -6,6 +6,7 @@ import { Setting } from '../model/Setting';
 import { User } from '../model/User.model';
 import { QuestionService } from '../service/QuestionService';
 import { FindOptions, Op } from 'sequelize';
+import { UserService } from './UserService';
 
 const penatlyInSeconds = 3;
 
@@ -14,6 +15,7 @@ class GameService {
 
   constructor(
     private questionService: QuestionService = Container.get(QuestionService),
+    private userService: UserService = Container.get(UserService),
   ) {
   }
 
@@ -88,6 +90,7 @@ class GameService {
    */
   async findBestGames(user: User, limit: number = 10, raw: boolean = false) {
     let options: FindOptions = {};
+    const isGuest = this.userService.isGuest(user);
     options.where = {
       endTime: {[Op.ne]: null},
       settings: {
