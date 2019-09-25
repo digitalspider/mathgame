@@ -63,7 +63,6 @@ function handleInput(target) {
 
 function submitSettingsForm() {
   let ele = jQuery('a.nav-link.active')[0];
-  console.log(ele);
   jQuery('#difficulty').val(ele.id);
   submitForm('settingsForm', (user) => {
     jQuery('#questionCount').val(user.settings.questionCount);
@@ -73,9 +72,7 @@ function submitSettingsForm() {
 }
 
 function submitForm(formId, callback) {
-  console.log('formId='+formId);
   let form = jQuery('#'+formId);
-  console.log(form);
   ajaxPost(form[0].action, form.serialize(), null, callback, true);
 }
 
@@ -115,6 +112,7 @@ jQuery(document).ready(() => {
   }
   // https://stackoverflow.com/questions/42165713/high-resolution-devices-display-extra-small-bootstrap-layout
   var scale = 1 / (window.devicePixelRatio || 1);
+  console.log('scale='+scale);
   var content = 'width=device-width, initial-scale=' + scale + ', minimum-scale=' + scale;
   document.querySelector('meta[name="viewport"]').setAttribute('content', content);
 
