@@ -75,9 +75,10 @@ class LookupService {
     return School.findByPk(key);
   }
 
-  async getAllCountry(query?: string): Promise<Country[]> {
+  async getAllCountry(query?: string, raw: boolean = true): Promise<Country[]> {
     let options: FindOptions = {};
     if (query) { options.where = {value: query}; }
+    options.raw = raw;
     return Country.findAll(options);
   }
 

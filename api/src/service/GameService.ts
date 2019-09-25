@@ -1,11 +1,11 @@
+import moment from 'moment';
+import { FindOptions, Op } from 'sequelize';
 import Container, { Service } from 'typedi';
 import uuid from 'uuid/v4';
-import moment from 'moment';
 import { Game } from '../model/Game.model';
 import { Setting } from '../model/Setting';
 import { User } from '../model/User.model';
 import { QuestionService } from '../service/QuestionService';
-import { FindOptions, Op } from 'sequelize';
 import { UserService } from './UserService';
 
 const penatlyInSeconds = 3;

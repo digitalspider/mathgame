@@ -1,15 +1,12 @@
-import {NextFunction, Request, Response} from 'express';
-import {IVerifyOptions} from 'passport-local';
-import Container from 'typedi';
-import {User} from '../model/User.model';
-import {UserService} from '../service/UserService';
-import {GameService} from '../service/GameService';
-import passport = require('passport');
+import { NextFunction, Request, Response } from 'express';
 import { check, sanitize, validationResult } from "express-validator";
-import {SettingService} from '../service/SettingService';
-import _ from 'lodash';
-import { Game } from '../model/Game.model';
+import { IVerifyOptions } from 'passport-local';
+import Container from 'typedi';
+import { User } from '../model/User.model';
+import { GameService } from '../service/GameService';
 import { LookupService } from '../service/LookupService';
+import { UserService } from '../service/UserService';
+import passport = require('passport');
 
 const userService = Container.get(UserService);
 const gameService = Container.get(GameService);
@@ -47,12 +44,12 @@ export const logout = (req: Request, res: Response) => {
   res.redirect('/login')
 };
 
-export const profile = (req: Request, res: Response) => {
+export const profile = async(req: Request, res: Response) => {
   let user: User = req.user as User;
   let {isGuest, settingOptions} = res.locals;
-  const country = lookupService.getAllCountry();
-  const state = lookupService.getAllCountry();
-  const school = lookupService.getAllCountry();
+  const country = await lookupService.getAllCountry();
+  const state = await lookupService.getAllState();
+  const school = await lookupService.getAllSchool();
   const view = true;
   res.render("profile", {
     user,

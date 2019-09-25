@@ -1,38 +1,110 @@
 
 <p>User Profile</p>
 {{#if user}}
-<table class="table table-striped table-hover">
-  <tr>
-    <th scope="col">Username</th>
-    <td scope="col">{{user.username}}</td>
-  </tr>
-  <tr>
-    <th scope="col">Email</th>
-    <td scope="col">{{user.email}}</td>
-  </tr>
-  <tr>
-    <th scope="col">Password</th>
-    <td scope="col">Reset Password</td>
-  </tr>
-  <tr>
-    <th scope="col">DisplayName</th>
-    <td scope="col">{{user.displayName}}</td>
-  </tr>
-  <tr>
-    <th scope="col">Age</th>
-    <td scope="col">{{user.age}}</td>
-  </tr>
-  <tr>
-    <th scope="col">Country</th>
-    <td scope="col">{{user.country}}</td>
-  </tr>
-  <tr>
-    <th scope="col">State</th>
-    <td scope="col">{{user.state}}</td>
-  </tr>
-  <tr>
-    <th scope="col">School</th>
-    <td scope="col">{{user.school}}</td>
-  </tr>
-</table>
+<form id="profileForm" method="POST" action="/api/user">
+  <table class="table table-striped table-hover">
+    <tr>
+      <th scope="col">Username</th>
+      <td scope="col">{{user.username}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Password</th>
+      <td scope="col">Reset Password</td>
+    </tr>
+    {{#unless isGuest}}
+    <tr>
+      <th scope="col">Level</th>
+      <td scope="col">{{user.level}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Points</th>
+      <td scope="col">{{user.points}}</td>
+    </tr>
+    {{/unless}}
+    {{#if view}}
+    <tr>
+      <th scope="col">Email</th>
+      <td scope="col">{{user.email}}</td>
+    </tr>
+    <tr>
+      <th scope="col">DisplayName</th>
+      <td scope="col">{{user.displayName}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Age</th>
+      <td scope="col">{{user.age}}</td>
+    </tr>
+    <tr>
+      <th scope="col">Country</th>
+      <td scope="col">{{user.country}}</td>
+    </tr>
+    <tr>
+      <th scope="col">State</th>
+      <td scope="col">{{user.state}}</td>
+    </tr>
+    <tr>
+      <th scope="col">School</th>
+      <td scope="col">{{user.school}}</td>
+    </tr>
+    {{else}}
+    <tr>
+      <th scope="col">Email</th>
+      <td scope="col"><input class="form-control" type="email" name="email" id="email" value="{{user.email}}"></input></td>
+    </tr>
+    <tr>
+      <th scope="col">Display Name</th>
+      <td scope="col"><input class="form-control" type="text" name="displayName" id="displayName" value="{{user.displayName}}"></input></td>
+    </tr>
+    <tr>
+      <th scope="col">Age</th>
+      <td scope="col">
+        <input class="form-control" type="number" name="age" id="age" value="{{user.age}}"></input>
+        <div class="checkbox">
+          <label>Show Age<input class="form-control" type="checkbox" name="showAge" id="showAge" {{#if user.showAge}}checked="true"{{/if}}></input></label>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th scope="col">Country</th>
+      <td scope="col">
+        <select name="country" id="country" class="form-control">
+          {{#each country}}
+          <option id="{{this.key}}" value="{{this.key}}" {{#if this.selected}}selected{{/if}}>{{this.value}}</option>
+          {{/each}}
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <th scope="col">State</th>
+      <td scope="col">
+        <select name="state" id="state" class="form-control">
+          {{#each state}}
+          <option id="{{this.key}}" value="{{this.key}}" {{#if this.selected}}selected{{/if}}>{{this.value}}</option>
+          {{/each}}
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <th scope="col">School</th>
+      <td scope="col">
+        <select name="school" id="school" class="form-control">
+          {{#each school}}
+          <option id="{{this.key}}" value="{{this.key}}" {{#if this.selected}}selected{{/if}}>{{this.value}}</option>
+          {{/each}}
+        </select>
+        <div class="checkbox">
+          <label>Show School<input class="form-control" type="checkbox" id="showSchool" name="showSchool" {{#if user.showSchool}}checked="true"{{/if}}></input></label>
+        </div>
+        <button type="button" class="btn btn-warning" data-toggle="popover" title="Coming soon" data-content="This functionality will come soon. Please be patient">Add School</button>
+      </td>
+    </tr>
+    <tr>
+      <td scope="col" colspan="2">
+        <div class="btn btn-secondary" onclick="location.reload()">Cancel</div>
+        <div class="btn btn-primary" onclick="javascript:submitUserForm()">Submit</div>
+      </td>
+    </tr>
+    {{/if}}
+  </table>
+</form>
 {{/if}}
