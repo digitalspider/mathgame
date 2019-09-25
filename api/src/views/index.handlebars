@@ -12,7 +12,7 @@
       <div class="carousel-item {{#if @first}}active{{/if}}" data-interval="6000">
         <div class="d-block w-100 form-inline game-tile">
           {{this.firstNumber}}{{this.operation}}{{this.secondNumber}}=
-          <input type="text" class="form-control answer" id="answer{{@index}}" onchange="javascript:handleInput(this)"></input>
+          <input type="number" class="form-control answer" id="answer{{@index}}" onchange="javascript:handleInput(this)"></input>
         </div>
       </div>
       {{/each}}

@@ -41,7 +41,12 @@ class GameService {
   async findGamesByUser(user: User, raw: boolean = false): Promise<Game[]> {
     let options: FindOptions = {};
     options.raw = raw;
-    options.where = {username: user.username};
+    options.where = {
+      username: user.username,
+      settings: {
+        difficulty: user.settings.difficulty,
+      }
+    };
     options.order = [['createdAt', 'DESC']];
     options.limit = 10;
     let games = await Game.findAll(options);
@@ -81,12 +86,20 @@ class GameService {
    * @param limit limit the result set
    * @param raw if true return raw sequelize content
    */
-  async findBestGames(limit: number = 10, isGuest: boolean = true, raw: boolean = false) {
+  async findBestGames(user: User, limit: number = 10, raw: boolean = false) {
     let options: FindOptions = {};
-    options.where = {endTime: {[Op.ne]: null}};
+    options.where = {
+      endTime: {[Op.ne]: null},
+      settings: {
+        difficulty: user.settings.difficulty,
+      }
+    };
     if (isGuest) {
       options.where = {
         endTime: {[Op.ne]: null},
+        settings: {
+          difficulty: user.settings.difficulty,
+        },
         username: 'guest',
       };
     }

@@ -59,7 +59,7 @@ export const profile = (req: Request, res: Response) => {
 export const leaderboard = async (req: Request, res: Response) => {
   let user: User = req.user as User;
   let {isGuest, settingOptions} = res.locals;
-  let bestGames = await gameService.findBestGames(10, isGuest, true);
+  let bestGames = await gameService.findBestGames(user, 10, true);
   res.render("leaderboard", {
     user,
     isGuest,
