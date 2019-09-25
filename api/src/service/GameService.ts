@@ -38,9 +38,10 @@ class GameService {
   /**
    * Find all the games that belong to this user
    * @param user the user whose games to find
+   * @param limit limit the result set
    * @param raw if true return raw sequelize content 
    */
-  async findGamesByUser(user: User, raw: boolean = false): Promise<Game[]> {
+  async findGamesByUser(user: User, limit: number = 10, raw: boolean = true): Promise<Game[]> {
     let options: FindOptions = {};
     options.raw = raw;
     options.where = {
@@ -50,7 +51,7 @@ class GameService {
       }
     };
     options.order = [['createdAt', 'DESC']];
-    options.limit = 10;
+    options.limit = limit;
     let games = await Game.findAll(options);
     this.formatGames(games);
     return games;
@@ -60,11 +61,10 @@ class GameService {
    * Find the current active game for the user
    * @param user the user whose game to find
    * @param games the list of games this user has
-   * @param raw if true return raw sequelize content
    */
-  async findActiveGame(user: User, games?: Game[], raw: boolean = false) {
+  async findActiveGame(user: User, games?: Game[]) {
     if (!games) {
-      games = await this.findGamesByUser(user, raw);
+      games = await this.findGamesByUser(user);
     }
     return games.find((game) => !game.endTime);
   }
@@ -73,11 +73,10 @@ class GameService {
    * Find the completed games for the user
    * @param user the user whose game to find
    * @param games the list of games this user has
-   * @param raw if true return raw sequelize content
    */
-  async findCompletedGame(user: User, games?: Game[], raw: boolean = false) {
+  async findCompletedGame(user: User, games?: Game[]) {
     if (!games) {
-      games = await this.findGamesByUser(user, raw);
+      games = await this.findGamesByUser(user);
     }
     return games.filter((game) => game.endTime);
   }

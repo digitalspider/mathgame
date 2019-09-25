@@ -15,7 +15,7 @@ const lookupService = Container.get(LookupService);
 export const index = async (req: Request, res: Response) => {
   let user: User = req.user as User;
   let {isGuest, settingOptions} = res.locals;
-  let userGames = await gameService.findGamesByUser(user, true);
+  let userGames = await gameService.findGamesByUser(user);
   let game = await gameService.findActiveGame(user, userGames);
   let completedGames = await gameService.findCompletedGame(user, userGames);
   res.render("index", {

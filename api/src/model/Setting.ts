@@ -5,7 +5,7 @@ class Setting {
   constructor(
     public difficulty: Difficulty = Difficulty.EASY,
     public operations: Operation[] = [Operation.ADD],
-    public questionCount: number = 10,
+    public questionCount: number = 5,
     public maxValue: number = 12,
     public avgSecondsPerQuestion: number = 6,
   ) {
