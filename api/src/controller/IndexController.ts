@@ -50,7 +50,7 @@ export const profile = async(req: Request, res: Response) => {
   const country = await lookupService.getAllCountry();
   const state = await lookupService.getAllState();
   const school = await lookupService.getAllSchool();
-  const view = true;
+  const view = !req.path.includes('/edit');
   res.render("profile", {
     user,
     isGuest,

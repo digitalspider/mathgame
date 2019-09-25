@@ -121,6 +121,7 @@ app.post('/register', indexController.postRegister);
 app.use(auth.isAuthenticated);
 app.get('/', auth.mainPage, indexController.index);
 app.get('/profile', auth.mainPage, indexController.profile);
+app.get('/profile/edit', auth.restrictGuest, auth.mainPage, indexController.profile);
 app.get('/leaderboard', auth.mainPage, indexController.leaderboard);
 app.get('/api/game/:id', gameController.get);
 app.get('/api/game', gameController.list);
