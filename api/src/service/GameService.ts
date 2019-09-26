@@ -7,6 +7,7 @@ import { Setting } from '../model/Setting';
 import { User } from '../model/User.model';
 import { QuestionService } from '../service/QuestionService';
 import { UserService } from './UserService';
+import { Difficulty } from '../model/Difficulty';
 
 const penatlyInSeconds = 3;
 
@@ -151,9 +152,10 @@ class GameService {
   /**
    * Stop the game, creating the endTime, calculating the duration,
    * scoring and updating the game.
+   * @param user the user playing the game
    * @param game the game being played
    */
-  async stop(game: Game): Promise<Game> {
+  async stop(user: User, game: Game): Promise<Game> {
     game.endTime = new Date();
     if (!game.startTime) {
       throw new Error(`Game ${game.id} has not started`);
@@ -172,7 +174,13 @@ class GameService {
     } else {
       game.goodMessage = `Well done: ${game.username}. Perfect score!`;
     }
+    if (!user.points) { user.points = 0; }
+    user.points += this.calculatePoints(game);
+    user.level = this.calculateLevel(user.points);
     this.calculateDisplay(game);
+    if (!this.userService.isGuest(user)) {
+      await this.userService.updateUser(user);
+    }
     return this.updateGame(game);
   }
 
@@ -203,6 +211,40 @@ class GameService {
       }
     });
     game.completed = game.questions.length === game.answered;
+  }
+
+  calculatePoints(game: Game) {
+    let points = 0;
+    points += game.score;
+    switch(game.settings.difficulty) {
+      case Difficulty.MEDIUM:
+        points += game.score;
+        break;
+      case Difficulty.HARD:
+        points += game.score;
+        points += game.score;
+        break;
+    }
+    return points;
+  }
+
+  calculateLevel(points: number = 0) {
+    let level = 0;
+    switch(true) {
+      case (points < 15): level = 0; break;
+      case (points < 25): level = 1; break;
+      case (points < 75): level = 2; break;
+      case (points < 150): level = 3; break;
+      case (points < 250): level = 4; break;
+      case (points < 500): level = 5; break;
+      case (points < 1000): level = 6; break;
+      case (points < 2500): level = 7; break;
+      case (points < 5000): level = 8; break;
+      case (points < 10000): level = 9; break;
+      case (points < 25000): level = 10; break;
+      default: level = 11;
+    }
+    return level;
   }
 
   /**

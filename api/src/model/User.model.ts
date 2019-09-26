@@ -31,11 +31,11 @@ class User extends Model<User> {
 
   @Default(0)
   @Column
-  points?: number;
+  points!: number;
 
   @Default(0)
   @Column
-  level?: number;
+  level!: number;
 
   @Column
   displayName?: string;

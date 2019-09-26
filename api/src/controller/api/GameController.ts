@@ -51,7 +51,7 @@ export const stop = async (req: Request, res: Response, next: NextFunction) => {
   let game = await gameService.getGame(gameId, user); // validate correct game
   // copy the questions, which contain the answers
   game.questions = Object.assign(game.questions, gameInput.questions);
-  game = await gameService.stop(game);
+  game = await gameService.stop(user, game);
   if (game.errorMessage) {
     req.flash('error_msg', game.errorMessage);
   }

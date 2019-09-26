@@ -16,6 +16,19 @@ export const update = async (req: Request, res: Response, next: NextFunction) =>
   let user: User = req.user as User;
   let {username} = user;
   let userInput: User = req.body;
+  if (typeof userInput.age === 'string') {
+    userInput.age = userInput.age ? parseInt(userInput.age) : 0;
+  }
+  if (typeof userInput.showAge === 'string') {
+    userInput.showAge = userInput.showAge === 'on';
+  }
+  if (typeof userInput.showEmail === 'string') {
+    userInput.showEmail = userInput.showEmail === 'on';
+  }
+  if (typeof userInput.showSchool === 'string') {
+    userInput.showSchool = userInput.showSchool === 'on';
+  }
+  console.log(userInput);
   if (username !== userInput.username) {
     throw new Error(`Cannot change username in update. Username=${username}`);
   }

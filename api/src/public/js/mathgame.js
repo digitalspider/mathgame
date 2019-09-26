@@ -71,6 +71,13 @@ function submitSettingsForm() {
   });
 }
 
+function submitProfileForm() {
+  submitForm('profileForm', (user) => {
+    localStorage.setItem('mathuser', JSON.stringify(user));
+    location.href = '/profile';
+  });
+}
+
 function submitForm(formId, callback) {
   let form = jQuery('#'+formId);
   ajaxPost(form[0].action, form.serialize(), null, callback, true);

@@ -133,6 +133,7 @@ app.get('/api/settings', settingController.get);
 app.post('/api/settings', settingController.update);
 app.get('/api/user', userController.get);
 app.put('/api/user', userController.update);
+app.post('/api/user', userController.update); // should really use put
 app.get('/api/lookup/:type', auth.restrictGuest, lookupController.all);
 app.get('/api/lookup/:type/:key', auth.restrictGuest, lookupController.get);
 app.get('/api/lookup/:type/find/:query', auth.restrictGuest, lookupController.find);

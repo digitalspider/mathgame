@@ -30,7 +30,11 @@
   <div type='button' class='btn btn-success' onclick="javascript:startGame('{{game.id}}')">Start Game</div>
   {{/if}}
 {{else}}
-  <p>Welcome player: <b>{{user.displayName}}</b></p>
+  <p>
+    Welcome player: <b>{{user.displayName}}</b><br/>
+    You are level: <b>{{user.level}}</b><br/>
+    You have earned: <b>{{user.points}} points</b><br/>
+  </p>
   <p>
     You can use the "Settings" options to select your difficulty level, and the operations you want to practice.
   </p>

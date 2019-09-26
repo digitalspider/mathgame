@@ -3,6 +3,7 @@ import Container, { Service } from 'typedi';
 import { Setting } from '../model/Setting';
 import { User } from '../model/User.model';
 import { SettingService } from './SettingService';
+import { FindOptions } from 'sequelize/types';
 
 @Service()
 class UserService {
@@ -27,8 +28,11 @@ class UserService {
   }
 
 
-  async getUser(username: string): Promise<User> {
-    let user = await User.findByPk(username, {attributes: {exclude: ['password']}});
+  async getUser(username: string, raw: boolean = false): Promise<User> {
+    let options: FindOptions = {};
+    options.raw = raw;
+    options.attributes = {exclude: ['password']};
+    let user = await User.findByPk(username, options);
     if (!user) {
       throw new Error('Username '+username+' does not exist');
     }
@@ -50,7 +54,20 @@ class UserService {
   async updateUser(user: User): Promise<User> {
     // validate that user exists
     let dbUser = await this.getUser(user.username);
-    let updatedUser = Object.assign({}, await dbUser.update({email: user.email, settings: user.settings}));
+    let updatedUser = Object.assign({}, await dbUser.update({
+      email: user.email,
+      settings: user.settings,
+      displayName: user.displayName,
+      age: user.age,
+      level: user.level,
+      points: user.points,
+      country: user.country,
+      state: user.state,
+      school: user.school,
+      showAge: user.showAge,
+      showEmail: user.showEmail,
+      showSchoool: user.showSchool,
+    }));
     delete updatedUser.password;
     return updatedUser;
   }
