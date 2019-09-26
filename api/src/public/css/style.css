@@ -1,13 +1,13 @@
 .answer {
   width: 160px !important;
-  font-size: 150px;
-  height: 160px;
+  font-size: 8rem;
+  display: inline;
 }
 
 .game-tile {
   background-color: lightgrey;
-  font-size: 150px;
-  height: 300px;
+  font-size: 8rem;
+  min-height: 300px;
   text-align: center;
 }
 
