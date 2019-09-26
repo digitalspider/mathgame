@@ -19,7 +19,7 @@
 FROM node:11-alpine
 WORKDIR /app
 # Copy the API dir to the container
-COPY ./api .
+COPY . .
 RUN npm install
 RUN npm run build
 # Copy the build from the builder container
