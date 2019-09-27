@@ -29,6 +29,12 @@ class User extends Model<User> {
   @Column
   age?: number;
 
+  @Column
+  accessToken?: string;
+
+  @Column
+  refreshToken?: string;
+
   @Default(0)
   @Column
   points!: number;
