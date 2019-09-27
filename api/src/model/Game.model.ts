@@ -20,6 +20,7 @@ class Game extends Model<Game> {
 
   displayTime?: string;
   displayDuration?: string;
+  displaySpeed?: string;
   displayName?: string;
   goodMessage?: string;
   errorMessage?: string;
@@ -43,6 +44,10 @@ class Game extends Model<Game> {
 
   @Column
   durationInMs?: number;
+
+  @Default(0)
+  @Column
+  speed: number = 0;
 
   @Default(0)
   @Column

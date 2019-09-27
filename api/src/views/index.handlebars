@@ -30,16 +30,19 @@
   <div type='button' class='btn btn-success' onclick="javascript:startGame('{{game.id}}')">Start Game</div>
   {{/if}}
 {{else}}
-  <p>
-    Welcome player: <b>{{user.displayName}}</b><br/>
-    You are level: <b>{{user.level}}</b><br/>
-    You have earned: <b>{{user.points}} points</b><br/>
-  </p>
-  <p>
-    You can use the "Settings" options to select your difficulty level, and the operations you want to practice.
-  </p>
-  <p>Click the below to start a new game</p>
-  <div type='button' class='btn btn-warning' onclick="javascript:createGame()">Start Game</div>
+  <div style="width: 100%; text-align: center">
+    <div>
+      <p>Welcome player: <b>{{user.displayName}}</b></p>
+      {{#unless isGuest}}
+      <p>You are level: <b>{{user.level}}</b></p>
+      <p>You have earned: <b>{{user.points}} points</b></p>
+      {{/unless}}
+    </div>
+    <div type='button' class='btn btn-warning' onclick="javascript:createGame()">Play New Game</div>
+    <div>
+      <span>Use "Settings" to change your difficulty configurations</span>
+    </div>
+  </div>
   {{#if completedGames}}
   <h3>Completed Games</h3>
   <table class="table table-striped table-hover">
@@ -49,7 +52,7 @@
         <th scope="col">Level</th>
         <th scope="col"></th>
         <th scope="col">Score</th>
-        <th scope="col">Completed</th>
+        <th scope="col">Speed</th>
         <th scope="col">Duration</th>
       </th>
     </thead>
@@ -60,7 +63,7 @@
         <td scope="row">{{this.settings.difficulty}}</td>
         <td scope="row" class="table-{{this.display}}" width="10px">&nbsp;</td>
         <td scope="row">{{this.score}} / {{this.questions.length}}</td>
-        <td scope="row">{{this.completed}}</td>
+        <td scope="row">{{this.displaySpeed}} seconds</td>
         <td scope="row">{{this.displayDuration}} seconds</td>
       </tr>
       {{/each}}

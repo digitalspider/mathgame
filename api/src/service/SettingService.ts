@@ -22,21 +22,22 @@ class SettingService {
     customAvgSecondsPerQuestion: number = 6,
   ): Setting {
     let setting = new Setting(difficulty, operations, questionCount, customMax, customAvgSecondsPerQuestion);
-    if (difficulty!=Difficulty.CUSTOM) {
-      this.setDifficulty(setting, difficulty);
-    }
+    this.setDifficulty(setting, difficulty);
     return setting;
   }
 
   setDifficulty(setting: Setting, difficulty: Difficulty) {
     switch(difficulty) {
-      case Difficulty.KINDY: setting.questionCount=5; setting.maxValue=6; setting.avgSecondsPerQuestion=10; break;
-      case Difficulty.EASY: setting.questionCount=5; setting.maxValue=12; setting.avgSecondsPerQuestion=6; break;
-      case Difficulty.MEDIUM: setting.questionCount=10; setting.maxValue=20; setting.avgSecondsPerQuestion=3; break;
-      case Difficulty.HARD: setting.questionCount=10; setting.maxValue=100; setting.avgSecondsPerQuestion=2; break;
+      case Difficulty.KINDY: setting.minQuestions=5; setting.maxValue=6; setting.avgSecondsPerQuestion=10; break;
+      case Difficulty.EASY: setting.minQuestions=8; setting.maxValue=12; setting.avgSecondsPerQuestion=6; break;
+      case Difficulty.MEDIUM: setting.minQuestions=10; setting.maxValue=20; setting.avgSecondsPerQuestion=3; break;
+      case Difficulty.HARD: setting.minQuestions=10; setting.maxValue=100; setting.avgSecondsPerQuestion=2; break;
       case Difficulty.CUSTOM: break; 
       default:
         throw new Error('Invalid difficulty input = '+difficulty);
+    }
+    if (setting.questionCount<setting.minQuestions) {
+      setting.questionCount = setting.minQuestions;
     }
   }
 
@@ -59,7 +60,7 @@ class SettingService {
         {name: Operation.MULTIPLY, active: false},
         {name: Operation.DIVIDE, active: false},
       ],
-      questionCount: [5, 10, 20, 30],
+      questionCount: [5, 8, 10, 10],
       maxValue: 10,
       avgSecondsPerQuestion: 6,
     };

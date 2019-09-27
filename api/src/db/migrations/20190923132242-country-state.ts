@@ -16,6 +16,10 @@ module.exports = {
         {key: 'UK', value: 'United Kingdom', createdAt: now, updatedAt: now},
         {key: 'IND', value: 'India', createdAt: now, updatedAt: now},
         {key: 'CH', value: 'China', createdAt: now, updatedAt: now},
+        {key: 'FR', value: 'France', createdAt: now, updatedAt: now},
+        {key: 'GR', value: 'Germany', createdAt: now, updatedAt: now},
+        {key: 'SP', value: 'Spain', createdAt: now, updatedAt: now},
+        {key: 'OTHER', value: 'Other', createdAt: now, updatedAt: now},
       ])
     );
     promises.push(
@@ -27,6 +31,7 @@ module.exports = {
         {key: 'NT', value: 'Northern Territory', createdAt: now, updatedAt: now},
         {key: 'VIC', value: 'Victoria', createdAt: now, updatedAt: now},
         {key: 'TAS', value: 'Tasmaina', createdAt: now, updatedAt: now},
+        {key: 'OTHER', value: 'Other', createdAt: now, updatedAt: now},
       ])
     );
     return Promise.all(promises);

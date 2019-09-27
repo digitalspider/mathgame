@@ -86,27 +86,37 @@ class GameService {
   /**
    * Find the fastest completed games
    * @param limit limit the result set
+   * @param frequency frequency of best games
    * @param raw if true return raw sequelize content
    */
-  async findBestGames(user: User, limit: number = 10, raw: boolean = false) {
+  async findBestGames(user: User, limit: number = 10, frequency?: string, raw: boolean = false) {
     let options: FindOptions = {};
     const isGuest = this.userService.isGuest(user);
+    let usernameOptions = isGuest ? 'guest' : {[Op.ne]: 'guest'};
+    let frequencyOptions: object = {[Op.not]: null};
+    if (frequency) {
+      switch(frequency) {
+        case 'daily':
+          frequencyOptions = {[Op.between]: [moment().startOf('day'),moment().endOf('day')]};
+          break;
+        case 'weekly':
+          frequencyOptions = {[Op.between]: [moment().startOf('week'),moment().endOf('week')]};
+          break;
+        case 'monthly':
+          frequencyOptions = {[Op.between]: [moment().startOf('month'),moment().endOf('month')]};
+          break;
+      }
+    }
     options.where = {
       endTime: {[Op.ne]: null},
+      speed: {[Op.gt]: 0},
       settings: {
         difficulty: user.settings.difficulty,
-      }
+      },
+      username: usernameOptions,
+      createdAt: frequencyOptions,
     };
-    if (isGuest) {
-      options.where = {
-        endTime: {[Op.ne]: null},
-        settings: {
-          difficulty: user.settings.difficulty,
-        },
-        username: 'guest',
-      };
-    }
-    options.order = [['durationInMs', 'ASC']];
+    options.order = [['speed', 'ASC']];
     options.limit = limit;
     options.raw = raw;
     let games = await Game.findAll(options);
@@ -174,6 +184,7 @@ class GameService {
     } else {
       game.goodMessage = `Well done: ${game.username}. Perfect score!`;
     }
+    game.speed = Math.floor(game.durationInMs / game.questions.length);
     if (!user.points) { user.points = 0; }
     user.points += this.calculatePoints(game);
     user.level = this.calculateLevel(user.points);
@@ -231,8 +242,8 @@ class GameService {
   calculateLevel(points: number = 0) {
     let level = 0;
     switch(true) {
-      case (points < 15): level = 0; break;
-      case (points < 25): level = 1; break;
+      case (points < 25): level = 0; break;
+      case (points < 50): level = 1; break;
       case (points < 75): level = 2; break;
       case (points < 150): level = 3; break;
       case (points < 250): level = 4; break;
@@ -258,6 +269,9 @@ class GameService {
   }
 
   deserialize(game: Game) {
+    if (typeof game.speed === 'string') {
+      game.speed = parseInt(game.speed);
+    }
     game.questions.forEach((question) => {
       if (typeof question.firstNumber === 'string') {
         question.firstNumber = parseInt(question.firstNumber);
@@ -283,6 +297,7 @@ class GameService {
       if (game.durationInMs) {
         game.displayDuration = moment.duration(game.durationInMs, 'ms').asSeconds().toString();
       }
+      game.displaySpeed = moment.duration(game.speed, 'ms').asSeconds().toString();
     });
   }
 }

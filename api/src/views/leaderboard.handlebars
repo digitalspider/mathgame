@@ -1,3 +1,32 @@
+{{#unless isGuest}}
+<div style="width: 100%; text-align: center">
+  <div>
+    <p>Welcome player: <b>{{user.displayName}}</b></p>
+    <p>You are level: <b>{{user.level}}</b></p>
+    <p>You have earned: <b>{{user.points}} points</b></p>
+  </div>
+  <div type='button' class='btn btn-warning' onclick="javascript:createGame()">Play New Game</div>
+  <div>
+    <span>Use "Settings" to change your configurations</span>
+  </div>
+  <div>
+    <ul id="filterTabs" class="nav nav-pills nav-fill nav-justified">
+      <li class="nav-item">
+        <a class="nav-link active" href="/leaderboard">All</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/leaderboard/daily">Daily</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/leaderboard/weekly">Weekly</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/leaderboard/monthly">Monthly</a>
+      </li>
+    </ul>
+  </div>
+</div>
+{{/unless}}
 {{#if bestGames}}
 <h3>Best Games</h3>
 <table class="table table-striped table-hover">
@@ -8,6 +37,7 @@
       <th scope="col">Level</th>
       <th scope="col"></th>
       <th scope="col">Score</th>
+      <th scope="col">Speed</th>
       <th scope="col">Duration</th>
     </th>
   </thead>
@@ -19,6 +49,7 @@
       <td scope="row">{{this.settings.difficulty}}</td>
       <td scope="row" class="table-{{this.display}}" width="10px">&nbsp;</td>
       <td scope="row">{{this.score}} / {{this.questions.length}}</td>
+      <td scope="row">{{this.displaySpeed}} seconds</td>
       <td scope="row">{{this.displayDuration}} seconds</td>
     </tr>
     {{/each}}
