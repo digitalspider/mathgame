@@ -1,6 +1,7 @@
 import bodyParser from "body-parser";
 import flash from "connect-flash";
 import express, { NextFunction, Request, Response } from 'express';
+import cookieParser from 'cookie-parser';
 import hbs from 'express-handlebars';
 import session from 'express-session';
 import passport from 'passport';
@@ -34,6 +35,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Set Static Folder
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
+
+// Use cookies
+app.use(cookieParser());
 
 // Express session
 app.use(

@@ -43,12 +43,16 @@ class UserService {
     return User.findByPk(username);
   }
 
-  async getUserByEmail(email: string): Promise<User> {
+  async findUserByEmail(email: string): Promise<User> {
     let user = await User.findOne<User>({where: {email: email}, attributes: {exclude: ['password']}});
     if (!user) {
       throw new Error('User with email '+email+' does not exist');
     }
     return user;
+  }
+
+  async findUserByAccessToken(accessToken: string): Promise<User | null> {
+    return User.findOne<User>({where: {accessToken: accessToken}, attributes: ['username']});
   }
 
   async updateUser(user: User): Promise<User> {
@@ -58,6 +62,8 @@ class UserService {
       email: user.email,
       settings: user.settings,
       displayName: user.displayName,
+      accessToken: user.accessToken,
+      refreshToken: user.refreshToken,
       age: user.age,
       level: user.level,
       points: user.points,

@@ -1,6 +1,8 @@
 require('dotenv').config();
 
 export const SESSION_SECRET = process.env.SESSION_SECRET || 'secret';
+export const JWT_SECRET = process.env.JWT_SECRET || 'secret';
+export const MATHGAME_COOKIE = process.env.MATHGAME_COOKIE || 'mathtoken';
 export const PORT = process.env.PORT || 5000;
 export const DB_HOST = process.env.DB_HOST || 'localhost';
 export const DB_PORT: number = process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432;

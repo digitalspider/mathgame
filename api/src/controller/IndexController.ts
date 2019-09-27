@@ -6,7 +6,9 @@ import { User } from '../model/User.model';
 import { GameService } from '../service/GameService';
 import { LookupService } from '../service/LookupService';
 import { UserService } from '../service/UserService';
-import passport = require('passport');
+import passport from 'passport';
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET, MATHGAME_COOKIE } from '../config';
 
 const userService = Container.get(UserService);
 const gameService = Container.get(GameService);
@@ -28,7 +30,22 @@ export const index = async (req: Request, res: Response) => {
   });
 };
 
-export const login = (req: Request, res: Response) => {
+export const login = async(req: Request, res: Response) => {
+  // Autologin via cookie
+  const authCookie = req.cookies[MATHGAME_COOKIE];
+  if (authCookie) {
+    const accessToken = jwt.verify(authCookie, JWT_SECRET);
+    if (accessToken && typeof accessToken==='object') {
+      const user = await userService.findUserByAccessToken(authCookie);
+      if (user) {
+        if ((accessToken as any).username === user.username) {
+          return req.logIn(user, (err) => {
+            if (!err) res.redirect("/");
+          });
+        }
+      }
+    }
+  }
   res.render("login", {
     success_msg: 'You can login as guest / guest <div class="btn btn-success" id="btn-login" onclick="javascript:loginAsGuest()">Login as Guest</div>',
   });
@@ -40,6 +57,7 @@ export const register = (req: Request, res: Response) => {
 
 export const logout = (req: Request, res: Response) => {
   req.logout();
+  req.clearCookie(MATHGAME_COOKIE);
   req.flash('success_msg', 'You are logged out');
   res.redirect('/login')
 };
@@ -111,6 +129,7 @@ export const postLogin = (req: Request, res: Response, next: NextFunction) => {
           req.flash("error_msg", info.message);
           return res.redirect("/login");
       }
+      createJwtToken(user, res);
       req.logIn(user, (err) => {
           if (err) { return next(err); }
           req.flash("success_msg", "Success! You are logged in.");
@@ -118,6 +137,15 @@ export const postLogin = (req: Request, res: Response, next: NextFunction) => {
       });
   })(req, res, next);
 };
+
+function createJwtToken(user: User, res: Response) {
+  const token = jwt.sign({
+    username: user.username
+  }, JWT_SECRET, { expiresIn: '24h' });
+  user.accessToken = token;
+  userService.updateUser(user);
+  res.cookie(MATHGAME_COOKIE, user.accessToken, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+}
 
 export const postRegister = async (req: Request, res: Response, next: NextFunction) => {
   try {
