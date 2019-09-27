@@ -62,7 +62,7 @@ function handleInput(target) {
 }
 
 function submitSettingsForm() {
-  let ele = jQuery('a.nav-link.active')[0];
+  let ele = jQuery('a.settings-link.active')[0];
   jQuery('#difficulty').val(ele.id);
   submitForm('settingsForm', (user) => {
     jQuery('#questionCount').val(user.settings.questionCount);

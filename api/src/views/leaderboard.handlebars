@@ -12,16 +12,16 @@
   <div>
     <ul id="filterTabs" class="nav nav-pills nav-fill nav-justified">
       <li class="nav-item">
-        <a class="nav-link active" href="/leaderboard">All</a>
+        <a class="nav-link {{#ifEq path '/leaderboard'}}active{{/ifEq}}" href="/leaderboard">All</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/leaderboard/daily">Daily</a>
+        <a class="nav-link {{#ifContainsStr path '/daily'}}active{{/ifContainsStr}}" href="/leaderboard/daily">Daily</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/leaderboard/weekly">Weekly</a>
+        <a class="nav-link {{#ifContainsStr path '/weekly'}}active{{/ifContainsStr}}" href="/leaderboard/weekly">Weekly</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="/leaderboard/monthly">Monthly</a>
+        <a class="nav-link {{#ifContainsStr path '/monthly'}}active{{/ifContainsStr}}" href="/leaderboard/monthly">Monthly</a>
       </li>
     </ul>
   </div>

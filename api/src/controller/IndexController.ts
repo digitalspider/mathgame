@@ -73,7 +73,22 @@ export const leaderboard = async (req: Request, res: Response) => {
     isGuest,
     bestGames,
     settingOptions,
+    path: req.path,
     success_msg: isGuest ? 'Please <a href="/register">register</a> a user to use this page' : null,
+    helpers: {
+      ifEq: function(elem: string, input: string, options: any) {
+        if(input === elem) {
+          return options.fn(this);
+        }
+        return options.inverse(this);
+      },
+      ifContainsStr: function(elem: string, input: string, options: any) {
+        if(elem.includes(input)) {
+          return options.fn(this);
+        }
+        return options.inverse(this);
+      },
+    },
   });
 };
 
