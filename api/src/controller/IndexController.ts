@@ -1,14 +1,15 @@
 import { NextFunction, Request, Response } from 'express';
 import { check, sanitize, validationResult } from "express-validator";
+import jwt from 'jsonwebtoken';
+import passport from 'passport';
 import { IVerifyOptions } from 'passport-local';
 import Container from 'typedi';
+import uuid from 'uuid/v4';
+import { JWT_SECRET, MATHGAME_COOKIE } from '../config';
 import { User } from '../model/User.model';
 import { GameService } from '../service/GameService';
 import { LookupService } from '../service/LookupService';
 import { UserService } from '../service/UserService';
-import passport from 'passport';
-import jwt from 'jsonwebtoken';
-import { JWT_SECRET, MATHGAME_COOKIE } from '../config';
 
 const userService = Container.get(UserService);
 const gameService = Container.get(GameService);
@@ -35,8 +36,8 @@ export const login = async(req: Request, res: Response) => {
   const authCookie = req.cookies[MATHGAME_COOKIE];
   if (authCookie) {
     const accessToken = jwt.verify(authCookie, JWT_SECRET);
-    if (accessToken && typeof accessToken==='object') {
-      const user = await userService.findUserByAccessToken(authCookie);
+    if (accessToken && typeof accessToken==='object' && Object.keys(accessToken).includes('token')) {
+      const user = await userService.findUserByAccessToken((accessToken as any).token);
       if (user) {
         if ((accessToken as any).username === user.username) {
           return req.logIn(user, (err) => {
@@ -56,10 +57,13 @@ export const register = (req: Request, res: Response) => {
 };
 
 export const logout = (req: Request, res: Response) => {
+  let user: User = req.user as User;
+  if (!userService.isGuest(user)) {
+    res.clearCookie(MATHGAME_COOKIE);
+  }
   req.logout();
-  req.clearCookie(MATHGAME_COOKIE);
   req.flash('success_msg', 'You are logged out');
-  res.redirect('/login')
+  res.redirect('/login');
 };
 
 export const profile = async(req: Request, res: Response) => {
@@ -129,7 +133,9 @@ export const postLogin = (req: Request, res: Response, next: NextFunction) => {
           req.flash("error_msg", info.message);
           return res.redirect("/login");
       }
-      createJwtToken(user, res);
+      if (!userService.isGuest(user)) {
+        createJwtToken(user, res);
+      }
       req.logIn(user, (err) => {
           if (err) { return next(err); }
           req.flash("success_msg", "Success! You are logged in.");
@@ -139,12 +145,13 @@ export const postLogin = (req: Request, res: Response, next: NextFunction) => {
 };
 
 function createJwtToken(user: User, res: Response) {
+  user.accessToken = uuid();
   const token = jwt.sign({
-    username: user.username
+    username: user.username,
+    token: user.accessToken,
   }, JWT_SECRET, { expiresIn: '24h' });
-  user.accessToken = token;
   userService.updateUser(user);
-  res.cookie(MATHGAME_COOKIE, user.accessToken, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+  res.cookie(MATHGAME_COOKIE, token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
 }
 
 export const postRegister = async (req: Request, res: Response, next: NextFunction) => {
