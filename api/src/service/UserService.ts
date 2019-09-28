@@ -51,6 +51,17 @@ class UserService {
     return user;
   }
 
+  async findUserByUsername(username: string, raw: boolean = false): Promise<User> {
+    let options: FindOptions = {};
+    options.raw = raw;
+    options.attributes = ['username','fastestSpeed','level','points','displayName','country','state'];
+    let user = await User.findByPk(username, options);
+    if (!user) {
+      throw new Error('Username '+username+' does not exist');
+    }
+    return user;
+  }
+
   async findUserByAccessToken(accessToken: string): Promise<User | null> {
     return User.findOne<User>({where: {accessToken: accessToken}, attributes: ['username']});
   }
@@ -64,6 +75,7 @@ class UserService {
       displayName: user.displayName,
       accessToken: user.accessToken,
       refreshToken: user.refreshToken,
+      fastestSpeed: user.fastestSpeed,
       age: user.age,
       level: user.level,
       points: user.points,

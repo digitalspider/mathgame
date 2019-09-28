@@ -57,6 +57,18 @@ class GameService {
   }
 
   /**
+   * Count the games that a user has played
+   * @param user the user whose games to find
+   */
+  async countGamesByUser(user: User): Promise<number> {
+    let options: FindOptions = {};
+    options.where = {
+      username: user.username,
+    };
+    return Game.count(options);
+  }
+
+  /**
    * Find the current active game for the user
    * @param user the user whose game to find
    * @param games the list of games this user has
@@ -191,7 +203,7 @@ class GameService {
     game.speed = Math.floor(game.durationInMs / game.questions.length);
     if (user.fastestSpeed === 0 || game.speed < user.fastestSpeed) {
       user.fastestSpeed = game.speed;
-      game.goodMessage += `<br/>Congratulations. A new fastest speed of ${game.speed}`;
+      game.goodMessage += `<br/>Congratulations. A new fastest speed of ${game.speed/1000}s`;
     }
     if (!user.points) { user.points = 0; }
     user.points += this.calculatePoints(game);

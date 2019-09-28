@@ -68,23 +68,42 @@ export const logout = (req: Request, res: Response) => {
 
 export const profile = async(req: Request, res: Response) => {
   let user: User = req.user as User;
+  let {username} = req.params;
   let {isGuest, settingOptions} = res.locals;
-  const games = await gameService.findGamesByUser(user);
-  const country = await lookupService.getAllCountry();
-  const state = await lookupService.getAllState();
-  const school = await lookupService.getAllSchool();
-  const view = !req.path.includes('/edit');
-  res.render("profile", {
-    user,
-    isGuest,
-    settingOptions,
-    country,
-    state,
-    school,
-    view,
-    games: games.length,
-    success_msg: isGuest ? 'Please <a href="/register">register</a> a user to use this page' : null,
-  });
+  let params = {}
+  if (!isGuest && username) {
+    let player = await userService.findUserByUsername(username, true);
+    const games = await gameService.countGamesByUser(player);
+    player.settings = user.settings;
+    params = {
+      user: player,
+      isGuest,
+      settingOptions,
+      view: true,
+      games,
+      isSelf: false,
+    }
+  }
+  else {
+    const games = await gameService.countGamesByUser(user);
+    const country = await lookupService.getAllCountry();
+    const state = await lookupService.getAllState();
+    const school = await lookupService.getAllSchool();
+    const view = !req.path.includes('/edit');
+    params = {
+      user,
+      isGuest,
+      settingOptions,
+      country,
+      state,
+      school,
+      view,
+      games,
+      isSelf: true,
+      success_msg: isGuest ? 'Please <a href="/register">register</a> a user to use this page' : null,
+    };
+  }
+  res.render("profile", params);
 };
 
 export const leaderboard = async (req: Request, res: Response) => {
@@ -92,6 +111,7 @@ export const leaderboard = async (req: Request, res: Response) => {
   let {frequency} = req.params;
   let {isGuest, settingOptions} = res.locals;
   let bestGames = await gameService.findBestGames(user, 10, frequency, true);
+  console.log(isGuest);
   res.render("leaderboard", {
     user,
     isGuest,

@@ -1,15 +1,17 @@
 
 {{#if user}}
 {{#unless isGuest}}
-  <div style="width: 100%">
-    <span class="float-left">User Profile</span>
-    {{#if view}}
-    <div class="float-right btn btn-primary" onclick="location.href='/profile/edit'">Edit</div>
-    {{else}}
-    <div class="float-right ml-2 btn btn-secondary" onclick="location.href='/profile'">Cancel</div>
-    <div class="float-right btn btn-primary" onclick="javascript:submitProfileForm()">Submit</div>
-    {{/if}}
-  </div>
+  {{#if isSelf}}
+    <div style="width: 100%">
+      <span class="float-left">User Profile</span>
+      {{#if view}}
+      <div class="float-right btn btn-primary" onclick="location.href='/profile/edit'">Edit</div>
+      {{else}}
+      <div class="float-right ml-2 btn btn-secondary" onclick="location.href='/profile'">Cancel</div>
+      <div class="float-right btn btn-primary" onclick="javascript:submitProfileForm()">Submit</div>
+      {{/if}}
+    </div>
+  {{/if}}
 {{/unless}}
 <form id="profileForm" method="POST" action="/api/user">
   <table class="table table-striped table-hover">
@@ -32,9 +34,10 @@
     </tr>
     <tr>
       <th scope="col">Games Played</th>
-      <td scope="col">{{user.games}}</td>
+      <td scope="col">{{games}}</td>
     </tr>
     {{#if view}}
+    {{#if isSelf}}
     <tr>
       <th scope="col">Email</th>
       <td scope="col">{{user.email}}</td>
@@ -59,6 +62,7 @@
       <th scope="col">School</th>
       <td scope="col">{{user.school}}</td>
     </tr>
+    {{/if}}
     {{else}}
     <tr>
       <th scope="col">Email</th>
