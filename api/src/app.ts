@@ -1,13 +1,15 @@
 import bodyParser from "body-parser";
 import flash from "connect-flash";
+import fs from 'fs';
 import express, { NextFunction, Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import hbs from 'express-handlebars';
 import session from 'express-session';
 import passport from 'passport';
 import path from 'path';
+import https from 'https';
 import "reflect-metadata";
-import { PORT, SESSION_SECRET } from './config';
+import { PORT, SESSION_SECRET, SSL_PORT, SSL_BASE_DIR } from './config';
 import * as passportConfig from "./config/passport";
 import * as gameController from "./controller/api/GameController";
 import * as settingController from "./controller/api/SettingController";
@@ -34,10 +36,22 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Set Static Folder
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000, dotfiles: 'allow' }));
 
 // Use cookies
 app.use(cookieParser());
+
+// Add SSL
+const privateKey = fs.readFileSync(`${SSL_BASE_DIR}/privkey.pem`, 'utf8');
+const certificate = fs.readFileSync(`${SSL_BASE_DIR}/cert.pem`, 'utf8');
+const ca = fs.readFileSync(`${SSL_BASE_DIR}/chain.pem`, 'utf8');
+
+const credentials = {
+  key: privateKey,
+  cert: certificate,
+  ca: ca
+};
+
 
 // Express session
 app.use(
@@ -162,6 +176,12 @@ sequelize.sync().then(() => {
   // Start listening
   app.listen(app.get('port'), function() {
     console.log('Server started on port '+app.get('port'));
+    console.log('DONE');
+  });
+  // SSL Server
+  const httpsServer = https.createServer(credentials, app);
+  httpsServer.listen(SSL_PORT, function() {
+    console.log('Server started on port '+SSL_PORT);
     console.log('DONE');
   });
 });
