@@ -189,6 +189,10 @@ class GameService {
       game.goodMessage = `Well done: ${game.username}. Perfect score!`;
     }
     game.speed = Math.floor(game.durationInMs / game.questions.length);
+    if (user.fastestSpeed === 0 || game.speed < user.fastestSpeed) {
+      user.fastestSpeed = game.speed;
+      game.goodMessage += `<br/>Congratulations. A new fastest speed of ${game.speed}`;
+    }
     if (!user.points) { user.points = 0; }
     user.points += this.calculatePoints(game);
     user.level = this.calculateLevel(user.points);
