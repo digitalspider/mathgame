@@ -29,6 +29,10 @@ class User extends Model<User> {
   @Column
   age?: number;
 
+  @Default(0)
+  @Column
+  fastestSpeed: number = 0;
+
   @Column
   accessToken?: string;
 
@@ -37,11 +41,11 @@ class User extends Model<User> {
 
   @Default(0)
   @Column
-  points!: number;
+  points: number = 0;
 
   @Default(0)
   @Column
-  level!: number;
+  level: number = 0;
 
   @Column
   displayName?: string;
