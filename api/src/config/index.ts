@@ -6,6 +6,7 @@ export const MATHGAME_COOKIE = process.env.MATHGAME_COOKIE || 'mathtoken';
 export const PORT = process.env.PORT || 5000;
 export const SSL_PORT = process.env.SSL_PORT || 5443;
 export const SSL_BASE_DIR = process.env.SSL_BASE_DIR || '/app/mathgame.com.au';
+export const SSL_ENABLED = process.env.SSL_ENABLED ? process.env.SSL_ENABLED === 'true' : false;
 export const DB_HOST = process.env.DB_HOST || 'localhost';
 export const DB_PORT: number = process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432;
 export const DB_NAME = process.env.DB_NAME || 'mathgame';
