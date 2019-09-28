@@ -9,7 +9,7 @@ import passport from 'passport';
 import path from 'path';
 import https from 'https';
 import "reflect-metadata";
-import { PORT, SESSION_SECRET, SSL_PORT, SSL_BASE_DIR } from './config';
+import { PORT, SESSION_SECRET, SSL_PORT, SSL_BASE_DIR, SSL_ENABLED } from './config';
 import * as passportConfig from "./config/passport";
 import * as gameController from "./controller/api/GameController";
 import * as settingController from "./controller/api/SettingController";
@@ -42,16 +42,17 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000, do
 app.use(cookieParser());
 
 // Add SSL
-const privateKey = fs.readFileSync(`${SSL_BASE_DIR}/privkey.pem`, 'utf8');
-const certificate = fs.readFileSync(`${SSL_BASE_DIR}/cert.pem`, 'utf8');
-const ca = fs.readFileSync(`${SSL_BASE_DIR}/chain.pem`, 'utf8');
-
-const credentials = {
-  key: privateKey,
-  cert: certificate,
-  ca: ca
-};
-
+let credentials = {};
+if (SSL_ENABLED) {
+  const privateKey = fs.readFileSync(`${SSL_BASE_DIR}/privkey.pem`, 'utf8');
+  const certificate = fs.readFileSync(`${SSL_BASE_DIR}/cert.pem`, 'utf8');
+  const ca = fs.readFileSync(`${SSL_BASE_DIR}/chain.pem`, 'utf8');
+  credentials = {
+    key: privateKey,
+    cert: certificate,
+    ca: ca
+  };
+}
 
 // Express session
 app.use(
@@ -179,9 +180,11 @@ sequelize.sync().then(() => {
     console.log('DONE');
   });
   // SSL Server
-  const httpsServer = https.createServer(credentials, app);
-  httpsServer.listen(SSL_PORT, function() {
-    console.log('Server started on port '+SSL_PORT);
-    console.log('DONE');
-  });
+  if (SSL_ENABLED) {
+    const httpsServer = https.createServer(credentials, app);
+    httpsServer.listen(SSL_PORT, function() {
+      console.log('Server started on port '+SSL_PORT);
+      console.log('DONE');
+    });
+  }
 });
