@@ -1,5 +1,7 @@
+.question {
+}
 .answer {
-  width: 160px !important;
+  width: 200px !important;
   font-size: 8rem;
   display: inline;
 }
@@ -19,6 +21,12 @@
 }
 
 @media only screen and (max-width: 800px) {
+  .game-tile {
+    font-size: 5rem;
+  }
+  .answer {
+    font-size: 5rem;
+  }
   .header .navbar .navbar-brand {
     font-size: 1.85rem;
   }

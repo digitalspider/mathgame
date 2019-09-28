@@ -9,8 +9,6 @@ import { QuestionService } from '../service/QuestionService';
 import { UserService } from './UserService';
 import { Difficulty } from '../model/Difficulty';
 
-const penatlyInSeconds = 3;
-
 @Service()
 class GameService {
 
@@ -177,6 +175,12 @@ class GameService {
     game.durationInMs = game.endTime.getTime()-game.startTime.getTime();
     this.calculateScore(game);
     if (game.errors) {
+      let penatlyInSeconds = 3;
+      switch (game.settings.difficulty) {
+        case Difficulty.MEDIUM: penatlyInSeconds = 4; break;
+        case Difficulty.HARD: penatlyInSeconds = 5; break;
+        case Difficulty.CUSTOM: penatlyInSeconds = 5; break;
+      }
       game.durationInMs += penatlyInSeconds * 1000 * game.errors; // Add 3s penalty
       let errorString = 'error';
       if (game.errors>1) { errorString = 'errors' }

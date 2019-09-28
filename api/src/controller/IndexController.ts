@@ -69,6 +69,7 @@ export const logout = (req: Request, res: Response) => {
 export const profile = async(req: Request, res: Response) => {
   let user: User = req.user as User;
   let {isGuest, settingOptions} = res.locals;
+  const games = await gameService.findGamesByUser(user);
   const country = await lookupService.getAllCountry();
   const state = await lookupService.getAllState();
   const school = await lookupService.getAllSchool();
@@ -81,6 +82,7 @@ export const profile = async(req: Request, res: Response) => {
     state,
     school,
     view,
+    games: games.length,
     success_msg: isGuest ? 'Please <a href="/register">register</a> a user to use this page' : null,
   });
 };

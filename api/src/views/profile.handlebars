@@ -30,13 +30,17 @@
       <th scope="col">Points</th>
       <td scope="col">{{user.points}}</td>
     </tr>
+    <tr>
+      <th scope="col">Games Played</th>
+      <td scope="col">{{user.games}}</td>
+    </tr>
     {{#if view}}
     <tr>
       <th scope="col">Email</th>
       <td scope="col">{{user.email}}</td>
     </tr>
     <tr>
-      <th scope="col">DisplayName</th>
+      <th scope="col">Display Name</th>
       <td scope="col">{{user.displayName}}</td>
     </tr>
     <tr>
@@ -69,9 +73,11 @@
       <td scope="col">
         <input class="hidden" type="hidden" name="username" value="{{user.username}}"></input>
         <input class="form-control" type="number" name="age" id="age" value="{{user.age}}"></input>
+        <!--
         <div class="checkbox">
           <label>Show Age<input class="form-control" type="checkbox" name="showAge" id="showAge" {{#if user.showAge}}checked="true"{{/if}}></input></label>
         </div>
+        -->
       </td>
     </tr>
     <tr>
@@ -102,9 +108,11 @@
           <option id="{{this.key}}" value="{{this.key}}" {{#if this.selected}}selected{{/if}}>{{this.value}}</option>
           {{/each}}
         </select>
+        <!--
         <div class="checkbox">
           <label>Show School<input class="form-control" type="checkbox" id="showSchool" name="showSchool" {{#if user.showSchool}}checked="true"{{/if}}></input></label>
         </div>
+        -->
         <button type="button" class="btn btn-warning" data-toggle="popover" title="Coming soon" data-content="This functionality will come soon. Please be patient">Add School</button>
       </td>
     </tr>
