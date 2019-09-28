@@ -95,16 +95,15 @@ class GameService {
     let usernameOptions = isGuest ? 'guest' : {[Op.ne]: 'guest'};
     let frequencyOptions: object = {[Op.not]: null};
     if (frequency) {
-      const now = moment().utcOffset(10);
       switch(frequency) {
         case 'daily':
-          frequencyOptions = {[Op.between]: [now.startOf('day'),now.endOf('day')]};
+          frequencyOptions = {[Op.between]: [moment().startOf('day'),moment().endOf('day')]};
           break;
         case 'weekly':
-          frequencyOptions = {[Op.between]: [now.startOf('week'),now.endOf('week')]};
+          frequencyOptions = {[Op.between]: [moment().startOf('week'),moment().endOf('week')]};
           break;
         case 'monthly':
-          frequencyOptions = {[Op.between]: [now.startOf('month'),now.endOf('month')]};
+          frequencyOptions = {[Op.between]: [moment().startOf('month'),moment().endOf('month')]};
           break;
       }
     }
