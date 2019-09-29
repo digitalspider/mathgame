@@ -63,10 +63,10 @@ function handleInput(target) {
 
 function onDifficultyChange(ele) {
   switch (ele.id) {
-    case 'KINDY': jQuery('#questionCount').val(5); break;
-    case 'EASY': jQuery('#questionCount').val(8); break;
-    case 'MEDIUM': jQuery('#questionCount').val(10); break;
-    case 'HARD': jQuery('#questionCount').val(10); break;
+    case 'KINDY': jQuery('#questionCount').val(5); jQuery('#maxValue').val(6); break;
+    case 'EASY': jQuery('#questionCount').val(8); jQuery('#maxValue').val(12); break;
+    case 'MEDIUM': jQuery('#questionCount').val(10); jQuery('#maxValue').val(20); break;
+    case 'HARD': jQuery('#questionCount').val(10); jQuery('#maxValue').val(100); break;
   }
   jQuery('#maxValue').prop('disabled', ele.id !== 'CUSTOM');
 }
