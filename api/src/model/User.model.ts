@@ -31,7 +31,7 @@ class User extends Model<User> {
 
   @Default(0)
   @Column
-  fastestSpeed: number = 0;
+  fastestSpeed!: number;
 
   @Column
   accessToken?: string;
@@ -41,11 +41,11 @@ class User extends Model<User> {
 
   @Default(0)
   @Column
-  points: number = 0;
+  points!: number;
 
   @Default(0)
   @Column
-  level: number = 0;
+  level!: number;
 
   @Column
   displayName?: string;

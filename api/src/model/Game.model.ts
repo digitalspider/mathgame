@@ -47,26 +47,26 @@ class Game extends Model<Game> {
 
   @Default(0)
   @Column
-  speed: number = 0;
+  speed!: number;
 
   @Default(0)
   @Column
-  errors: number = 0;
+  errors!: number;
 
   @Default(0)
   @Column
-  score: number = 0;
+  score!: number;
 
   @Column
   display?: string;
 
   @Default(0)
   @Column
-  answered: number = 0;
+  answered!: number;
 
   @Default(false)
   @Column
-  completed: boolean = false;
+  completed!: boolean;
 }
 
 export { Game };
