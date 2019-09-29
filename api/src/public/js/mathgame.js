@@ -61,8 +61,18 @@ function handleInput(target) {
   }
 }
 
+function onDifficultyChange(ele) {
+  switch (ele.id) {
+    case 'KINDY': jQuery('#questionCount').val(5); break;
+    case 'EASY': jQuery('#questionCount').val(8); break;
+    case 'MEDIUM': jQuery('#questionCount').val(10); break;
+    case 'HARD': jQuery('#questionCount').val(10); break;
+  }
+  jQuery('#maxValue').prop('disabled', ele.id !== 'CUSTOM');
+}
+
 function submitSettingsForm() {
-  let ele = jQuery('a.settings-link.active')[0];
+  let ele = jQuery('a.difficulty-link.active')[0];
   jQuery('#difficulty').val(ele.id);
   submitForm('settingsForm', (user) => {
     jQuery('#questionCount').val(user.settings.questionCount);

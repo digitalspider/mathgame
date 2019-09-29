@@ -26,6 +26,13 @@ class SettingService {
     return setting;
   }
 
+  updateSettings(user: User, settings: Setting) {
+    if (user.settings.difficulty != settings.difficulty) {
+      settings.questionCount = settings.minQuestions;
+    }
+    user.settings = settings;
+  }
+
   setDifficulty(setting: Setting, difficulty: Difficulty) {
     switch(difficulty) {
       case Difficulty.KINDY: setting.minQuestions=5; setting.maxValue=6; setting.avgSecondsPerQuestion=10; break;

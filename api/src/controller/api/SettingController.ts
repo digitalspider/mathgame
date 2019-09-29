@@ -14,12 +14,12 @@ export const get = (req: Request, res: Response, next: NextFunction) => {
 
 export const update = (req: Request, res: Response, next: NextFunction) => {
   let user: User = req.user as User;
-  user.settings = settingService.createSetting(
+  settingService.updateSettings(user, settingService.createSetting(
     req.body.difficulty,
     req.body.operations,
     parseInt(req.body.questionCount),
     parseInt(req.body.maxValue)
-  );
+  ));
   userService.updateUser(user);
   return res.json(user);
 }

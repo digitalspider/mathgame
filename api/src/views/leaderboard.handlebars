@@ -36,20 +36,19 @@
   <thead>
     <tr>
       <th scope="col">Rank</th>
-      <th scope="col">Date</th>
+      <th scope="col">Speed</th>
       <th scope="col">User</th>
-      <th scope="col">Level</th>
       <th scope="col"></th>
       <th scope="col">Score</th>
-      <th scope="col">Speed</th>
-      <th scope="col">Duration</th>
+      <th scope="col">Date</th>
+      <th scope="col">Difficulty</th>
     </th>
   </thead>
   <tbody>
     {{#each bestGames}}
     <tr>
       <td scope="row">{{@index}}</td>
-      <td scope="row">{{this.displayTime}}</td>
+      <td scope="row">{{this.displaySpeed}} seconds</td>
       <td scope="row">
         {{#if ../isGuest}}
           {{this.username}}
@@ -57,11 +56,10 @@
           <a href='/profile/{{this.username}}'>{{this.username}}</a>
         {{/if}}
       </td>
-      <td scope="row">{{this.settings.difficulty}}</td>
       <td scope="row" class="table-{{this.display}}" width="10px">&nbsp;</td>
       <td scope="row">{{this.score}} / {{this.questions.length}}</td>
-      <td scope="row">{{this.displaySpeed}} seconds</td>
-      <td scope="row">{{this.displayDuration}} seconds</td>
+      <td scope="row">{{this.displayTime}}</td>
+      <td scope="row">{{this.settings.difficulty}}</td>
     </tr>
     {{/each}}
   </tbody>
