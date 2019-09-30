@@ -54,7 +54,7 @@ class User extends Model<User> {
   oldEmail?: string;
 
   @ForeignKey(() => Country)
-  @Column(name)
+  @Column
   countryId?: string;
 
   @ForeignKey(() => State)
