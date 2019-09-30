@@ -14,6 +14,8 @@ class Country extends Model<Country> implements InterfaceKeyValue {
   @Unique
   @Column
   value!: string;
+
+  selected: boolean = false;
 }
 
 export { Country };

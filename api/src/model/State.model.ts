@@ -14,6 +14,8 @@ class State extends Model<State> implements InterfaceKeyValue {
   @Unique
   @Column
   value!: string;
+
+  selected: boolean = false;
 }
 
 export { State };

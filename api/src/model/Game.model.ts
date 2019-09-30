@@ -17,6 +17,9 @@ class Game extends Model<Game> {
   @ForeignKey(() => User)
   @Column
   username!: string;
+  
+  @BelongsTo(() => User)
+  user!: User;
 
   displayTime?: string;
   displayDuration?: string;
@@ -24,9 +27,6 @@ class Game extends Model<Game> {
   displayName?: string;
   goodMessage?: string;
   errorMessage?: string;
-  
-  @BelongsTo(() => User)
-  user!: User;
 
   @AllowNull(false)
   @Column(JSONB)

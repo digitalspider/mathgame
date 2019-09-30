@@ -14,6 +14,8 @@ class School extends Model<School> implements InterfaceKeyValue {
   @Unique
   @Column
   value!: string;
+
+  selected: boolean = false;
 }
 
 export { School };

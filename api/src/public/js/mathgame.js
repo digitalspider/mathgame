@@ -78,19 +78,19 @@ function submitSettingsForm() {
     jQuery('#questionCount').val(user.settings.questionCount);
     jQuery('#maxValue').val(user.settings.maxValue);
     localStorage.setItem('mathuser', JSON.stringify(user));
-  });
+  }, true);
 }
 
 function submitProfileForm() {
   submitForm('profileForm', (user) => {
     localStorage.setItem('mathuser', JSON.stringify(user));
-    location.href = '/profile';
-  });
+    window.location.href = '/profile';
+  }, false);
 }
 
-function submitForm(formId, callback) {
+function submitForm(formId, callback, reloadPage = true) {
   let form = jQuery('#'+formId);
-  ajaxPost(form[0].action, form.serialize(), null, callback, true);
+  ajaxPost(form[0].action, form.serialize(), null, callback, reloadPage);
 }
 
 function getGame() {

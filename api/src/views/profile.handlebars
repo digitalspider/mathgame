@@ -54,15 +54,15 @@
     </tr>
     <tr>
       <th scope="col">Country</th>
-      <td scope="col">{{user.country}}</td>
+      <td scope="col">{{user.countryId}}</td>
     </tr>
     <tr>
       <th scope="col">State</th>
-      <td scope="col">{{user.state}}</td>
+      <td scope="col">{{user.stateId}}</td>
     </tr>
     <tr>
       <th scope="col">School</th>
-      <td scope="col">{{user.school}}</td>
+      <td scope="col">{{user.schoolId}}</td>
     </tr>
     {{/if}}
     {{else}}
@@ -89,7 +89,7 @@
     <tr>
       <th scope="col">Country</th>
       <td scope="col">
-        <select name="country" id="country" class="form-control">
+        <select name="countryId" id="country" class="form-control">
           {{#each country}}
           <option id="{{this.key}}" value="{{this.key}}" {{#if this.selected}}selected{{/if}}>{{this.value}}</option>
           {{/each}}
@@ -99,7 +99,7 @@
     <tr>
       <th scope="col">State</th>
       <td scope="col">
-        <select name="state" id="state" class="form-control">
+        <select name="stateId" id="state" class="form-control">
           {{#each state}}
           <option id="{{this.key}}" value="{{this.key}}" {{#if this.selected}}selected{{/if}}>{{this.value}}</option>
           {{/each}}
@@ -109,7 +109,7 @@
     <tr>
       <th scope="col">School</th>
       <td scope="col">
-        <select name="school" id="school" class="form-control">
+        <select name="schoolId" id="school" class="form-control">
           {{#each school}}
           <option id="{{this.key}}" value="{{this.key}}" {{#if this.selected}}selected{{/if}}>{{this.value}}</option>
           {{/each}}

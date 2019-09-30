@@ -12,7 +12,7 @@ export const get = (req: Request, res: Response, next: NextFunction) => {
   return res.json(settings);
 }
 
-export const update = (req: Request, res: Response, next: NextFunction) => {
+export const update = async (req: Request, res: Response, next: NextFunction) => {
   let user: User = req.user as User;
   settingService.updateSettings(user, settingService.createSetting(
     req.body.difficulty,
@@ -20,7 +20,7 @@ export const update = (req: Request, res: Response, next: NextFunction) => {
     parseInt(req.body.questionCount),
     parseInt(req.body.maxValue)
   ));
-  userService.updateUser(user);
-  return res.json(user);
+  let updatedUser = await userService.updateUser(user);
+  return res.json(updatedUser);
 }
 

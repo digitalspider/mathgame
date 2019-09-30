@@ -28,7 +28,6 @@ export const update = async (req: Request, res: Response, next: NextFunction) =>
   if (typeof userInput.showSchool === 'string') {
     userInput.showSchool = userInput.showSchool === 'on';
   }
-  console.log(userInput);
   if (username !== userInput.username) {
     throw new Error(`Cannot change username in update. Username=${username}`);
   }

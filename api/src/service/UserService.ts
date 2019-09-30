@@ -54,7 +54,7 @@ class UserService {
   async findUserByUsername(username: string, raw: boolean = false): Promise<User> {
     let options: FindOptions = {};
     options.raw = raw;
-    options.attributes = ['username','fastestSpeed','level','points','displayName','country','state'];
+    options.attributes = ['username','fastestSpeed','level','points','displayName','countryId','stateId'];
     let user = await User.findByPk(username, options);
     if (!user) {
       throw new Error('Username '+username+' does not exist');
@@ -69,7 +69,7 @@ class UserService {
   async updateUser(user: User): Promise<User> {
     // validate that user exists
     let dbUser = await this.getUser(user.username);
-    let updatedUser = Object.assign({}, await dbUser.update({
+    await dbUser.update({
       email: user.email,
       settings: user.settings,
       displayName: user.displayName,
@@ -79,15 +79,14 @@ class UserService {
       age: user.age,
       level: user.level,
       points: user.points,
-      country: user.country,
-      state: user.state,
-      school: user.school,
+      countryId: user.countryId,
+      stateId: user.stateId,
+      schoolId: user.schoolId,
       showAge: user.showAge,
       showEmail: user.showEmail,
       showSchoool: user.showSchool,
-    }));
-    delete updatedUser.password;
-    return updatedUser;
+    });
+    return this.getUser(user.username, true);
   }
 
   isGuest(user: User): boolean {

@@ -89,6 +89,15 @@ export const profile = async(req: Request, res: Response) => {
     const country = await lookupService.getAllCountry();
     const state = await lookupService.getAllState();
     const school = await lookupService.getAllSchool();
+    country.forEach((item) => {
+      if (user.countryId && item.key === user.countryId) item.selected = true;
+    });
+    state.forEach((item) => {
+      if (user.stateId && item.key === user.stateId) item.selected = true;
+    });
+    school.forEach((item) => {
+      if (user.schoolId && item.key === user.schoolId) item.selected = true;
+    });
     const view = !req.path.includes('/edit');
     params = {
       user,
@@ -111,7 +120,6 @@ export const leaderboard = async (req: Request, res: Response) => {
   let {frequency} = req.params;
   let {isGuest, settingOptions} = res.locals;
   let bestGames = await gameService.findBestGames(user, 10, frequency, true);
-  console.log(isGuest);
   res.render("leaderboard", {
     user,
     isGuest,

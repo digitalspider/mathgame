@@ -1,5 +1,5 @@
 import { JSONB } from "sequelize";
-import { Column, Model, PrimaryKey, Table, Unique, HasMany, ForeignKey, DataType, Default } from 'sequelize-typescript';
+import { Column, Model, PrimaryKey, Table, Unique, HasMany, ForeignKey, Default, BelongsTo } from 'sequelize-typescript';
 import { Setting } from "./Setting";
 import { Game } from "./Game.model";
 import { Country } from "./Country.model";
@@ -54,15 +54,24 @@ class User extends Model<User> {
   oldEmail?: string;
 
   @ForeignKey(() => Country)
-  @Column(DataType.STRING)
-  country?: Country;
+  @Column(name)
+  countryId?: string;
 
   @ForeignKey(() => State)
-  @Column(DataType.STRING)
-  state?: State;
+  @Column
+  stateId?: string;
 
   @ForeignKey(() => School)
-  @Column(DataType.STRING)
+  @Column
+  schoolId?: string;
+
+  @BelongsTo(() => Country)
+  country?: Country;
+
+  @BelongsTo(() => State)
+  state?: State;
+
+  @BelongsTo(() => School)
   school?: School;
 
   @Default(true)
