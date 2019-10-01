@@ -4,7 +4,7 @@ import { InterfaceKeyValue } from './InterfaceKeyValue';
 @Table({
   tableName: 'state',
   modelName: 'State',
-  timestamps: true,
+  timestamps: false,
 })
 class State extends Model<State> implements InterfaceKeyValue {
   @PrimaryKey

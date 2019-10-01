@@ -28,7 +28,7 @@
     -->
     <tr>
       <th scope="col">Level</th>
-      <td scope="col">{{user.level}}</td>
+      <td scope="col"><span class="badge badge-primary">{{user.level}}</span></td>
     </tr>
     <tr>
       <th scope="col">Points</th>
@@ -54,7 +54,7 @@
     </tr>
     <tr>
       <th scope="col">Country</th>
-      <td scope="col">{{user.countryId}}</td>
+      <td scope="col">{{user.countryId}} <span class="flag-icon flag-icon-{{toLowerCase user.countryId}}"></span></td>
     </tr>
     <tr>
       <th scope="col">State</th>

@@ -3,7 +3,7 @@
 <div style="width: 100%; text-align: center">
   <div>
     <p>Welcome player: <b>{{user.displayName}}</b></p>
-    <p>You are level: <b>{{user.level}}</b></p>
+    <p>You are level: <span class="badge badge-primary">{{user.level}}</span></p>
     <p>You have earned: <b>{{user.points}} points</b></p>
   </div>
   <!--
@@ -53,7 +53,9 @@
         {{#if ../isGuest}}
           {{this.username}}
         {{else}}
-          <a href='/profile/{{this.username}}'>{{this.username}}</a>
+          <a href='/profile/{{this.username}}'>
+            <span class="flag-icon flag-icon-{{toLowerCase this.user.countryId}}"></span> {{this.username}} <span class="badge badge-primary">{{this.user.level}}</span>
+          </a>
         {{/if}}
       </td>
       <td scope="row" class="table-{{this.display}}" width="10px">&nbsp;</td>

@@ -110,6 +110,11 @@ export const profile = async(req: Request, res: Response) => {
       games,
       isSelf: true,
       success_msg: isGuest ? 'Please <a href="/register">register</a> a user to use this page' : null,
+      helpers: {
+        toLowerCase: function(input: string) {
+          return input && input.toLowerCase();
+        }
+      }
     };
   }
   res.render("profile", params);
@@ -119,7 +124,7 @@ export const leaderboard = async (req: Request, res: Response) => {
   let user: User = req.user as User;
   let {frequency} = req.params;
   let {isGuest, settingOptions} = res.locals;
-  let bestGames = await gameService.findBestGames(user, 10, frequency, true);
+  let bestGames = await gameService.findBestGames(user, 10, frequency, false);
   res.render("leaderboard", {
     user,
     isGuest,
@@ -139,6 +144,9 @@ export const leaderboard = async (req: Request, res: Response) => {
           return options.fn(this);
         }
         return options.inverse(this);
+      },
+      toLowerCase: function(input: string) {
+        return input && input.toLowerCase();
       },
     },
   });

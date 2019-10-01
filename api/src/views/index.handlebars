@@ -36,7 +36,7 @@
     <div>
       <p>Welcome player: <b>{{user.displayName}}</b></p>
       {{#unless isGuest}}
-      <p>You are level: <b>{{user.level}}</b></p>
+      <p>You are level: <span class="badge badge-primary">{{user.level}}</span></p>
       <p>You have earned: <b>{{user.points}} points</b></p>
       {{/unless}}
     </div>

@@ -126,6 +126,7 @@ class GameService {
       username: usernameOptions,
       createdAt: frequencyOptions,
     };
+    options.include = [{model: User, as: 'user'}],
     options.order = [['speed', 'ASC']];
     options.limit = limit;
     options.raw = raw;
