@@ -53,7 +53,7 @@
           {{this.username}}
         {{else}}
           <a href='/profile/{{this.username}}'>
-            <span class="flag-icon flag-icon-{{toLowerCase this.user.countryId}}"></span> {{this.username}} <span class="badge badge-primary">{{this.user.level}}</span>
+            <span class="flag-icon flag-icon-{{toLowerCase this.user.countryId}}"></span> {{this.user.displayName}} <span class="badge badge-primary">{{this.user.level}}</span>
           </a>
         {{/if}}
       </td>
