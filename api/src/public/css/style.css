@@ -6,6 +6,24 @@
   display: inline;
 }
 
+span#score {
+  font-size: 1.00rem;
+  font-weight: normal;
+}
+
+i.mathicon {
+  font-size: 30px;
+}
+i#perfect-score {
+  color: green;
+}
+i#new-level {
+  color: yellow;
+}
+i#fastest-speed {
+  color: lightsalmon;
+}
+
 .game-tile {
   background-color: lightgrey;
   font-size: 8rem;
@@ -76,7 +94,7 @@ body {
 /* Customize container */
 @media (min-width: 768px) {
   .container {
-    max-width: 1000px;
+    max-width: 1200px;
   }
 }
 .container-narrow > hr {

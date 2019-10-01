@@ -199,18 +199,23 @@ class GameService {
       if (game.errors>1) { errorString = 'errors' }
       game.errorMessage = `Well done, but you made ${game.errors} ${errorString}, with ${penatlyInSeconds}s penalty per error`;
     } else {
-      game.goodMessage = `Well done: ${game.username}. Perfect score!`;
+      game.goodMessage = `Well done: ${game.username}. Perfect score!<i class="fa fa-check mathicon" id="perfect-score"></i>`;
     }
     game.speed = Math.floor(game.durationInMs / game.questions.length);
     this.calculateDisplay(game);
     if (!this.userService.isGuest(user)) {
       if (user.fastestSpeed === 0 || game.speed < user.fastestSpeed) {
         user.fastestSpeed = game.speed;
-        game.goodMessage += `<br/>Congratulations. A new fastest speed of ${game.speed/1000}s`;
+        game.goodMessage += `<br/>Congratulations. A new fastest speed of ${game.speed/1000}s <i class="fa fa-fighter-jet mathicon" id="fastest-speed"></i>`;
       }
       if (!user.points) { user.points = 0; }
       user.points += this.calculatePoints(game);
-      user.level = this.calculateLevel(user.points);
+      const newLevel = this.calculateLevel(user.points);
+      if (newLevel > user.level) {
+        user.level = newLevel;
+        game.goodMessage += `<br/>Congratulations. <b>New Level!</b> You are now level <span class="badge badge-primary">${user.level}</span>
+          <span class="badge badge-primary"><i class="fa fa-trophy mathicon" id="new-level"></i></span>`;
+      }
       await this.userService.updateUser(user);
     }
     return this.updateGame(game);

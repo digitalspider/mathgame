@@ -51,7 +51,6 @@
     <thead>
       <tr>
         <th scope="col">Date</th>
-        <th scope="col"></th>
         <th scope="col">Score</th>
         <th scope="col">Speed</th>
         <th scope="col">Duration</th>
@@ -62,8 +61,7 @@
       {{#each completedGames}}
       <tr>
         <td scope="row">{{this.displayTime}}</td>
-        <td scope="row" class="table-{{this.display}}" width="10px">&nbsp;</td>
-        <td scope="row">{{this.score}} / {{this.questions.length}}</td>
+        <td scope="row"><span id="score" class="badge badge-{{this.display}}">{{this.score}} / {{this.questions.length}}</span></td>
         <td scope="row">{{this.displaySpeed}} seconds</td>
         <td scope="row">{{this.displayDuration}} seconds</td>
         <td scope="row">{{this.settings.difficulty}}</td>
