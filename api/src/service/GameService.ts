@@ -141,7 +141,7 @@ class GameService {
    */
   async createGame(user: User): Promise<Game> {
     let questions = this.createQuestions(user.settings);
-    let game = Game.build({id: uuid().split('-')[0], user, username: user.username, settings: user.settings, questions});
+    let game = Game.build({id: uuid(), user, username: user.username, settings: user.settings, questions});
     return this.updateGame(game);
   }
 
