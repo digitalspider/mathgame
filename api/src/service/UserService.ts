@@ -23,7 +23,7 @@ class UserService {
     }
     let salt = await bcrypt.genSalt(10);
     let hash = await bcrypt.hash(password, salt);
-    let user = User.build({username, password: hash, email, settings});
+    let user = User.build({username, password: hash, email, settings, displayName: username});
     return user.save();
   }
 

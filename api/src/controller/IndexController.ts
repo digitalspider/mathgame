@@ -10,16 +10,18 @@ import { User } from '../model/User.model';
 import { GameService } from '../service/GameService';
 import { LookupService } from '../service/LookupService';
 import { UserService } from '../service/UserService';
+import { ValidationService } from '../service/ValidationService';
 
 const userService = Container.get(UserService);
 const gameService = Container.get(GameService);
 const lookupService = Container.get(LookupService);
+const validationService = Container.get(ValidationService);
 
 export const index = async (req: Request, res: Response) => {
   let user: User = req.user as User;
   let {isGuest, settingOptions} = res.locals;
   let userGames = await gameService.findGamesByUser(user);
-  let game = await gameService.findActiveGame(user, userGames);
+  let game = await gameService.findActiveGame(user, req.ip, userGames);
   let completedGames = await gameService.findCompletedGame(user, userGames);
   res.render("index", {
       title: "Home",
@@ -187,14 +189,17 @@ function createJwtToken(user: User, res: Response) {
   const token = jwt.sign({
     username: user.username,
     token: user.accessToken,
-  }, JWT_SECRET, { expiresIn: '24h' });
+  }, JWT_SECRET, { expiresIn: '7d' });
   userService.updateUser(user);
-  res.cookie(MATHGAME_COOKIE, token, { maxAge: 24 * 60 * 60 * 1000, httpOnly: true });
+  res.cookie(MATHGAME_COOKIE, token, { maxAge: 7 * 24 * 60 * 60 * 1000, httpOnly: true });
 }
 
 export const postRegister = async (req: Request, res: Response, next: NextFunction) => {
   try {
     let {username, password, email} = req.body;
+    validationService.validateInput(username, 'username');
+    validationService.validateInput(password, 'password');
+    validationService.validateInput(email, 'email');
     let user = await userService.createUser(username, password, email);
     if (!user) {
       throw new Error('Could not register user: '+username)

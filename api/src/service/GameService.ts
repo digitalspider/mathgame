@@ -2,12 +2,12 @@ import moment from 'moment';
 import { FindOptions, Op } from 'sequelize';
 import Container, { Service } from 'typedi';
 import uuid from 'uuid/v4';
+import { Difficulty } from '../model/Difficulty';
 import { Game } from '../model/Game.model';
 import { Setting } from '../model/Setting';
 import { User } from '../model/User.model';
 import { QuestionService } from '../service/QuestionService';
 import { UserService } from './UserService';
-import { Difficulty } from '../model/Difficulty';
 
 @Service()
 class GameService {
@@ -71,13 +71,14 @@ class GameService {
   /**
    * Find the current active game for the user
    * @param user the user whose game to find
+   * @param ip the current ip address of the user
    * @param games the list of games this user has
    */
-  async findActiveGame(user: User, games?: Game[]) {
+  async findActiveGame(user: User, ip: string, games?: Game[]) {
     if (!games) {
       games = await this.findGamesByUser(user);
     }
-    return games.find((game) => !game.endTime);
+    return games.find((game) => game.ip === ip && !game.endTime);
   }
 
   /**
@@ -138,10 +139,11 @@ class GameService {
   /**
    * Create a new game and populate teh questions.
    * @param user the user the game belongs to
+   * @param ip the ip address of the request for this game
    */
-  async createGame(user: User): Promise<Game> {
+  async createGame(user: User, ip: string): Promise<Game> {
     let questions = this.createQuestions(user.settings);
-    let game = Game.build({id: uuid(), user, username: user.username, settings: user.settings, questions});
+    let game = Game.build({id: uuid(), user, username: user.username, settings: user.settings, questions, ip});
     return this.updateGame(game);
   }
 

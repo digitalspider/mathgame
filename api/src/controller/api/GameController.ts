@@ -21,7 +21,7 @@ export const list = (req: Request, res: Response, next: NextFunction) => {
 
 export const create = async (req: Request, res: Response, next: NextFunction) => {
   let user: User = req.user as User;
-  let game = await gameService.createGame(user);
+  let game = await gameService.createGame(user, req.ip);
   return res.json(game);
 }
 

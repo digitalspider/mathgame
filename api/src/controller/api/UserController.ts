@@ -1,10 +1,12 @@
+import { NextFunction, Request, Response } from 'express';
 import "reflect-metadata";
-import {User} from '../../model/User.model';
-import {UserService} from '../../service/UserService';
 import Container from 'typedi';
-import {Request, Response, NextFunction} from 'express';
+import { User } from '../../model/User.model';
+import { UserService } from '../../service/UserService';
+import { ValidationService } from "../../service/ValidationService";
 
 const userService: UserService = Container.get(UserService);
+const validationService: ValidationService = Container.get(ValidationService);
 
 export const get = async (req: Request, res: Response, next: NextFunction) => {
   let user: User = req.user as User;
@@ -31,6 +33,8 @@ export const update = async (req: Request, res: Response, next: NextFunction) =>
   if (username !== userInput.username) {
     throw new Error(`Cannot change username in update. Username=${username}`);
   }
+  validationService.validateInput(userInput.email, 'email');
+  validationService.validateInput(userInput.displayName, 'displayName');
   let result = await userService.updateUser(userInput);
   return res.json(result);
 }

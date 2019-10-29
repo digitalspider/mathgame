@@ -48,7 +48,7 @@ class User extends Model<User> {
   level!: number;
 
   @Column
-  displayName?: string;
+  displayName!: string;
 
   @Column
   oldEmail?: string;

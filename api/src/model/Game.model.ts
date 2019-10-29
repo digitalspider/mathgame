@@ -67,6 +67,9 @@ class Game extends Model<Game> {
   @Default(false)
   @Column
   completed!: boolean;
+
+  @Column
+  ip!: string;
 }
 
 export { Game };
