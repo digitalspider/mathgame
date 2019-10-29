@@ -20,8 +20,9 @@ const validationService = Container.get(ValidationService);
 export const index = async (req: Request, res: Response) => {
   let user: User = req.user as User;
   let {isGuest, settingOptions} = res.locals;
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || '';
   let userGames = await gameService.findGamesByUser(user);
-  let game = await gameService.findActiveGame(user, req.ip, userGames);
+  let game = await gameService.findActiveGame(user, ip.toString(), userGames);
   let completedGames = await gameService.findCompletedGame(user, userGames);
   res.render("index", {
       title: "Home",

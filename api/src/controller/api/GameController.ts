@@ -21,7 +21,8 @@ export const list = (req: Request, res: Response, next: NextFunction) => {
 
 export const create = async (req: Request, res: Response, next: NextFunction) => {
   let user: User = req.user as User;
-  let game = await gameService.createGame(user, req.ip);
+  const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || '';
+  let game = await gameService.createGame(user, ip.toString());
   return res.json(game);
 }
 
