@@ -1,0 +1,1 @@
+docker rm -f mathgame # && docker system prune -a
