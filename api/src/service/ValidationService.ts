@@ -8,7 +8,7 @@ class ValidationService {
   badWords: string[];
 
   constructor() {
-    this.badWords = fs.readFileSync(path.join(__dirname, '../config/invalidWords.txt'), 'UTF-8').split('/n');
+    this.badWords = fs.readFileSync(path.join(__dirname, '../config/invalidWords.txt'), 'UTF-8').split('\n').map(x => x.trim()).filter(x => x.length>=3);
   }
 
   validateInput(input: string, fieldName?: string): void {

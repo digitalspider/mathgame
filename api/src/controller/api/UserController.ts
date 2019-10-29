@@ -30,11 +30,15 @@ export const update = async (req: Request, res: Response, next: NextFunction) =>
   if (typeof userInput.showSchool === 'string') {
     userInput.showSchool = userInput.showSchool === 'on';
   }
-  if (username !== userInput.username) {
-    throw new Error(`Cannot change username in update. Username=${username}`);
+  try {
+    if (username !== userInput.username) {
+      throw new Error(`Cannot change username in update. Username=${username}`);
+    }
+    validationService.validateInput(userInput.email, 'email');
+    validationService.validateInput(userInput.displayName, 'displayName');
+    let result = await userService.updateUser(userInput);
+    return res.json(result);
+  } catch(err) {
+    res.status(400).json({message: err.message});
   }
-  validationService.validateInput(userInput.email, 'email');
-  validationService.validateInput(userInput.displayName, 'displayName');
-  let result = await userService.updateUser(userInput);
-  return res.json(result);
 }
