@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import { Service } from 'typedi';
 
 @Service()
@@ -7,7 +8,7 @@ class ValidationService {
   badWords: string[];
 
   constructor() {
-    this.badWords = fs.readFileSync('../config/invalidWords.txt', 'UTF-8').split('/n');
+    this.badWords = fs.readFileSync(path.join(__dirname, '../config/invalidWords.txt'), 'UTF-8').split('/n');
   }
 
   validateInput(input: string, fieldName?: string): void {
