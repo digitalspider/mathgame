@@ -1,0 +1,36 @@
+version: 0.2:
+env:
+  variables:
+    BUILD_DIR: "dist"
+    AWS_DEFAULT_REGION: "ap-southeast-2"
+    IMAGE_REPO_NAME: "mathgame"
+  parameter-store:
+    AWS_ACCOUNT_ID: "/codebuild/aws-id"
+    AWS_ACCESS_KEY_ID: "/codebuild/key-id"
+    AWS_SECRET_ACCESS_KEY: "/codebuild/key-secret"
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
+      - git checkout master
+      - cd api
+      - npm i
+
+  build:
+    commands:
+      - echo Build started on `date`. version=$CODEBUILD_RESOLVED_SOURCE_VERSION
+      - npm run build
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION .
+      - docker tag $IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
+
+  post_build:
+    commands:
+      - echo Build completed on `date`. status=$CODEBUILD_BUILD_SUCCEEDING
+      - echo Pushing the Docker image...
+      - $CODEBUILD_BUILD_SUCCEEDING && docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
