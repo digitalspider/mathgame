@@ -5,9 +5,9 @@ env:
     AWS_DEFAULT_REGION: "ap-southeast-2"
     IMAGE_REPO_NAME: "mathgame"
   parameter-store:
-    AWS_ACCOUNT_ID: "/codebuild/aws-id"
-    AWS_ACCESS_KEY_ID: "/codebuild/key-id"
-    AWS_SECRET_ACCESS_KEY: "/codebuild/key-secret"
+    AWS_ACCOUNT_ID: "/CodeBuild/aws-id"
+    AWS_ACCESS_KEY_ID: "/CodeBuild/key-id"
+    AWS_SECRET_ACCESS_KEY: "/CodeBuild/key-secret"
 phases:
   install:
     runtime-versions:
