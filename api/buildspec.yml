@@ -1,4 +1,5 @@
-version: 0.2:
+version: 0.2
+
 env:
   variables:
     BUILD_DIR: "dist"
@@ -8,6 +9,7 @@ env:
     AWS_ACCOUNT_ID: "/CodeBuild/aws-id"
     AWS_ACCESS_KEY_ID: "/CodeBuild/key-id"
     AWS_SECRET_ACCESS_KEY: "/CodeBuild/key-secret"
+
 phases:
   install:
     runtime-versions:
