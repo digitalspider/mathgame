@@ -10,7 +10,7 @@ class SlackService {
       const fetchData: RequestInit = {
         method: 'POST',
         body: JSON.stringify({
-          data: message,
+          text: message,
         }),
       };
       try {
