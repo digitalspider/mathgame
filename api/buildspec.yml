@@ -15,9 +15,6 @@ phases:
     runtime-versions:
       nodejs: 10
       docker: 18
-    commands:
-      - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2&
-      - timeout 45 sh -c "until docker info; do echo .; sleep 1; done"
 
   pre_build:
     commands:
@@ -38,4 +35,4 @@ phases:
     commands:
       - echo Build completed on `date`. status=$CODEBUILD_BUILD_SUCCEEDING
       - echo Pushing the Docker image...
-      - $CODEBUILD_BUILD_SUCCEEDING && docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
