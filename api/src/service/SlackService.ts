@@ -12,8 +12,15 @@ class SlackService {
           data: message,
         }),
       };
-      // asynchronously send fetch data
-      fetch(SLACK_WEBHOOK, fetchData);
+      try {
+        // send fetch data
+        let response: Response = await fetch(SLACK_WEBHOOK, fetchData);
+        if (!response.ok) {
+          console.error(`Could not update Slack. status=${response.status}. text=${response.statusText}`);
+        }
+      } catch (err) {
+        console.error(`Could not update Slack. error=${err.message}`);
+      }
     }
   }
 }
