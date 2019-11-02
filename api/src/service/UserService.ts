@@ -1,15 +1,17 @@
 import bcrypt from 'bcryptjs';
+import { FindOptions } from 'sequelize/types';
 import Container, { Service } from 'typedi';
 import { Setting } from '../model/Setting';
 import { User } from '../model/User.model';
 import { SettingService } from './SettingService';
-import { FindOptions } from 'sequelize/types';
+import { SlackService } from './SlackService';
 
 @Service()
 class UserService {
 
   constructor(
-    private settingService: SettingService = Container.get(SettingService),
+    private settingService = Container.get(SettingService),
+    private slackService = Container.get(SlackService),
   ) {
   }
 
@@ -24,7 +26,10 @@ class UserService {
     let salt = await bcrypt.genSalt(10);
     let hash = await bcrypt.hash(password, salt);
     let user = User.build({username, password: hash, email, settings, displayName: username});
-    return user.save();
+    const result = user.save();
+    // Asynchronously send slack notification
+    this.slackService.sendMessage(`New user registered: ${user.username}`);
+    return result;
   }
 
 

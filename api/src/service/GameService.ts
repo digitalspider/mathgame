@@ -8,6 +8,7 @@ import { Setting } from '../model/Setting';
 import { User } from '../model/User.model';
 import { QuestionService } from '../service/QuestionService';
 import { UserService } from './UserService';
+import { SlackService } from './SlackService';
 
 @Service()
 class GameService {
@@ -15,6 +16,7 @@ class GameService {
   constructor(
     private questionService: QuestionService = Container.get(QuestionService),
     private userService: UserService = Container.get(UserService),
+    private slackService = Container.get(SlackService),
   ) {
   }
 
@@ -220,7 +222,10 @@ class GameService {
       }
       await this.userService.updateUser(user);
     }
-    return this.updateGame(game);
+    const result = this.updateGame(game);
+    // Asynchronously send slack notification
+    this.slackService.sendMessage(`New game completed. User=${user.username}, Speed=${game.speed}`);
+    return result;
   }
 
   /**
