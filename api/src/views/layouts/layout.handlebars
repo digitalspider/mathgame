@@ -122,6 +122,9 @@
     <script src="/js/bootstrap-4.3.1.min.js"></script>
     {{#if user}}
     <script src="/js/mathgame.js"></script>
+    {{#unless isGuest}}
+    <script src="/js/userback.js"></script>
+    {{/unless}}
     {{/if}}
 </body>
 </html>
