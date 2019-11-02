@@ -5,6 +5,7 @@ import { SLACK_WEBHOOK } from '../config';
 class SlackService {
 
   async sendMessage(message: string): Promise<void> {
+    console.log(`sendMessage called. ${SLACK_WEBHOOK}. ${message}`);
     if (SLACK_WEBHOOK) {
       const fetchData: RequestInit = {
         method: 'POST',
@@ -14,6 +15,7 @@ class SlackService {
       };
       try {
         // send fetch data
+        console.log(`sending message to slack: ${message}`);
         let response: Response = await fetch(SLACK_WEBHOOK, fetchData);
         if (!response.ok) {
           console.error(`Could not update Slack. status=${response.status}. text=${response.statusText}`);

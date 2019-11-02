@@ -38,16 +38,20 @@ export const login = async(req: Request, res: Response) => {
   // Autologin via cookie
   const authCookie = req.cookies[MATHGAME_COOKIE];
   if (authCookie) {
-    const accessToken = jwt.verify(authCookie, JWT_SECRET);
-    if (accessToken && typeof accessToken==='object' && Object.keys(accessToken).includes('token')) {
-      const user = await userService.findUserByAccessToken((accessToken as any).token);
-      if (user) {
-        if ((accessToken as any).username === user.username) {
-          return req.logIn(user, (err) => {
-            if (!err) res.redirect("/");
-          });
+    try {
+      const accessToken = jwt.verify(authCookie, JWT_SECRET);
+      if (accessToken && typeof accessToken==='object' && Object.keys(accessToken).includes('token')) {
+        const user = await userService.findUserByAccessToken((accessToken as any).token);
+        if (user) {
+          if ((accessToken as any).username === user.username) {
+            return req.logIn(user, (err) => {
+              if (!err) res.redirect("/");
+            });
+          }
         }
       }
+    } catch(err) {
+      console.error(`Could not authenticate with cookie. ${err}`);
     }
   }
   res.render("login", {
