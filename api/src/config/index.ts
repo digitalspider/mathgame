@@ -13,4 +13,4 @@ export const DB_NAME = process.env.DB_NAME || 'mathgame';
 export const DB_USER = process.env.DB_USER || 'mathgame';
 export const DB_PASS = process.env.DB_PASS || 'mathgame';
 export const DB_DIALECT = process.env.DB_DIALECT || 'postgres';
-export const SLACK_WEBHOOK = process.env.SLACK_WEBHOOK || undefined;
+export const SLACK_POST_URL = process.env.SLACK_POST_URL || undefined;
