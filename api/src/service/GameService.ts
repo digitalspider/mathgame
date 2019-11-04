@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { FindOptions, Op } from 'sequelize';
 import Container, { Service } from 'typedi';
 import uuid from 'uuid/v4';
@@ -9,6 +9,8 @@ import { User } from '../model/User.model';
 import { QuestionService } from '../service/QuestionService';
 import { UserService } from './UserService';
 import { SlackService } from './SlackService';
+
+const TZ_AUD_SYD = 'Australia/Sydney';
 
 @Service()
 class GameService {
@@ -324,14 +326,16 @@ class GameService {
     })
   }
 
-  formatGames(games: Game[]) {
-    games.map((game) => {
-      if (game.endTime) game.displayTime = moment(game.endTime).format('DD MMM YYYY @ HH:mm');
-      if (game.durationInMs) {
-        game.displayDuration = moment.duration(game.durationInMs, 'ms').asSeconds().toString();
-      }
-      game.displaySpeed = moment.duration(game.speed, 'ms').asSeconds().toString();
-    });
+  formatGames(games: Game[], timezone: string = TZ_AUD_SYD) {
+    games.map((game) => this.formatGame(game));
+  }
+
+  formatGame(game: Game, timezone: string = TZ_AUD_SYD) {
+    if (game.endTime) game.displayTime = moment(game.endTime).tz(timezone).format('DD MMM YYYY @ HH:mm');
+    if (game.durationInMs) {
+      game.displayDuration = moment.duration(game.durationInMs, 'ms').asSeconds().toString();
+    }
+    game.displaySpeed = moment.duration(game.speed, 'ms').asSeconds().toString();
   }
 }
 
