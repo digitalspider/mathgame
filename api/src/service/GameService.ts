@@ -327,7 +327,7 @@ class GameService {
   }
 
   formatGames(games: Game[], timezone: string = TZ_AUD_SYD) {
-    games.map((game) => this.formatGame(game));
+    games.map((game) => this.formatGame(game, timezone));
   }
 
   formatGame(game: Game, timezone: string = TZ_AUD_SYD) {
