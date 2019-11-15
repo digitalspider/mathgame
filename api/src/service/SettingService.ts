@@ -21,7 +21,7 @@ class SettingService {
     customMax: number = 6,
     customAvgSecondsPerQuestion: number = 6,
   ): Setting {
-    let setting = new Setting(difficulty, operations, questionCount, customMax, customAvgSecondsPerQuestion);
+    let setting = new Setting(difficulty, operations, questionCount, questionCount, customMax, customAvgSecondsPerQuestion);
     this.setDifficulty(setting, difficulty);
     return setting;
   }
@@ -46,6 +46,10 @@ class SettingService {
     if (setting.questionCount<setting.minQuestions) {
       setting.questionCount = setting.minQuestions;
     }
+    // Limit values
+    setting.maxValue = Math.max(setting.maxValue, 1);
+    setting.maxValue = Math.min(setting.maxValue, 100);
+    setting.questionCount = Math.min(setting.questionCount, 25);
   }
 
   /**
