@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import { IVerifyOptions } from 'passport-local';
 import Container from 'typedi';
-import uuid from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 import { JWT_SECRET, MATHGAME_COOKIE } from '../config';
 import { User } from '../model/User.model';
 import { GameService } from '../service/GameService';
@@ -190,7 +190,7 @@ export const postLogin = (req: Request, res: Response, next: NextFunction) => {
 };
 
 function createJwtToken(user: User, res: Response) {
-  user.accessToken = uuid();
+  user.accessToken = uuidv4();
   const token = jwt.sign({
     username: user.username,
     token: user.accessToken,

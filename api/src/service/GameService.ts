@@ -1,7 +1,7 @@
 import moment from 'moment-timezone';
 import { FindOptions, Op } from 'sequelize';
 import Container, { Service } from 'typedi';
-import uuid from 'uuid/v4';
+import { v4 as uuidv4 } from 'uuid';
 import { Difficulty } from '../model/Difficulty';
 import { Game } from '../model/Game.model';
 import { Setting } from '../model/Setting';
@@ -147,7 +147,7 @@ class GameService {
    */
   async createGame(user: User, ip: string): Promise<Game> {
     let questions = this.createQuestions(user.settings);
-    let game = Game.build({id: uuid(), user, username: user.username, settings: user.settings, questions, ip});
+    let game = Game.build({id: uuidv4(), user, username: user.username, settings: user.settings, questions, ip});
     return this.updateGame(game);
   }
 
