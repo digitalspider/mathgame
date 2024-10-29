@@ -171,8 +171,8 @@ app.get('/', (req, res) => {
 });
 */
 
-// Syncronize the database
-sequelize.sync().then(() => {
+// Synchronize the database
+sequelize.sync({ logging: true }).then(() => {
   // Set Port
   app.set('port', PORT);
   // Start listening
