@@ -34,7 +34,7 @@ jobs:
 
       - name: Install-Test
         run: |
-          npm run ci
+          npm ci
 
       # - name: Install SAM
       #   uses: aws-actions/setup-sam@v2
