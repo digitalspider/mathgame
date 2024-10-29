@@ -63,7 +63,7 @@
     "@types/validator": "^10.11.3",
     "cross-env": "^5.2.1",
     "eslint": "^6.3.0",
-    "nodemon": "^1.19.4",
+    "nodemon": "^3.1.7",
     "reflect-metadata": "^0.2.2",
     "sequelize-typescript": "^1.1.0",
     "shelljs": "^0.8.5",
