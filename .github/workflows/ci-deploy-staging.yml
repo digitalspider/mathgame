@@ -1,0 +1,26 @@
+name: CI Deploy STAGING
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    int_tests:
+      description: Run integration tests
+      required: false
+      default: true
+      type: boolean
+
+jobs:
+  deploy:
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    uses: ./.github/workflows/wf-deploy.yml
+    with:
+      environment_name: staging
+    secrets: inherit
+
+  integration-tests:
+    if: ${{ github.actor != 'dependabot[bot]' && github.ref == 'refs/heads/main' || inputs.int_tests }}
+    uses: ./.github/workflows/wf-test.yml
+    needs: deploy
+    with:
+      environment_name: staging

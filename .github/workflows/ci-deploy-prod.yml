@@ -1,0 +1,14 @@
+name: CI Deploy PROD
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    uses: ./.github/workflows/wf-deploy.yml
+    with:
+      environment_name: prod
+    secrets: inherit
