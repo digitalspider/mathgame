@@ -3,6 +3,7 @@
 # UTILS
 alias upgrade='sudo apt update && sudo apt -y upgrade'
 #alias functions
+alias psql='function _psql(){ /c/Apps/PostgreSQL/17/bin/psql.exe $*; };_psql'
 doc() { docker exec -it $1 /bin/bash -l; }
 
 # MATHGAME Docker commands

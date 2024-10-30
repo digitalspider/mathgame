@@ -171,21 +171,23 @@ app.get('/', (req, res) => {
 });
 */
 
-// Synchronize the database
-sequelize.sync({ logging: true }).then(() => {
-  // Set Port
-  app.set('port', PORT);
-  // Start listening
-  app.listen(app.get('port'), function() {
-    console.log('Server started on port '+app.get('port'));
+// Set Port
+app.set('port', PORT);
+// Start listening
+app.listen(app.get('port'), async function() {
+  console.log('Server started on port '+app.get('port'));
+  // Synchronize the database
+  console.log('Database sync START');
+  await sequelize.sync({ logging: true }).then(() => {
+    console.log('Database sync DONE');
+  });
+  console.log('SERVER READY');
+});
+// SSL Server
+if (SSL_ENABLED) {
+  const httpsServer = https.createServer(credentials, app);
+  httpsServer.listen(SSL_PORT, function() {
+    console.log('Server started on port '+SSL_PORT);
     console.log('DONE');
   });
-  // SSL Server
-  if (SSL_ENABLED) {
-    const httpsServer = https.createServer(credentials, app);
-    httpsServer.listen(SSL_PORT, function() {
-      console.log('Server started on port '+SSL_PORT);
-      console.log('DONE');
-    });
-  }
-});
+}
