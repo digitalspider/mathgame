@@ -1,15 +1,12 @@
 import {Sequelize} from 'sequelize-typescript';
-import { DB_HOST, DB_USER, DB_PASS, DB_PORT, DB_NAME, NODE_ENV } from '../config';
+import { DB_HOST, DB_USER, DB_PASS, DB_PORT, DB_NAME, DB_DIALECT } from '../config';
 
 const sequelize =  new Sequelize(DB_NAME, DB_USER, DB_PASS, {
   dialect: 'postgres',
   host: DB_HOST,
   port: DB_PORT,
-  dialectOptions: {
-    ssl: {
-      rejectUnauthorized: NODE_ENV !== 'development',
-    }
-  },
+  protocol: DB_DIALECT,
+  dialectOptions: {},
   models: [__dirname + './../model/**/*.model.*s'],
   modelMatch: (filename, member) => {
     return filename.substring(0, filename.indexOf('.model')) === member;
