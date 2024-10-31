@@ -68,9 +68,11 @@ export const logout = (req: Request, res: Response) => {
   if (!userService.isGuest(user)) {
     res.clearCookie(MATHGAME_COOKIE);
   }
-  req.logout();
-  req.flash('success_msg', 'You are logged out');
-  res.redirect('/login');
+  req.logout(function(err) {
+    if (err) { console.error(err); }
+    req.flash('success_msg', 'You are logged out');
+    res.redirect('/login');
+  });
 };
 
 export const profile = async(req: Request, res: Response) => {
