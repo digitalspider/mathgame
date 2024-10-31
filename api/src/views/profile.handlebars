@@ -90,7 +90,7 @@
       <th scope="col">Country</th>
       <td scope="col">
         <select name="countryId" id="country" class="form-control">
-          {{#each country}}
+          {{#each countryList}}
           <option id="{{this.key}}" value="{{this.key}}" {{#if this.selected}}selected{{/if}}>{{this.value}}</option>
           {{/each}}
         </select>
@@ -100,7 +100,7 @@
       <th scope="col">State</th>
       <td scope="col">
         <select name="stateId" id="state" class="form-control">
-          {{#each state}}
+          {{#each stateList}}
           <option id="{{this.key}}" value="{{this.key}}" {{#if this.selected}}selected{{/if}}>{{this.value}}</option>
           {{/each}}
         </select>
@@ -110,7 +110,7 @@
       <th scope="col">School</th>
       <td scope="col">
         <select name="schoolId" id="school" class="form-control">
-          {{#each school}}
+          {{#each schoolList}}
           <option id="{{this.key}}" value="{{this.key}}" {{#if this.selected}}selected{{/if}}>{{this.value}}</option>
           {{/each}}
         </select>

@@ -76,20 +76,19 @@ class LookupService {
   }
 
   async getAllCountry(query?: string, raw: boolean = true): Promise<Country[]> {
-    let options: FindOptions = {};
+    let options: FindOptions = { raw };
     if (query) { options.where = {value: query}; }
-    options.raw = raw;
     return Country.findAll(options);
   }
 
-  async getAllState(query?: string): Promise<State[]> {
-    let options: FindOptions = {};
+  async getAllState(query?: string, raw: boolean = true): Promise<State[]> {
+    let options: FindOptions = { raw };
     if (query) { options.where = {value: query}; }
     return State.findAll(options);
   }
 
-  async getAllSchool(query?: string): Promise<School[]> {
-    let options: FindOptions = {};
+  async getAllSchool(query?: string, raw: boolean = true): Promise<School[]> {
+    let options: FindOptions = { raw };
     if (query) { options.where = {value: query}; }
     return School.findAll(options);
   }

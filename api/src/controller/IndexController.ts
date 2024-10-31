@@ -95,16 +95,16 @@ export const profile = async(req: Request, res: Response) => {
   }
   else {
     const games = await gameService.countGamesByUser(user);
-    const country = await lookupService.getAllCountry();
-    const state = await lookupService.getAllState();
-    const school = await lookupService.getAllSchool();
-    country.forEach((item) => {
+    const countryList = await lookupService.getAllCountry();
+    const stateList = await lookupService.getAllState();
+    const schoolList = await lookupService.getAllSchool();
+    countryList.forEach((item) => {
       if (user.countryId && item.key === user.countryId) item.selected = true;
     });
-    state.forEach((item) => {
+    stateList.forEach((item) => {
       if (user.stateId && item.key === user.stateId) item.selected = true;
     });
-    school.forEach((item) => {
+    schoolList.forEach((item) => {
       if (user.schoolId && item.key === user.schoolId) item.selected = true;
     });
     const view = !req.path.includes('/edit');
@@ -112,9 +112,9 @@ export const profile = async(req: Request, res: Response) => {
       user,
       isGuest,
       settingOptions,
-      country,
-      state,
-      school,
+      countryList,
+      stateList,
+      schoolList,
       view,
       games,
       isSelf: true,
