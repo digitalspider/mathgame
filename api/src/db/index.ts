@@ -16,9 +16,11 @@ const sequelize =  new Sequelize(DB_NAME, DB_USER, DB_PASS, {
   },
 });
 
+/*
 Object.keys(sequelize.models).forEach((model: string) => {
   console.log(model);
   console.log(sequelize.models[model].tableName);
 });
+*/
 
 export { sequelize };
