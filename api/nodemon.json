@@ -2,5 +2,5 @@
   "watch": ["src"],
   "ext": "js,json,ts",
   "ignore": [".git", "node_modules/**/node_modules", "src/public"],
-  "exec": "./node_modules/.bin/cross-env NODE_ENV=development ./node_modules/.bin/ts-node src/app.ts"
+  "exec": "./node_modules/.bin/cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 NODE_ENV=development ./node_modules/.bin/ts-node src/app.ts"
 }

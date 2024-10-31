@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+export const NODE_ENV = process.env.NODE_ENV || 'development';
 export const SESSION_SECRET = process.env.SESSION_SECRET || 'secret';
 export const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 export const MATHGAME_COOKIE = process.env.MATHGAME_COOKIE || 'mathtoken';
