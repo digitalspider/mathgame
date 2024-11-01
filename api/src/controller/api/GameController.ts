@@ -45,7 +45,7 @@ export const start = async (req: Request, res: Response, next: NextFunction) => 
 export const stop = async (req: Request, res: Response, next: NextFunction) => {
   let gameId = req.params.id;
   let gameInput = req.body;
-  if (gameInput.id != gameId) {
+  if (gameInput.id && gameInput.id != gameId) {
     throw new Error(`Invalid game.id provided: ${gameInput.id}!=${gameId}`);
   }
   let user: User = req.user as User;

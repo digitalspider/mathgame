@@ -11,7 +11,8 @@ import { UserService } from './UserService';
 import { SlackService } from './SlackService';
 
 const TZ_AUD_SYD = 'Australia/Sydney';
-const GameAttributes = 'id,username,settings,startTime,endTime,durationInMs,speed,errors,score,display,answered,completed'.split(',');
+const GameAttributesForLeaderBoard = 'id,username,settings,startTime,endTime,durationInMs,speed,errors,score,display,answered,completed'.split(',');
+const GameAttributes = [...GameAttributesForLeaderBoard, 'questions','ip','createdAt','updatedAt'];
 const UserAttributesForGame = 'displayName,countryId,points,level'.split(',');
 
 @Service()
@@ -65,7 +66,6 @@ class GameService {
     options.include = [{model: User, as: 'user', attributes: UserAttributesForGame }];
     let games = await Game.findAll(options);
     this.formatGames(games);
-    console.log({ games: JSON.stringify(games,undefined,2) });
     return games;
   }
 
@@ -140,7 +140,7 @@ class GameService {
       username: usernameOptions,
       createdAt: frequencyOptions,
     };
-    options.attributes = GameAttributes;
+    options.attributes = GameAttributesForLeaderBoard;
     options.include = [{model: User, as: 'user', attributes: UserAttributesForGame }];
     options.nest = true;
     options.order = [['speed', 'ASC']];
