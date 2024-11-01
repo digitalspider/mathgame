@@ -131,7 +131,9 @@ class GameService {
       username: usernameOptions,
       createdAt: frequencyOptions,
     };
-    options.include = [{model: User, as: 'user'}],
+    options.attributes = 'id,username,settings,startTime,endTime,speed,errors,score,display,answered,completed'.split(','),
+    options.include = [{model: User, as: 'user', attributes: 'displayName,countryId,points,level'.split(',') }],
+    options.nest = true;
     options.order = [['speed', 'ASC']];
     options.limit = limit;
     options.raw = raw;

@@ -130,10 +130,10 @@ export const profile = async(req: Request, res: Response) => {
 };
 
 export const leaderboard = async (req: Request, res: Response) => {
-  let user: User = req.user as User;
-  let {frequency} = req.params;
-  let {isGuest, settingOptions} = res.locals;
-  let bestGames = await gameService.findBestGames(user, 10, frequency, false);
+  const user: User = req.user as User;
+  const {frequency} = req.params;
+  const {isGuest, settingOptions} = res.locals;
+  const bestGames = await gameService.findBestGames(user, 10, frequency, true);
   res.render("leaderboard", {
     user,
     isGuest,

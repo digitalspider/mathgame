@@ -17,7 +17,7 @@ class User extends Model<User> {
   username!: string;
 
   @Column
-  password!: string;
+  password?: string;
 
   @Unique
   @Column
