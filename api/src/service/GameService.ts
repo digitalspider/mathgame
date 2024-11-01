@@ -11,6 +11,8 @@ import { UserService } from './UserService';
 import { SlackService } from './SlackService';
 
 const TZ_AUD_SYD = 'Australia/Sydney';
+const GameAttributes = 'id,username,settings,startTime,endTime,durationInMs,speed,errors,score,display,answered,completed'.split(',');
+const UserAttributesForGame = 'displayName,countryId,points,level'.split(',');
 
 @Service()
 class GameService {
@@ -28,7 +30,10 @@ class GameService {
    * @param user the user the game belongs to
    */
   async getGame(id: string, user: User) {
-    let game = await Game.findByPk(id);
+    const options: FindOptions = {};
+    options.attributes = GameAttributes;
+    options.include = [{model: User, as: 'user', attributes: UserAttributesForGame }];
+    let game = await Game.findByPk(id, options);
     if (!game) {
       throw new Error(`Game ${id} does not exist`);
     }
@@ -47,6 +52,7 @@ class GameService {
   async findGamesByUser(user: User, limit: number = 10, raw: boolean = true): Promise<Game[]> {
     let options: FindOptions = {};
     options.raw = raw;
+    options.nest = true;
     options.where = {
       username: user.username,
       settings: {
@@ -55,8 +61,11 @@ class GameService {
     };
     options.order = [['createdAt', 'DESC']];
     options.limit = limit;
+    options.attributes = GameAttributes;
+    options.include = [{model: User, as: 'user', attributes: UserAttributesForGame }];
     let games = await Game.findAll(options);
     this.formatGames(games);
+    console.log({ games: JSON.stringify(games,undefined,2) });
     return games;
   }
 
@@ -131,8 +140,8 @@ class GameService {
       username: usernameOptions,
       createdAt: frequencyOptions,
     };
-    options.attributes = 'id,username,settings,startTime,endTime,speed,errors,score,display,answered,completed'.split(','),
-    options.include = [{model: User, as: 'user', attributes: 'displayName,countryId,points,level'.split(',') }],
+    options.attributes = GameAttributes;
+    options.include = [{model: User, as: 'user', attributes: UserAttributesForGame }];
     options.nest = true;
     options.order = [['speed', 'ASC']];
     options.limit = limit;

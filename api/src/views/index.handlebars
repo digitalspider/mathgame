@@ -61,10 +61,10 @@
       {{#each completedGames}}
       <tr>
         <td scope="row">{{this.displayTime}}</td>
-        <td scope="row"><span id="score" class="badge badge-{{this.display}}">{{this.score}} / {{this.questions.length}}</span></td>
+        <td scope="row"><span id="score" class="badge badge-{{this.display}}">{{this.score}} / {{this.settings.questionCount}}</span></td>
         <td scope="row">{{this.displaySpeed}} seconds</td>
         <td scope="row">{{this.displayDuration}} seconds</td>
-        <td scope="row">{{this.settings.difficulty}}</td>
+        <td scope="row">{{this.settings.difficulty}} ({{this.settings.operations}})</td>
       </tr>
       {{/each}}
     </tbody>
