@@ -1,0 +1,53 @@
+# https://docs.docker.com/compose/environment-variables/
+
+version: "2.4"
+
+services:
+  postgres:
+    image: postgres:${POSTGRES_IMAGE_TAG}
+    restart: ${RESTART_POLICY}
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 100
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/run/postgresql
+    volumes:
+      - ${POSTGRES_DATA_PATH}:/var/lib/postgresql/data
+    environment:
+      # timezone inside container
+      - TZ
+
+      # necessary Postgres options/variables
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+
+  mathgame:
+    depends_on:
+      - postgres
+    build: ../api/Dockerfile
+    image: mathgame/${MATHGAME_IMAGE}:${MATHGAME_IMAGE_TAG}
+    restart: ${RESTART_POLICY}
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 200
+    read_only: ${MATHGAME_CONTAINER_READONLY}
+    tmpfs:
+      - /tmp
+    volumes:
+      - ${MATHGAME_CONFIG_PATH}:/mathgame/config:rw
+      - ${MATHGAME_DATA_PATH}:/mathgame/data:rw
+      - ${MATHGAME_LOGS_PATH}:/mathgame/logs:rw
+
+    environment:
+      # timezone inside container
+      - TZ
+
+      # necessary Mathgame options/variables (see env.example)
+      - SQLSETTINGS_DRIVERNAME
+      - SQLSETTINGS_DATASOURCE
+
+      # additional settings
+      - SERVICESETTINGS_SITEURL

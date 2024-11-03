@@ -1,7 +1,7 @@
 yum install psql
 
-docker pull postgres:11.5
-docker run --name mathgame-postgres --publish=5432:5432 -e POSTGRES_PASSWORD=mypassword -d postgres:11.5
+docker pull postgres:17-alpine
+docker run --name mathgame-postgres --publish=5432:5432 -e POSTGRES_PASSWORD=mypassword -d postgres:17-alpine
 docker exec -it mathgame-postgres psql -U postgres
 
 # get IP
