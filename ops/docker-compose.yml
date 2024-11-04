@@ -5,6 +5,7 @@ version: "2.4"
 services:
   postgresDB:
     image: postgres:${POSTGRES_IMAGE_TAG}
+    container_name: mathgame-postgres
     restart: ${RESTART_POLICY}
     security_opt:
       - no-new-privileges:true
@@ -23,6 +24,8 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - POSTGRES_DB
+    networks:
+      - mathgame
 
   mathgame:
     depends_on:
@@ -30,6 +33,7 @@ services:
     build:
       context: ../api
       dockerfile: Dockerfile
+    container_name: mathgame
     image: mathgame/${MATHGAME_IMAGE}:${MATHGAME_IMAGE_TAG}
     restart: ${RESTART_POLICY}
     security_opt:
@@ -43,19 +47,62 @@ services:
       - ${MATHGAME_DATA_PATH}:/app/data:rw
       - ${MATHGAME_LOGS_PATH}:/app/logs:rw
 
-    network_mode: bridge
-    extra_hosts:
-      - "dockerhost:host-gateway"
+    # ports:
+    #   - ${APP_PORT}:${APP_PORT}
+      
+    # network_mode: bridge
+    # extra_hosts:
+    #   - "dockerhost:host-gateway"
+    networks:
+      - mathgame
 
     environment:
       # timezone inside container
       - TZ
 
+      - PORT:${APP_PORT}
       - DB_HOST:postgresDB
-      - DB_PORT:5432
+      - DB_PORT:${POSTGRES_PORT}
       - DB_NAME:${POSTGRES_DB}
       - DB_USER:${POSTGRES_USER}
       - DB_PASS:${POSTGRES_PASSWORD}
 
       # additional settings
       - BASEURL
+
+  nginx:
+    depends_on:
+      - mathgame
+    container_name: mathgame-nginx
+    image: nginx:${NGINX_IMAGE_TAG}
+    restart: ${RESTART_POLICY}
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 100
+    read_only: true
+    tmpfs:
+      - /var/run
+      - /var/cache
+      - /var/log/nginx
+    volumes:
+      - ${NGINX_CONFIG_PATH}:/etc/nginx/conf.d:ro
+      - ${CERT_PATH}:/cert.pem:ro
+      - ${KEY_PATH}:/key.pem:ro
+      - shared-webroot:/usr/share/nginx/html
+    environment:
+      # timezone inside container
+      - TZ
+    ports:
+      - ${HTTPS_PORT}:443
+      - ${HTTP_PORT}:80
+    networks:
+      - mathgame
+
+# Shared volume for Let's Encrypt certificate renewal with a webroot
+volumes:
+  shared-webroot:
+    name: shared-webroot
+
+networks:
+  mathgame:
+    driver: bridge

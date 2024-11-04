@@ -7,3 +7,4 @@
 **/.DS_Store
 **/.ignore
 ops/volumes
+ops/certs/key-no-password.pem
