@@ -21,7 +21,7 @@ WORKDIR /app
 # Copy the API dir to the container
 COPY . .
 RUN npm install
-RUN cp .env.default .env
+RUN cp .env.docker .env
 RUN sed -i s/"logout()"/"logout(done?: (err: any) => void)"/g node_modules/@types/passport/index.d.ts
 RUN sed -i s/"logOut()"/"logOut(done?: (err: any) => void)"/g node_modules/@types/passport/index.d.ts
 

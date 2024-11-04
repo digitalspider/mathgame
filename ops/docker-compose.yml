@@ -3,7 +3,7 @@
 version: "2.4"
 
 services:
-  postgres:
+  postgresDB:
     image: postgres:${POSTGRES_IMAGE_TAG}
     restart: ${RESTART_POLICY}
     security_opt:
@@ -26,8 +26,10 @@ services:
 
   mathgame:
     depends_on:
-      - postgres
-    build: ../api/Dockerfile
+      - postgresDB
+    build:
+      context: ../api
+      dockerfile: Dockerfile
     image: mathgame/${MATHGAME_IMAGE}:${MATHGAME_IMAGE_TAG}
     restart: ${RESTART_POLICY}
     security_opt:
@@ -37,17 +39,23 @@ services:
     tmpfs:
       - /tmp
     volumes:
-      - ${MATHGAME_CONFIG_PATH}:/mathgame/config:rw
-      - ${MATHGAME_DATA_PATH}:/mathgame/data:rw
-      - ${MATHGAME_LOGS_PATH}:/mathgame/logs:rw
+      - ${MATHGAME_CONFIG_PATH}:/app/config:rw
+      - ${MATHGAME_DATA_PATH}:/app/data:rw
+      - ${MATHGAME_LOGS_PATH}:/app/logs:rw
+
+    network_mode: bridge
+    extra_hosts:
+      - "dockerhost:host-gateway"
 
     environment:
       # timezone inside container
       - TZ
 
-      # necessary Mathgame options/variables (see env.example)
-      - SQLSETTINGS_DRIVERNAME
-      - SQLSETTINGS_DATASOURCE
+      - DB_HOST:postgresDB
+      - DB_PORT:5432
+      - DB_NAME:${POSTGRES_DB}
+      - DB_USER:${POSTGRES_USER}
+      - DB_PASS:${POSTGRES_PASSWORD}
 
       # additional settings
-      - SERVICESETTINGS_SITEURL
+      - BASEURL
