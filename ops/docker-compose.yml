@@ -70,6 +70,10 @@ services:
       - DB_NAME:${POSTGRES_DB}
       - DB_USER:${POSTGRES_USER}
       - DB_PASS:${POSTGRES_PASSWORD}
+      - GOOGLE_CLIENT_ID:${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET:${GOOGLE_CLIENT_SECRET}
+      - SESSION_SECRET:${SESSION_SECRET}
+      - JWT_SECRET:${JWT_SECRET}
 
       # additional settings
       - BASEURL

@@ -36,11 +36,11 @@ jobs:
         run: |
           npm ci
 
-      # - name: Install SAM
-      #   uses: aws-actions/setup-sam@v2
-
       - name: Build
         run: npm run build
+
+      - name: Create Docker
+        run: npm run docker:build
 
       # - name: Deploy Stack
       #   env:

@@ -11,6 +11,10 @@
     "debug": "node --inspect dist/app.js",
     "start": "node dist/app.js",
     "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
+    "docker:build": "cross-env GOOGLE_CLIENT_ID=123; docker buildx build -t mathgame --secret id=GOOGLE_CLIENT_ID .",
+    "docker:compose:build": "docker-compose -f ../ops/docker-compose.yml build",
+    "docker:compose": "docker-compose -f ../ops/docker-compose.yml up",
+    "docker:compose:down": "docker-compose -f ../ops/docker-compose.yml down",
     "db:migrate:status": "npx sequelize-cli db:migrate:status",
     "db:migrate:undo": "tsc -p . && npx sequelize-cli db:migrate:undo",
     "db:migrate": "tsc -p . && npx sequelize-cli db:migrate"
