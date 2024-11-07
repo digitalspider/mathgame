@@ -79,7 +79,7 @@ passport.use(new GoogleStrategy({
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
   callbackURL: GOOGLE_CB_URL,
-  scope: [ 'profile' ],
+  scope: [ 'email', 'profile' ],
   passReqToCallback: true,
 }, verifyFederatedCredentials));
 
