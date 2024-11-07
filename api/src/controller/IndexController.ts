@@ -213,7 +213,7 @@ export const postRegister = async (req: Request, res: Response, next: NextFuncti
     }
     postLogin(req, res, next);
   } catch(err) {
-    req.flash('error_msg', err.message);
+    req.flash('error_msg', (err as Error).message);
     res.redirect('/register');
   }
 }

@@ -39,6 +39,6 @@ export const update = async (req: Request, res: Response, next: NextFunction) =>
     let result = await userService.updateUser(userInput);
     return res.json(result);
   } catch(err) {
-    res.status(400).json({message: err.message});
+    res.status(400).json({message: (err as Error).message});
   }
 }
