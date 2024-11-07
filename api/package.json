@@ -18,7 +18,7 @@
     "db:migrate:status": "npx sequelize-cli db:migrate:status",
     "db:migrate:undo": "tsc -p . && npx sequelize-cli db:migrate:undo",
     "db:migrate": "tsc -p . && npx sequelize-cli db:migrate",
-    "db:migrate:gen": "tsc -p . && npx sequelize-cli migration:generate --name="
+    "db:migrate:gen": "tsc -p . && npx sequelize-cli migration:generate --name"
   },
   "author": "dvittor@gmail.com",
   "license": "ISC",

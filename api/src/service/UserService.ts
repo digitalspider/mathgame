@@ -15,7 +15,8 @@ class UserService {
   ) {
   }
 
-  async createUser(username: string, password: string, email: string, settings?: Setting, googleId?: string): Promise<User> {
+  async createUser(username: string, password: string, email: string, settings?: Setting, data?: Partial<User>): Promise<User> {
+    const { googleId, googleProfile } = data || {};
     const existingUser = await this.getUserRaw(username);
     if (existingUser) {
       throw new Error('This username is already registered');
@@ -25,7 +26,7 @@ class UserService {
     }
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
-    let user = User.build({username, password: hash, email, settings, displayName: username, googleId });
+    let user = User.build({username, password: hash, email, settings, displayName: username, googleId, googleProfile });
     const result = user.save();
     // Asynchronously send slack notification
     this.slackService.sendMessage(`New user registered: ${user.username}`);

@@ -1,12 +1,13 @@
 import bcrypt from 'bcryptjs';
+import { Request } from 'express';
 import passport from "passport";
-import { Strategy as GoogleStrategy, VerifyCallback, Profile } from "passport-google-oauth20";
+import { Strategy as GoogleStrategy, Profile, VerifyCallback } from "passport-google-oauth20";
 import { Strategy as LocalStrategy } from "passport-local";
 import Container from 'typedi';
+import { v4 as uuidv4 } from 'uuid';
 import { GOOGLE_CB_URL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from '.';
 import { User } from '../model/User.model';
 import { UserService } from '../service/UserService';
-import { Request } from 'express';
 
 const userService: UserService = Container.get(UserService);
 
@@ -28,8 +29,9 @@ passport.deserializeUser(async (username: string, done: Function) => {
 // thanks to https://dev.to/samippoudel/google-oauth-using-typescript-expressjs-passportjs-mongodb-5el8
 async function verifyFederatedCredentials(req: Request, accessToken: string, refreshToken: string,  profile: Profile, done: VerifyCallback) {
   // note: accessToken and refresh token allows for calling Google APIs to update user data. Not required.
-  console.log('google profile', { profile });
-  const { id, displayName, emails } = profile || {};
+  console.debug('google profile', { profile });
+  const { id, displayName, emails, _json } = profile || {};
+  const { picture } = _json || {};
   const username = displayName;
   const email = emails?.[0].value || '';
   try {
@@ -37,7 +39,8 @@ async function verifyFederatedCredentials(req: Request, accessToken: string, ref
     if (existingUser) return done(null, existingUser);
     const user = await userService.getUserRaw(username);
     if (!user) {
-      const newUser = await userService.createUser(username, '', email, undefined, id);
+      const password = uuidv4();
+      const newUser = await userService.createUser(username, password, email, undefined, { googleId: id, googleProfile: picture });
       if (!newUser) throw new Error(`Could not create a new user: ${username} for federated google account`);
       return done(null, newUser);
     }

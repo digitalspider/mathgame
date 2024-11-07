@@ -90,6 +90,9 @@ class User extends Model<User> {
   @Column
   googleId?: string;
 
+  @Column
+  googleProfile?: string;
+
   // @HasMany(() => Game, 'username')
   // games!: Game[];
 }
