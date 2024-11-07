@@ -14,4 +14,7 @@ export const DB_NAME = process.env.DB_NAME || 'mathgame';
 export const DB_USER = process.env.DB_USER || 'mathgame';
 export const DB_PASS = process.env.DB_PASS || 'mathgame';
 export const DB_DIALECT = process.env.DB_DIALECT || 'postgres';
+export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
+export const GOOGLE_CB_URL = process.env.GOOGLE_CB_URL || '/oauth2/redirect/google';
 export const SLACK_POST_URL = process.env.SLACK_POST_URL || undefined;

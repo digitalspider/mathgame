@@ -72,6 +72,7 @@ app.use(
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+// app.use(passport.authenticate('session'));
 
 app.use((req, res, next) => {
   res.locals.user = req.user;
@@ -82,14 +83,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     return next();
   };
   // After successful login, redirect back to the intended page
-  if (!req.user &&
-  req.path !== "/login" &&
-  req.path !== "/register" &&
-  !req.path.match(/^\/auth/) &&
-  !req.path.match(/\./)) {
+  if (!req.user && req.path !== "/login" && req.path !== "/register" && 
+      !req.path.match(/^\/auth/) && !req.path.match(/\./)) {
     req.session.returnTo = req.path;
-  } else if (req.user &&
-  req.path == "/account") {
+  } else if (req.user && req.path == "/account") {
       req.session.returnTo = req.path;
   }
   next();
@@ -133,6 +130,12 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.get('/login', indexController.login);
 app.get('/register', indexController.register);
 app.get('/logout', indexController.logout);
+// thanks to https://github.com/passport/todos-express-google
+app.get('/login/federated/google', passport.authenticate('google'));
+app.get('/oauth2/redirect/google', passport.authenticate('google', {
+  successReturnToOrRedirect: '/',
+  failureRedirect: '/login'
+}));
 app.post('/login', indexController.postLogin);
 app.post('/register', indexController.postRegister);
 

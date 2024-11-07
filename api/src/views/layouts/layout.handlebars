@@ -27,6 +27,7 @@
                 <li class="nav-item"><a class="nav-link" href="/logout" onclick="javascript:logout()"><i class="fa fa-sign-out menuicon" id="logout"></i> Logout {{user.displayName}}</a></li>
               {{else}}
                 <li class="nav-item"><a class="nav-link" href="/login"><i class="fa fa-sign-in menuicon" id="login"></i> Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="/login/federated/google"><i class="fa fa-sign-in menuicon" id="login-google"></i> Google Login</a></li>
                 <li class="nav-item"><a class="nav-link" href="/register"><i class="fa fa-user menuicon" id="profile"></i> Register</a></li>
               {{/if}}
             </ul>

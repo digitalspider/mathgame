@@ -15,17 +15,17 @@ class UserService {
   ) {
   }
 
-  async createUser(username: string, password: string, email: string, settings?: Setting): Promise<User> {
-    let existingUser = await this.getUserRaw(username);
+  async createUser(username: string, password: string, email: string, settings?: Setting, googleId?: string): Promise<User> {
+    const existingUser = await this.getUserRaw(username);
     if (existingUser) {
       throw new Error('This username is already registered');
     }
     if (!settings) {
       settings = this.settingService.createSetting();
     }
-    let salt = await bcrypt.genSalt(10);
-    let hash = await bcrypt.hash(password, salt);
-    let user = User.build({username, password: hash, email, settings, displayName: username});
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt);
+    let user = User.build({username, password: hash, email, settings, displayName: username, googleId });
     const result = user.save();
     // Asynchronously send slack notification
     this.slackService.sendMessage(`New user registered: ${user.username}`);
@@ -34,10 +34,10 @@ class UserService {
 
 
   async getUser(username: string, raw: boolean = false): Promise<User> {
-    let options: FindOptions = {};
+    const options: FindOptions = {};
     options.raw = raw;
     options.attributes = {exclude: ['password']};
-    let user = await User.findByPk(username, options);
+    const user = await User.findByPk(username, options);
     if (!user) {
       throw new Error('Username '+username+' does not exist');
     }
@@ -57,17 +57,23 @@ class UserService {
   }
 
   async findUserByUsername(username: string, raw: boolean = false): Promise<User> {
-    let options: FindOptions = {};
+    const options: FindOptions = {};
     options.raw = raw;
     options.attributes = ['username','fastestSpeed','level','points','displayName','countryId','stateId'];
-    let user = await User.findByPk(username, options);
+    const user = await User.findByPk(username, options);
     if (!user) {
       throw new Error('Username '+username+' does not exist');
     }
     return user;
   }
 
-  async findUserByAccessToken(accessToken: string): Promise<User | null> {
+  async findUserByGoogleId(googleId: string): Promise<User|null> {
+    const options: FindOptions = { where: {googleId} };
+    options.attributes = ['username','fastestSpeed','level','points','displayName','countryId','stateId'];
+    return User.findOne<User>(options);
+  }
+
+  async findUserByAccessToken(accessToken: string): Promise<User|null> {
     return User.findOne<User>({where: {accessToken: accessToken}, attributes: ['username']});
   }
 

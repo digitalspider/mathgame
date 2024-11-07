@@ -86,6 +86,10 @@ class User extends Model<User> {
   @Column
   showEmail!: boolean;
 
+  @Unique
+  @Column
+  googleId?: string;
+
   // @HasMany(() => Game, 'username')
   // games!: Game[];
 }
