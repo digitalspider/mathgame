@@ -86,6 +86,7 @@ passport.use(new GoogleStrategy({
   callbackURL: GOOGLE_CB_URL,
   scope: [ 'email', 'profile' ],
   passReqToCallback: true,
+  proxy: true,
 }, verifyFederatedCredentials));
 
 passport.use(new LocalStrategy(verifyLocalPassword));
