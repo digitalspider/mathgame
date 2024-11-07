@@ -24,6 +24,7 @@
                 <li class="nav-item"><a class="nav-link" href="/leaderboard"><i class="fa fa-trophy menuicon" id="leaderboard"></i> Leaderboard</a></li>
                 <li class="nav-item"><a class="nav-link" data-toggle="modal" data-target="#settingsModal"><i class="fa fa-cog menuicon" id="settings"></i> Settings</a></li>
                 <li class="nav-item"><a class="nav-link" href="/profile"><i class="fa fa-user menuicon" id="profile"></i> Profile</a></li>
+                <img src="{{user.googleProfile}}"/>
                 <li class="nav-item"><a class="nav-link" href="/logout" onclick="javascript:logout()"><i class="fa fa-sign-out menuicon" id="logout"></i> Logout {{user.displayName}}</a></li>
               {{else}}
                 <li class="nav-item"><a class="nav-link" href="/login"><i class="fa fa-sign-in menuicon" id="login"></i> Login</a></li>

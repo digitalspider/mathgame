@@ -29,22 +29,24 @@ passport.deserializeUser(async (username: string, done: Function) => {
 // thanks to https://dev.to/samippoudel/google-oauth-using-typescript-expressjs-passportjs-mongodb-5el8
 async function verifyFederatedCredentials(req: Request, accessToken: string, refreshToken: string,  profile: Profile, done: VerifyCallback) {
   // note: accessToken and refresh token allows for calling Google APIs to update user data. Not required.
-  console.debug('google profile', { profile });
-  const { id, displayName, emails, _json } = profile || {};
-  const { picture } = _json || {};
+  console.debug('google profile', JSON.stringify(profile, undefined, 2));
+  const { id, displayName, emails, photos } = profile || {};
   const username = displayName;
   const email = emails?.[0].value || '';
+  const photo = photos?.[0].value || undefined;
   try {
     const existingUser: User|null = await userService.findUserByGoogleId(id);
     if (existingUser) return done(null, existingUser);
     const user = await userService.getUserRaw(username);
     if (!user) {
       const password = uuidv4();
-      const newUser = await userService.createUser(username, password, email, undefined, { googleId: id, googleProfile: picture });
+      const newUser = await userService.createUser(username, password, email, undefined, { googleId: id, googleProfile: photo });
       if (!newUser) throw new Error(`Could not create a new user: ${username} for federated google account`);
       return done(null, newUser);
     }
     user.googleId = id;
+    user.googleProfile = photo;
+    user.email = email;
     await user.save();
     return done(null, user);
   } catch (e) {

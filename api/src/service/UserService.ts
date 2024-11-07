@@ -60,7 +60,7 @@ class UserService {
   async findUserByUsername(username: string, raw: boolean = false): Promise<User> {
     const options: FindOptions = {};
     options.raw = raw;
-    options.attributes = ['username','fastestSpeed','level','points','displayName','countryId','stateId'];
+    options.attributes = ['username','fastestSpeed','level','points','displayName','countryId','stateId','googleProfile'];
     const user = await User.findByPk(username, options);
     if (!user) {
       throw new Error('Username '+username+' does not exist');
@@ -70,7 +70,7 @@ class UserService {
 
   async findUserByGoogleId(googleId: string): Promise<User|null> {
     const options: FindOptions = { where: {googleId} };
-    options.attributes = ['username','fastestSpeed','level','points','displayName','countryId','stateId'];
+    options.attributes = ['username','fastestSpeed','level','points','displayName','countryId','stateId','googleProfile'];
     return User.findOne<User>(options);
   }
 
