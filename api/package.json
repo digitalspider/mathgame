@@ -72,7 +72,7 @@
     "eslint": "^6.3.0",
     "nodemon": "^3.1.7",
     "reflect-metadata": "^0.2.2",
-    "sequelize-typescript": "^1.1.0",
+    "sequelize-typescript": "^2.1.6",
     "shelljs": "^0.8.5",
     "ts-node": "^8.3.0",
     "typedi": "^0.10.0",
